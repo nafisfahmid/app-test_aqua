@@ -1,0 +1,6 @@
+{
+  "appId": "com.machbondhu.demo",
+  "appName": "মাছবন্ধু",
+  "webDir": "www",
+  "android": { "backgroundColor": "#0F5F55" }
+}

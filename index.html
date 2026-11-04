@@ -1,0 +1,1710 @@
+<title>Machbondhu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0F5F55">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one-column phone app — sticky title bar, scrolling content, fixed 5-tab bar with big picture labels */
+:root{
+  --pond:#0F5F55;        /* deep pond green: primary */
+  --pond-2:#E3F0EC;      /* pale water tint */
+  --turmeric:#D9921A;    /* due tasks, premium */
+  --ink:#16302B;         /* body text */
+  --ink-2:#4E6660;       /* secondary text */
+  --paper:#F4F7F3;       /* page */
+  --card:#FFFFFF;
+  --line:#D5E2DC;
+  --safe:#23874F; --safe-bg:#E2F3E8;
+  --watch:#B7740B; --watch-bg:#FBF0DA;
+  --danger:#C62F24; --danger-bg:#FBE3E0;
+  --lock:#7A5AA6;
+  --shadow:0 1px 2px rgba(15,60,50,.08),0 4px 14px rgba(15,60,50,.06);
+  --f-display:"Baloo Da 2","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --f-body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --tab-h:72px;
+  --bar:#0F5F55;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --pond:#4FC2AE; --pond-2:#16302C; --turmeric:#F0B347; --ink:#E7F0EC; --ink-2:#A6BDB6;
+  --paper:#0D1A18; --card:#14241F; --line:#27403A;
+  --safe:#5BCB8A; --safe-bg:#143224; --watch:#F0B347; --watch-bg:#33280F; --danger:#FF7C6E; --danger-bg:#3A1714; --lock:#B79BE0;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --bar:#0F3E37; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --pond:#4FC2AE; --pond-2:#16302C; --turmeric:#F0B347; --ink:#E7F0EC; --ink-2:#A6BDB6;
+  --paper:#0D1A18; --card:#14241F; --line:#27403A;
+  --safe:#5BCB8A; --safe-bg:#143224; --watch:#F0B347; --watch-bg:#33280F; --danger:#FF7C6E; --danger-bg:#3A1714; --lock:#B79BE0;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --bar:#0F3E37; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bar)}
+button{font:inherit;color:inherit}
+input,select,textarea{font:inherit;color:var(--ink)}
+:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);color:#fff;
+  padding-block:10px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;gap:8px;min-height:60px}
+.top h1{font-family:var(--f-display);font-weight:600;font-size:22px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.iconbtn{width:48px;height:48px;border-radius:14px;border:0;background:rgba(255,255,255,.14);display:grid;place-items:center;cursor:pointer;flex:none;color:#fff}
+.iconbtn svg{width:26px;height:26px}
+.langbtn{height:40px;padding:0 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.5);background:transparent;color:#fff;font-weight:600;cursor:pointer}
+.planchip{font-size:13px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--turmeric);color:#2a1c00}
+
+/* Main */
+main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:14px calc(var(--tab-h) + 100px + env(safe-area-inset-bottom,0px));max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h2{font-family:var(--f-display);font-size:21px;font-weight:600;margin:6px 0 0;line-height:1.25;text-wrap:balance}
+h3{font-family:var(--f-display);font-size:18px;font-weight:600;margin:0;line-height:1.3}
+p{margin:0}
+.muted{color:var(--ink-2)}
+.small{font-size:14px}
+.demo-tag{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-2);border:1px dashed var(--ink-2);border-radius:6px;padding:0 6px;white-space:nowrap}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow);min-width:0}
+.row{display:flex;align-items:center;gap:12px;min-width:0}
+.row > .grow{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stack{display:flex;flex-direction:column;gap:10px}
+
+/* Big buttons */
+.btn{min-height:56px;border-radius:16px;border:0;padding:10px 18px;font-weight:600;font-size:18px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-align:center;line-height:1.25}
+.btn svg{width:26px;height:26px;flex:none}
+.btn.primary{background:var(--pond);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#062420}}
+:root[data-theme="dark"] .btn.primary{color:#062420}
+.btn.ghost{background:var(--pond-2);color:var(--ink)}
+.btn.warn{background:var(--turmeric);color:#2a1c00}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.line{background:transparent;border:2px solid var(--line)}
+.btn.full{width:100%}
+.btn.sm{min-height:44px;font-size:16px;border-radius:12px;padding:6px 14px}
+.btn[disabled]{opacity:.45}
+
+/* Tiles (picture menu) */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 10px;min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;text-align:center;font-weight:600;font-size:17px;line-height:1.25;box-shadow:var(--shadow);position:relative}
+.tile .ic{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:var(--pond-2);color:var(--pond)}
+.tile .ic svg{width:32px;height:32px}
+.tile .lockb{position:absolute;top:8px;right:8px;width:24px;height:24px;color:var(--lock)}
+.tile.sel{outline:3px solid var(--pond);background:var(--pond-2)}
+
+/* Pond card */
+.pond-head{display:flex;gap:12px;align-items:center}
+.ring{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;flex:none;border:6px solid var(--safe);background:var(--safe-bg);color:var(--safe)}
+.ring svg{width:26px;height:26px}
+.ring.watch{border-color:var(--watch);background:var(--watch-bg);color:var(--watch)}
+.ring.danger{border-color:var(--danger);background:var(--danger-bg);color:var(--danger)}
+.status-word{font-weight:700;font-size:15px}
+.safe-t{color:var(--safe)} .watch-t{color:var(--watch)} .danger-t{color:var(--danger)}
+.task{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--paper);border:1px solid var(--line);cursor:pointer;text-align:left;width:100%;min-height:60px}
+.task .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--pond-2);color:var(--pond)}
+.task .ic svg{width:26px;height:26px}
+.task.due .ic{background:var(--watch-bg);color:var(--watch)}
+.task.late .ic{background:var(--danger-bg);color:var(--danger)}
+.task.done{opacity:.7}
+.task.done .ic{background:var(--safe-bg);color:var(--safe)}
+.task b{display:block;font-size:17px;line-height:1.25}
+.task span{font-size:14px;color:var(--ink-2)}
+
+/* Stats */
+.stat{background:var(--paper);border-radius:14px;padding:10px 12px;min-width:0}
+.stat .k{font-size:14px;color:var(--ink-2);line-height:1.3}
+.stat .v{font-family:var(--f-display);font-weight:600;font-size:23px;line-height:1.2}
+.stat .v small{font-size:14px;font-family:var(--f-body);font-weight:500;color:var(--ink-2)}
+.stat.locked{position:relative}
+.stat.locked .v{filter:blur(6px);user-select:none}
+
+/* Alert banner */
+.alert{border-radius:16px;padding:14px;display:flex;gap:12px;align-items:flex-start;border:2px solid var(--danger);background:var(--danger-bg)}
+.alert.watch{border-color:var(--watch);background:var(--watch-bg)}
+.alert .ic{color:var(--danger);flex:none} .alert.watch .ic{color:var(--watch)}
+.alert .ic svg{width:30px;height:30px}
+.alert b{display:block}
+
+/* Weather */
+.weather{display:flex;gap:10px;align-items:center;background:linear-gradient(0deg,var(--card),var(--card));border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow)}
+.weather .wic{color:var(--ink-2)} .weather .wic svg{width:40px;height:40px}
+.wcells{display:flex;gap:16px;flex-wrap:wrap}
+.wcell b{font-family:var(--f-display);font-size:20px;display:block;line-height:1.1}
+
+/* Tabs bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs button{border:0;background:none;height:var(--tab-h);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.tabs button svg{width:28px;height:28px}
+.tabs button.on{color:var(--pond)}
+.tabs button.on .pill{background:var(--pond-2)}
+.tabs .pill{padding:3px 16px;border-radius:99px;display:grid;place-items:center}
+
+/* FAB */
+.fab{position:fixed;right:max(16px,calc(env(safe-area-inset-right,0px) + 16px));bottom:calc(var(--tab-h) + 16px + env(safe-area-inset-bottom,0px));z-index:19;
+  height:64px;padding:0 22px 0 18px;border-radius:20px;border:0;background:var(--turmeric);color:#2a1c00;font-weight:700;font-size:19px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.22);cursor:pointer}
+.fab svg{width:30px;height:30px}
+
+/* Forms */
+label.lbl{font-weight:600;font-size:17px;display:flex;align-items:center;gap:8px}
+label.lbl svg{width:24px;height:24px;color:var(--pond)}
+.field{display:flex;flex-direction:column;gap:6px}
+.inp{width:100%;min-height:54px;border-radius:14px;border:2px solid var(--line);background:var(--card);padding:10px 14px;font-size:18px}
+.inp:focus{border-color:var(--pond);outline:none}
+textarea.inp{min-height:96px;resize:vertical}
+.stepper{display:grid;grid-template-columns:60px 1fr 60px;gap:8px;align-items:stretch}
+.stepper button{border:0;border-radius:14px;background:var(--pond-2);color:var(--pond);font-size:30px;font-weight:700;cursor:pointer;min-height:60px}
+.stepper input{text-align:center;font-family:var(--f-display);font-weight:600;font-size:26px;min-height:60px;border-radius:14px;border:2px solid var(--line);background:var(--card);width:100%;min-width:0}
+.unit{font-size:15px;color:var(--ink-2);text-align:center}
+.choice{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:48px;padding:6px 16px;border-radius:99px;border:2px solid var(--line);background:var(--card);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip.sel{border-color:var(--pond);background:var(--pond);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip.sel{color:#062420}}
+:root[data-theme="dark"] .chip.sel{color:#062420}
+.chip svg{width:20px;height:20px}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.yn .chip{justify-content:center;border-radius:14px;min-height:56px}
+
+/* Swatches (test-kit colours) */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.sw{border:3px solid transparent;border-radius:14px;padding:0;cursor:pointer;background:var(--card);display:flex;flex-direction:column;overflow:hidden;min-height:72px}
+.sw i{display:block;height:44px}
+.sw span{font-weight:700;font-size:15px;padding:2px 0}
+.sw.sel{border-color:var(--ink)}
+
+/* Lists */
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);min-width:0}
+.li:last-child{border-bottom:0}
+.li .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--pond-2);color:var(--pond);flex:none}
+.li .ic svg{width:24px;height:24px}
+.li .grow{flex:1;min-width:0}
+.li .amt{font-family:var(--f-display);font-weight:600;font-size:19px;white-space:nowrap}
+.plus{color:var(--safe)} .minus{color:var(--danger)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--pond-2);color:var(--pond);white-space:nowrap}
+.badge.safe{background:var(--safe-bg);color:var(--safe)} .badge.watch{background:var(--watch-bg);color:var(--watch)} .badge.danger{background:var(--danger-bg);color:var(--danger)}
+.badge.lock{background:transparent;border:1.5px solid var(--lock);color:var(--lock)}
+.badge svg{width:14px;height:14px}
+
+/* Segmented sub-tabs */
+.seg{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none;min-height:46px;padding:0 16px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+.seg button svg{width:20px;height:20px}
+.seg button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* Sheet & overlays */
+.scrim{position:fixed;inset:0;background:rgba(5,20,17,.5);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);width:100%;max-width:640px;border-radius:24px 24px 0 0;max-height:92%;overflow:auto;
+  padding-block:10px calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.grab{width:48px;height:5px;border-radius:9px;background:var(--line);margin:0 auto}
+.danger-full{position:fixed;inset:0;z-index:50;background:var(--danger);color:#fff;display:flex;flex-direction:column;
+  padding-block:calc(28px + env(safe-area-inset-top,0px)) calc(24px + env(safe-area-inset-bottom,0px));padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));gap:16px;overflow:auto}
+.danger-full h2{color:#fff;font-size:28px}
+.danger-full .step{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.14);border-radius:16px;padding:14px;font-size:19px;font-weight:600}
+.danger-full .step b{font-family:var(--f-display);font-size:26px;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--danger);display:grid;place-items:center;flex:none}
+.danger-full .btn{background:#fff;color:#8f1e16}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tab-h) + 96px + env(safe-area-inset-bottom,0px));z-index:45;background:var(--ink);color:var(--paper);
+  padding:12px 16px;border-radius:14px;display:flex;gap:14px;align-items:center;font-weight:600;max-width:calc(100% - 32px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast button{background:none;border:0;color:var(--turmeric);font-weight:700;text-decoration:underline;cursor:pointer;min-height:40px}
+
+/* Charts */
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:var(--f-body);font-size:12px;fill:var(--ink-2)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.legend i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+/* Steps / progress */
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:28px;height:8px;border-radius:9px;background:var(--line)}
+.dots i.on{background:var(--pond)}
+.paywall{border:2px solid var(--lock);background:color-mix(in srgb,var(--lock) 8%,var(--card))}
+.lockrow{display:flex;gap:10px;align-items:center;color:var(--lock);font-weight:700}
+.lockrow svg{width:26px;height:26px}
+.check-li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.check-li .box{width:30px;height:30px;border-radius:9px;border:2.5px solid var(--line);flex:none;display:grid;place-items:center;color:#fff}
+.check-li.ok .box{background:var(--safe);border-color:var(--safe)}
+.check-li .box svg{width:20px;height:20px}
+.secchi{display:flex;gap:12px;align-items:center}
+.secchi svg{width:90px;height:110px;flex:none}
+hr{border:0;border-top:1px solid var(--line);margin:0;width:100%}
+.center{text-align:center}
+.big-num{font-family:var(--f-display);font-weight:700;font-size:40px;line-height:1.1}
+.price-up{color:var(--safe)} .price-dn{color:var(--danger)}
+@media (prefers-reduced-motion: no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}}
+@media (max-width:360px){.tiles{gap:8px}.tile{min-height:104px;font-size:16px}.grid3{grid-template-columns:1fr 1fr}}
+</style>
+
+<header class="top" id="top"></header>
+<main id="app" aria-live="polite"></main>
+<nav class="tabs" id="tabs" aria-label="Main"></nav>
+<div id="layer"></div>
+
+<script>
+"use strict";
+/* ===================== Icons ===================== */
+const I = (d, fill) => `<svg viewBox="0 0 24 24" fill="${fill?'currentColor':'none'}" stroke="${fill?'none':'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IC = {
+  today: I('<circle cx="12" cy="13" r="4"/><path d="M12 3v3M4.2 6.2l2 2M19.8 6.2l-2 2M2 13h3M19 13h3M3 20h18"/>'),
+  pond: I('<path d="M2 10c2 0 2-1.5 4-1.5S8 10 10 10s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 20c2 0 2-1.5 4-1.5S8 20 10 20s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/>'),
+  help: I('<circle cx="12" cy="12" r="9"/><path d="M12 7v10M7 12h10"/>'),
+  market: I('<path d="M3 9l2-5h14l2 5"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v7h14v-7"/><path d="M10 20v-4h4v4"/>'),
+  me: I('<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/>'),
+  fish: I('<path d="M2 12c3-5 9-7 14-4l4-3v14l-4-3c-5 3-11 1-14-4z"/><circle cx="7" cy="11" r="1" fill="currentColor"/>'),
+  feed: I('<path d="M6 4h12l-1 3H7z"/><path d="M7 7c-2 3-2 9 0 13h10c2-4 2-10 0-13"/><path d="M10 12h4M10 15h4"/>'),
+  drop: I('<path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/>'),
+  scale: I('<path d="M5 8h14l-2 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/><path d="M12 13v3"/>'),
+  money: I('<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 10v4M18 10v4"/>'),
+  plus: I('<path d="M12 5v14M5 12h14"/>'),
+  back: I('<path d="M15 5l-7 7 7 7"/>'),
+  next: I('<path d="M9 5l7 7-7 7"/>'),
+  check: I('<path d="M5 13l4 4L19 7"/>'),
+  alert: I('<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>'),
+  cloud: I('<path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/>'),
+  sun: I('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  temp: I('<path d="M10 14V5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0z"/><path d="M12 9v7"/>'),
+  rain: I('<path d="M7 15h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 15z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/>'),
+  pill: I('<rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"/><path d="M9.5 9.5l5 5"/>'),
+  calc: I('<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h.5M12 11h.5M16 11h.5M8 15h.5M12 15h.5M16 15h.5M8 19h.5M12 19h4"/>'),
+  book: I('<path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>'),
+  chat: I('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>'),
+  doctor: I('<circle cx="12" cy="7" r="4"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/><path d="M12 15v3M10.5 16.5h3"/>'),
+  cart: I('<path d="M3 4h2l2 11h11l2-8H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>'),
+  chart: I('<path d="M4 20V4M4 20h16"/><path d="M7 15l4-4 3 3 5-6"/>'),
+  lock: I('<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+  trash: I('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+  edit: I('<path d="M4 20h4L19 9l-4-4L4 16z"/>'),
+  camera: I('<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'),
+  bell: I('<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>'),
+  truck: I('<path d="M2 6h12v10H2zM14 10h4l3 3v3h-7"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'),
+  doc: I('<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h8M9 17h8"/>'),
+  globe: I('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>'),
+  reset: I('<path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 1.5-8.5L4 10"/>'),
+  team: I('<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c.8-3.5 3.5-5 7-5s6.2 1.5 7 5M15 14.5c3 0 5 1.5 6 4.5"/>'),
+  sensor: I('<path d="M12 22v-8"/><circle cx="12" cy="11" r="3"/><path d="M7 6a7 7 0 0 1 10 0M4 3a11 11 0 0 1 16 0"/>'),
+  star: I('<path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.3L12 17.5 6.5 20.4l1-6.3L3 9.7l6.2-.9z"/>'),
+  list: I('<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.5M4 12h.5M4 18h.5"/>'),
+  skull: I('<path d="M12 3a8 8 0 0 0-5 14v3h10v-3a8 8 0 0 0-5-14z"/><circle cx="9" cy="11" r="1.5" fill="currentColor"/><circle cx="15" cy="11" r="1.5" fill="currentColor"/><path d="M10 20v-2M14 20v-2"/>'),
+  net: I('<path d="M3 4c6 2 12 2 18 0L18 20H6z"/><path d="M5 9h14M6 14h12M10 4l-1 16M14 4l1 16"/>'),
+  info: I('<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'),
+  clock: I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  wind: I('<path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h7"/>'),
+  gasp: I('<path d="M2 16c3-4 7-5 11-3l3-2v8l-3-2c-4 2-8 1-11-1z"/><circle cx="17" cy="6" r="1.5"/><circle cx="20" cy="3.5" r="1"/><path d="M2 10h20" stroke-dasharray="2 2"/>'),
+  noeat: I('<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/><path d="M8 13c2-2.5 5-3 8-1.5" />'),
+  swirl: I('<path d="M12 12a3 3 0 1 1 3-3 6 6 0 1 1-6-6"/><path d="M4 20c4-1 6 0 8 1"/>'),
+  ok: I('<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>'),
+  redspot: I('<path d="M2 12c3-5 9-7 14-4l4-3v14l-4-3c-5 3-11 1-14-4z"/><circle cx="10" cy="12" r="2" fill="currentColor"/><circle cx="14" cy="10" r="1" fill="currentColor"/>'),
+  whitespot: I('<path d="M2 12c3-5 9-7 14-4l4-3v14l-4-3c-5 3-11 1-14-4z"/><circle cx="9" cy="11" r=".8"/><circle cx="12" cy="13" r=".8"/><circle cx="14" cy="10" r=".8"/><circle cx="11" cy="9" r=".8"/>'),
+  belly: I('<path d="M2 11c3-6 10-7 14-3l4-3v13l-4-3c-4 5-12 4-14-4z"/><path d="M8 15c2 1.5 5 1.5 7 0"/>'),
+  finrot: I('<path d="M2 12c3-5 9-7 13-4"/><path d="M2 12c3 5 9 7 13 4"/><path d="M15 8l2 1-1 2 3 1-2 2 2 1-4 1"/>'),
+  moon: I('<path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10z"/>'),
+  snow: I('<path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10"/>'),
+  leaf: I('<path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15z"/><path d="M5 19l8-8"/>'),
+  stink: I('<path d="M8 20c-2-3 2-4 0-7s2-4 0-7M12 20c-2-3 2-4 0-7s2-4 0-7M16 20c-2-3 2-4 0-7s2-4 0-7"/>'),
+  phone: I('<path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/>'),
+};
+
+/* ===================== Language & formatting ===================== */
+let S; // app state
+const L = (bn, en) => (S && S.lang === 'en') ? en : bn;
+const BN_D = '০১২৩৪৫৬৭৮৯';
+const dig = s => (S && S.lang === 'en') ? String(s) : String(s).replace(/[0-9]/g, d => BN_D[d]);
+function n(x, dec = 0) {
+  if (x === null || x === undefined || !isFinite(x)) return '–';
+  const v = Number(x);
+  let s = v.toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  return dig(s);
+}
+const tk = x => (x < 0 ? '−৳' : '৳') + n(Math.abs(Math.round(x)));
+const kgOrG = kg => kg >= 1 ? n(kg, kg < 10 ? 1 : 0) + ' ' + L('কেজি', 'kg') : n(kg * 1000) + ' ' + L('গ্রাম', 'g');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const MON_BN = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+const MON_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAY_BN = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+const DAY_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const pad = x => String(x).padStart(2, '0');
+const isoOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => isoOf(new Date());
+const addDays = (iso, k) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + k); return isoOf(d); };
+const daysBetween = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
+const daysAgo = iso => daysBetween(iso, today());
+function fmtDate(iso, withYear) {
+  const d = new Date(iso + 'T12:00:00');
+  const m = (S.lang === 'en' ? MON_EN : MON_BN)[d.getMonth()];
+  return S.lang === 'en' ? `${d.getDate()} ${m}${withYear ? ' ' + d.getFullYear() : ''}` : `${dig(d.getDate())} ${m}${withYear ? ' ' + dig(d.getFullYear()) : ''}`;
+}
+function ago(iso) {
+  const k = daysAgo(iso);
+  if (k <= 0) return L('আজ', 'today');
+  if (k === 1) return L('গতকাল', 'yesterday');
+  return L(`${dig(k)} দিন আগে`, `${k} days ago`);
+}
+function fmtTime(hm) {
+  const [h, m] = hm.split(':').map(Number);
+  if (S.lang === 'en') return `${((h + 11) % 12) + 1}:${pad(m)} ${h < 12 ? 'AM' : 'PM'}`;
+  const part = h < 5 ? 'রাত' : h < 12 ? 'সকাল' : h < 16 ? 'দুপুর' : h < 18 ? 'বিকাল' : h < 20 ? 'সন্ধ্যা' : 'রাত';
+  return `${part} ${dig(((h + 11) % 12) + 1)}:${dig(pad(m))}`;
+}
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+
+/* ===================== Reference data (demo values; to be expert-validated) ===================== */
+const SP = {
+  rui:     { bn: 'রুই', en: 'Rohu', type: 'carp', target: 900, adg: 4, price: 300, fry: 4 },
+  katla:   { bn: 'কাতলা', en: 'Catla', type: 'carp', target: 1000, adg: 4.5, price: 320, fry: 5 },
+  mrigel:  { bn: 'মৃগেল', en: 'Mrigal', type: 'carp', target: 700, adg: 3, price: 260, fry: 3 },
+  silver:  { bn: 'সিলভার কার্প', en: 'Silver carp', type: 'carp', nat: true, target: 900, adg: 4, price: 180, fry: 3 },
+  tilapia: { bn: 'তেলাপিয়া', en: 'Tilapia', type: 'tilapia', target: 250, adg: 2.2, price: 180, fry: 1.5 },
+  pangas:  { bn: 'পাঙ্গাস', en: 'Pangas', type: 'pangas', cat: true, target: 1200, adg: 7, price: 170, fry: 6 },
+  koi:     { bn: 'কৈ', en: 'Koi (climbing perch)', type: 'perch', target: 120, adg: 1, price: 280, fry: 1.2 },
+  shing:   { bn: 'শিং', en: 'Shing', type: 'perch', cat: true, target: 100, adg: 0.8, price: 450, fry: 1.5 },
+  pabda:   { bn: 'পাবদা', en: 'Pabda', type: 'perch', target: 80, adg: 0.7, price: 550, fry: 2 },
+};
+const spName = id => SP[id] ? L(SP[id].bn, SP[id].en) : id;
+// [upper weight g, min % body weight, max %]
+const FEED = {
+  carp:    [[50, 7, 8], [100, 5, 6], [200, 4, 5], [300, 3, 4], [1e9, 2, 2.5]],
+  tilapia: [[10, 10, 15], [30, 6, 8], [90, 4, 5], [180, 3, 3.5], [1e9, 2, 2.5]],
+  pangas:  [[30, 10, 12], [100, 6, 8], [300, 4, 5], [700, 3, 3.5], [1e9, 1.5, 2]],
+  perch:   [[10, 10, 12], [30, 7, 8], [60, 5, 6], [1e9, 3, 4]],
+};
+const FEED_TIMES = { carp: ['08:00', '16:00'], tilapia: ['07:00', '12:00', '17:00'], pangas: ['07:00', '17:00'], perch: ['07:00', '18:00'] };
+// stocking models: fish per decimal [min,max]
+const MODELS = [
+  { id: 'carp', bn: 'রুই জাতীয় মিশ্র চাষ', en: 'Carp polyculture', seasonal: true, mix: { rui: [10, 12], katla: [4, 6], mrigel: [8, 10], silver: [4, 6] } },
+  { id: 'tilapia', bn: 'তেলাপিয়া চাষ', en: 'Tilapia', seasonal: true, mix: { tilapia: [200, 250], silver: [3, 4], katla: [1, 2] } },
+  { id: 'pangas', bn: 'পাঙ্গাস চাষ', en: 'Pangas', mix: { pangas: [100, 120], silver: [4, 5], katla: [1, 2] } },
+  { id: 'koi', bn: 'কৈ চাষ', en: 'Koi', mix: { koi: [300, 400], silver: [3, 4] } },
+  { id: 'shing', bn: 'শিং চাষ', en: 'Shing', mix: { shing: [300, 500] } },
+  { id: 'pabda', bn: 'পাবদা চাষ', en: 'Pabda', mix: { pabda: [150, 200], silver: [2, 3] } },
+];
+const PARAMS = {
+  ph:    { bn: 'পিএইচ (pH)', en: 'pH', unit: '', icon: 'drop' },
+  do:    { bn: 'অক্সিজেন (DO)', en: 'Oxygen (DO)', unit: 'mg/L', icon: 'wind' },
+  nh3:   { bn: 'অ্যামোনিয়া', en: 'Ammonia', unit: 'mg/L', icon: 'stink' },
+  temp:  { bn: 'পানির তাপমাত্রা', en: 'Water temperature', unit: '°C', icon: 'temp' },
+  secchi:{ bn: 'পানির স্বচ্ছতা', en: 'Water clearness (Secchi)', unit: L('সেমি', 'cm'), icon: 'leaf' },
+  no2:   { bn: 'নাইট্রাইট', en: 'Nitrite', unit: 'mg/L', icon: 'pill' },
+};
+function band(p, v) {
+  if (v === null || v === undefined || v === '' || !isFinite(v)) return null;
+  switch (p) {
+    case 'do': return v >= 5 ? 'safe' : v >= 3 ? 'watch' : 'danger';
+    case 'ph': return (v >= 6.5 && v <= 8.5) ? 'safe' : (v >= 6 && v <= 9) ? 'watch' : 'danger';
+    case 'nh3': return v < 0.5 ? 'safe' : v <= 1 ? 'watch' : 'danger';
+    case 'temp': return (v >= 25 && v <= 32) ? 'safe' : (v >= 20 && v <= 34) ? 'watch' : 'danger';
+    case 'secchi': return (v >= 25 && v <= 40) ? 'safe' : (v >= 20 && v <= 50) ? 'watch' : 'danger';
+    case 'no2': return v < 0.1 ? 'safe' : v <= 0.5 ? 'watch' : 'danger';
+  }
+  return null;
+}
+const BAND_WORD = b => ({ safe: L('ভালো', 'Good'), watch: L('সাবধান', 'Watch'), danger: L('বিপদ', 'Danger') }[b] || L('জানা নেই', 'Unknown'));
+const BAND_ICON = b => b === 'safe' ? IC.check : b === 'watch' ? IC.alert : b === 'danger' ? IC.alert : IC.info;
+const worst = arr => arr.includes('danger') ? 'danger' : arr.includes('watch') ? 'watch' : arr.includes('safe') ? 'safe' : null;
+function actionFor(p, v) {
+  const b = band(p, v); if (!b || b === 'safe') return null;
+  switch (p) {
+    case 'do': return [L('এখনই এরেটর চালান বা নতুন পানি দিন', 'Run the aerator or add fresh water now'), L('আজ খাবার দেবেন না', 'Do not feed today'), L('ভোরবেলা আবার দেখুন', 'Check again at dawn')];
+    case 'ph': return v < 6.5 ? [L('চুন দিন (নিচে পরিমাণ দেখুন)', 'Apply lime (see amount below)'), L('৩ দিন পর আবার মাপুন', 'Test again after 3 days')] :
+      [L('চুন দেবেন না', 'Do NOT apply lime'), L('কিছু পানি বদলান', 'Exchange some water'), L('সার দেওয়া বন্ধ রাখুন', 'Stop fertiliser for now')];
+    case 'nh3': return [L('খাবার অর্ধেক করুন', 'Cut feed by half'), L('কিছু পানি বদলান', 'Exchange some water'), L('জিওলাইট দিন', 'Apply zeolite')];
+    case 'temp': return v < 25 ? [L('খাবার কম দিন', 'Feed less'), L('দুপুরে খাবার দিন', 'Feed at midday')] : [L('খাবার কম দিন', 'Feed less'), L('পানি বাড়ান বা ছায়া দিন', 'Add water depth or shade')];
+    case 'secchi': return v < 25 ? [L('সার দেওয়া বন্ধ করুন', 'Stop fertiliser'), L('ভোরে অক্সিজেন দেখুন', 'Watch oxygen at dawn')] : [L('সার দিন (নিচে পরিমাণ দেখুন)', 'Apply fertiliser (see below)')];
+    case 'no2': return [L('প্রতি শতাংশে ২৫০ গ্রাম লবণ দিন', 'Apply 250 g salt per decimal'), L('কিছু পানি বদলান', 'Exchange some water')];
+  }
+}
+
+const DISEASES = [
+  { id: 'oxygen', bn: 'অক্সিজেনের অভাব', en: 'Oxygen shortage', f: ['gasp', 'dawn', 'green', 'cloudy', 'noeat'],
+    sym: [L0('ভোরে মাছ পানির উপরে মুখ তুলে খাবি খায়', 'Fish gasp at the surface at dawn'), L0('বড় মাছ আগে মরে', 'Big fish die first')],
+    cause: [L0('মেঘলা গরম দিন, বেশি মাছ, বেশি সবুজ পানি', 'Cloudy hot days, too many fish, very green water')],
+    aid: [L0('এখনই এরেটর চালান বা পাম্পে নতুন পানি দিন', 'Run an aerator or pump in fresh water now'), L0('খাবার বন্ধ রাখুন', 'Stop feeding'), L0('পানিতে বাঁশ দিয়ে ঢেউ তুলুন', 'Splash the water with a bamboo pole')],
+    prev: [L0('মেঘলা দিনে খাবার কম দিন', 'Feed less on cloudy days'), L0('সঠিক সংখ্যায় মাছ ছাড়ুন', 'Stock the right number of fish')] },
+  { id: 'eus', bn: 'ক্ষত রোগ (লাল দাগ)', en: 'Ulcer disease (EUS, red spots)', f: ['red', 'winter', 'noeat'],
+    sym: [L0('গায়ে লাল দাগ, পরে গভীর ঘা', 'Red spots on the body that become deep sores'), L0('মাছ দুর্বল, খায় না', 'Fish weak, not eating')],
+    cause: [L0('শীতকালে পানির তাপ কমে যাওয়া, খারাপ পানি', 'Cold water in winter, poor water quality')],
+    aid: [L0('প্রতি শতাংশে ১ কেজি চুন ও ১ কেজি লবণ দিন', 'Apply 1 kg lime and 1 kg salt per decimal'), L0('মরা মাছ তুলে মাটিতে পুঁতে ফেলুন', 'Remove dead fish and bury them'), L0('উপজেলা মৎস্য অফিসে জানান', 'Inform the upazila fisheries office')],
+    prev: [L0('শীতের আগে চুন দিন', 'Apply lime before winter'), L0('পুকুরে বাইরের পানি ঢুকতে দেবেন না', 'Keep outside water from entering the pond')] },
+  { id: 'white', bn: 'সাদা দাগ রোগ', en: 'White spot disease', f: ['white', 'winter', 'erratic'],
+    sym: [L0('গায়ে ও পাখনায় ছোট সাদা দানা', 'Small white grains on body and fins'), L0('মাছ গা ঘষে', 'Fish rub their bodies')],
+    cause: [L0('পরজীবী, ঠান্ডা পানিতে বাড়ে', 'A parasite that grows in cold water')],
+    aid: [L0('প্রতি শতাংশে ২৫০ গ্রাম লবণ দিন', 'Apply 250 g salt per decimal'), L0('খাবার কম দিন', 'Feed less'), L0('মৎস্য কর্মকর্তার পরামর্শ নিন', 'Ask a fisheries officer')],
+    prev: [L0('নতুন পোনা লবণ পানিতে ধুয়ে ছাড়ুন', 'Dip new fry in salt water before stocking')] },
+  { id: 'dropsy', bn: 'পেট ফোলা রোগ', en: 'Dropsy (swollen belly)', f: ['belly', 'noeat', 'foul'],
+    sym: [L0('পেট ফুলে যায়, আঁশ খাড়া হয়', 'Belly swells, scales stand up'), L0('মাছ ধীরে সাঁতার কাটে', 'Fish swim slowly')],
+    cause: [L0('ব্যাকটেরিয়া, নোংরা তলা ও পচা খাবার', 'Bacteria, dirty pond bottom and rotten feed')],
+    aid: [L0('অসুস্থ মাছ আলাদা করুন', 'Separate sick fish'), L0('প্রতি শতাংশে ৫০০ গ্রাম চুন দিন', 'Apply 500 g lime per decimal'), L0('ওষুধের জন্য মৎস্য কর্মকর্তার পরামর্শ নিন', 'Ask a fisheries officer before using medicine')],
+    prev: [L0('অতিরিক্ত খাবার দেবেন না', 'Do not overfeed'), L0('তলার কাদা পরিষ্কার রাখুন', 'Keep the bottom mud clean')] },
+  { id: 'finrot', bn: 'লেজ ও পাখনা পচা', en: 'Fin and tail rot', f: ['fin', 'foul', 'erratic'],
+    sym: [L0('লেজ ও পাখনার মাথা সাদা হয়ে খসে পড়ে', 'Tail and fin edges turn white and fall away')],
+    cause: [L0('ব্যাকটেরিয়া, আঘাত, খারাপ পানি', 'Bacteria, injury, poor water')],
+    aid: [L0('প্রতি শতাংশে ২৫০ গ্রাম লবণ দিন', 'Apply 250 g salt per decimal'), L0('কিছু পানি বদলান', 'Exchange some water')],
+    prev: [L0('জাল টানার সময় মাছ সাবধানে ধরুন', 'Handle fish gently when netting')] },
+  { id: 'ammonia', bn: 'অ্যামোনিয়া বিষক্রিয়া', en: 'Ammonia poisoning', f: ['noeat', 'gasp', 'foul', 'erratic', 'green'],
+    sym: [L0('মাছ খায় না, এলোমেলো সাঁতার কাটে', 'Fish stop eating and swim erratically'), L0('পানিতে দুর্গন্ধ', 'Water smells bad')],
+    cause: [L0('বেশি খাবার, পচা তলা, বেশি মাছ', 'Too much feed, rotten bottom, too many fish')],
+    aid: [L0('খাবার অর্ধেক বা বন্ধ করুন', 'Halve or stop feeding'), L0('প্রতি শতাংশে ২০০ গ্রাম জিওলাইট দিন', 'Apply 200 g zeolite per decimal'), L0('কিছু পানি বদলান', 'Exchange some water')],
+    prev: [L0('খাবারের সঠিক হিসাব মেনে চলুন', 'Follow the feed calculator'), L0('প্রতি সপ্তাহে পানি পরীক্ষা করুন', 'Test water every week')] },
+];
+function L0(bn, en) { return { bn, en }; }
+const tx = o => (S.lang === 'en' ? o.en : o.bn);
+
+const SYMPTOM_STEPS = [
+  { q: L0('মাছ কী করছে?', 'What are the fish doing?'), opts: [
+    ['gasp', 'gasp', L0('পানির উপরে খাবি খাচ্ছে', 'Gasping at the surface')],
+    ['noeat', 'noeat', L0('খাবার খাচ্ছে না', 'Not eating')],
+    ['erratic', 'swirl', L0('এলোমেলো সাঁতার / গা ঘষছে', 'Swimming oddly / rubbing')],
+    ['normal', 'ok', L0('স্বাভাবিক আছে', 'Behaving normally')]] },
+  { q: L0('মাছের গায়ে কী দেখছেন?', 'What do you see on the fish?'), opts: [
+    ['red', 'redspot', L0('লাল দাগ বা ঘা', 'Red spots or sores')],
+    ['white', 'whitespot', L0('সাদা ছোট দানা', 'Small white spots')],
+    ['belly', 'belly', L0('পেট ফোলা', 'Swollen belly')],
+    ['fin', 'finrot', L0('লেজ/পাখনা পচা', 'Rotting tail or fins')],
+    ['none', 'ok', L0('কিছু দেখছি না', 'Nothing visible')]] },
+  { q: L0('কখন বা কেমন অবস্থায় হচ্ছে?', 'When or in what conditions?'), opts: [
+    ['dawn', 'moon', L0('ভোরবেলা বেশি', 'Worse at dawn')],
+    ['winter', 'snow', L0('শীতকাল', 'Winter')],
+    ['green', 'leaf', L0('পানি খুব সবুজ', 'Water very green')],
+    ['foul', 'stink', L0('পানিতে দুর্গন্ধ', 'Water smells bad')],
+    ['cloudy', 'cloud', L0('মেঘলা দিন', 'Cloudy days')]] },
+];
+
+const ARTICLES = [
+  { id: 'prep', icon: 'pond', t: L0('পুকুর প্রস্তুতি', 'Preparing the pond'), steps: [
+    L0('পুকুর শুকিয়ে তলার কালো কাদা তুলে ফেলুন।', 'Dry the pond and remove black bottom mud.'),
+    L0('রাক্ষুসে মাছ ও আগাছা সরিয়ে ফেলুন।', 'Remove predatory fish and weeds.'),
+    L0('প্রতি শতাংশে ১ কেজি চুন দিন, ৭ দিন রাখুন।', 'Apply 1 kg lime per decimal and wait 7 days.'),
+    L0('পানি দিয়ে সার দিন, পানি হালকা সবুজ হলে পোনা ছাড়ুন।', 'Fill with water, fertilise, and stock fry when the water turns light green.')] },
+  { id: 'stock', icon: 'fish', t: L0('সঠিক পোনা ছাড়া', 'Stocking fry the right way'), steps: [
+    L0('বিশ্বস্ত হ্যাচারি থেকে সুস্থ, একই আকারের পোনা কিনুন।', 'Buy healthy, same-size fry from a trusted hatchery.'),
+    L0('পোনার পাত্র ১৫–২০ মিনিট পুকুরের পানিতে ভাসিয়ে রাখুন।', 'Float the fry container in the pond for 15–20 minutes.'),
+    L0('ধীরে ধীরে পুকুরের পানি মিশিয়ে পোনা ছাড়ুন।', 'Slowly mix in pond water, then release the fry.'),
+    L0('সকাল বা বিকালে ঠান্ডা সময়ে ছাড়ুন।', 'Release in the cool morning or evening.')] },
+  { id: 'feed', icon: 'feed', t: L0('সঠিক পরিমাণে খাবার', 'Feeding the right amount'), steps: [
+    L0('মাছের মোট ওজনের হিসাবে খাবার দিন — অ্যাপ হিসাব করে দেবে।', 'Feed by total fish weight — the app calculates it.'),
+    L0('প্রতিদিন একই সময়ে, একই জায়গায় খাবার দিন।', 'Feed at the same time and place each day.'),
+    L0('খাবার পড়ে থাকলে পরের বার কম দিন।', 'If feed is left over, give less next time.'),
+    L0('মেঘলা দিনে ও শীতে খাবার কমান।', 'Feed less on cloudy days and in winter.')] },
+  { id: 'water', icon: 'drop', t: L0('পানির মান ও অক্সিজেন', 'Water quality and oxygen'), steps: [
+    L0('প্রতি সপ্তাহে pH ও অ্যামোনিয়া মাপুন।', 'Test pH and ammonia every week.'),
+    L0('ভোরে মাছ খাবি খেলে অক্সিজেন কম — এরেটর চালান।', 'If fish gasp at dawn, oxygen is low — run the aerator.'),
+    L0('পানির স্বচ্ছতা ২৫–৪০ সেমি ভালো।', 'Water clearness of 25–40 cm is good.'),
+    L0('pH বেশি হলে চুন দেবেন না।', 'Never add lime when pH is high.')] },
+  { id: 'winter', icon: 'snow', t: L0('শীতকালে যত্ন', 'Winter care'), steps: [
+    L0('শীতের আগে প্রতি শতাংশে ২৫০ গ্রাম চুন দিন।', 'Apply 250 g lime per decimal before winter.'),
+    L0('খাবার কমিয়ে দুপুরে দিন।', 'Feed less, at midday.'),
+    L0('পানির গভীরতা বাড়ান।', 'Keep the water deeper.'),
+    L0('লাল দাগ দেখলে দ্রুত ব্যবস্থা নিন।', 'Act quickly if you see red spots.')] },
+  { id: 'sell', icon: 'money', t: L0('মাছ বিক্রি ও ভালো দাম', 'Selling fish for a good price'), steps: [
+    L0('বাজার দর দেখে বিক্রির দিন ঠিক করুন।', 'Check market prices before choosing the sale day.'),
+    L0('বিক্রির আগের দিন খাবার বন্ধ রাখুন।', 'Stop feeding the day before harvest.'),
+    L0('ভোরে মাছ ধরুন, বরফ দিয়ে রাখুন।', 'Catch fish at dawn and keep them on ice.'),
+    L0('প্রতি কেজি খরচ জেনে দরদাম করুন।', 'Know your cost per kg before you bargain.')] },
+];
+
+const DISTRICTS = [
+  { id: 'mymensingh', bn: 'ময়মনসিংহ', en: 'Mymensingh', f: 0.95 },
+  { id: 'jessore', bn: 'যশোর', en: 'Jessore', f: 1.0 },
+  { id: 'bogura', bn: 'বগুড়া', en: 'Bogura', f: 1.02 },
+  { id: 'cumilla', bn: 'কুমিল্লা', en: 'Cumilla', f: 1.05 },
+  { id: 'khulna', bn: 'খুলনা', en: 'Khulna', f: 1.03 },
+  { id: 'dhaka', bn: 'ঢাকা', en: 'Dhaka', f: 1.12 },
+];
+const PRODUCTS = [
+  { id: 'p1', cat: 'feed', icon: 'feed', bn: 'ভাসমান খাবার – গ্রোয়ার (২৫ কেজি)', en: 'Floating feed – grower (25 kg)', price: 1450 },
+  { id: 'p2', cat: 'feed', icon: 'feed', bn: 'ডুবন্ত খাবার – নার্সারি (২৫ কেজি)', en: 'Sinking feed – nursery (25 kg)', price: 1250 },
+  { id: 'p3', cat: 'care', icon: 'drop', bn: 'চুন (১০ কেজি)', en: 'Lime (10 kg)', price: 220 },
+  { id: 'p4', cat: 'care', icon: 'drop', bn: 'জিওলাইট (১০ কেজি)', en: 'Zeolite (10 kg)', price: 650 },
+  { id: 'p5', cat: 'care', icon: 'drop', bn: 'লবণ (২৫ কেজি)', en: 'Salt (25 kg)', price: 500 },
+  { id: 'p6', cat: 'tool', icon: 'calc', bn: 'পানি পরীক্ষার কিট (pH, অ্যামোনিয়া, অক্সিজেন)', en: 'Water test kit (pH, ammonia, oxygen)', price: 1800 },
+  { id: 'p7', cat: 'tool', icon: 'wind', bn: 'প্যাডেল এরেটর (১ এইচপি)', en: 'Paddle aerator (1 HP)', price: 28000 },
+  { id: 'p8', cat: 'tool', icon: 'net', bn: 'টানা জাল (১০০ ফুট)', en: 'Seine net (100 ft)', price: 6500 },
+];
+const EXP_CATS = [['fry', 'fish', L0('পোনা', 'Fry')], ['feed', 'feed', L0('খাবার', 'Feed')], ['med', 'pill', L0('ওষুধ/চুন', 'Medicine/lime')], ['labour', 'team', L0('শ্রমিক', 'Labour')], ['power', 'sun', L0('বিদ্যুৎ/ডিজেল', 'Power/diesel')], ['lease', 'doc', L0('লিজ', 'Lease')], ['other', 'list', L0('অন্যান্য', 'Other')]];
+const INC_CATS = [['sale', 'money', L0('মাছ বিক্রি', 'Fish sale')], ['other_in', 'plus', L0('অন্য আয়', 'Other income')]];
+const catLabel = c => { const x = [...EXP_CATS, ...INC_CATS].find(z => z[0] === c); return x ? tx(x[2]) : c; };
+const catIcon = c => { const x = [...EXP_CATS, ...INC_CATS].find(z => z[0] === c); return x ? IC[x[1]] : IC.money; };
+
+const PLANS = { free: { ponds: 2 }, plus: { ponds: 10 }, pro: { ponds: 999 } };
+const planName = p => ({ free: L('ফ্রি', 'Free'), plus: L('প্লাস', 'Plus'), pro: L('প্রো', 'Pro') }[p]);
+const hasPlan = need => (need === 'plus' ? ['plus', 'pro'] : ['pro']).includes(S.plan);
+
+/* ===================== Demo data ===================== */
+function demoState() {
+  const T = today();
+  const s = { v: 2, lang: 'bn', plan: 'free', profile: { name: 'রহিম মিয়া', district: 'mymensingh', phone: '' },
+    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: {}, demo: true };
+  const p1 = { id: 'p_home', name: 'বাড়ির পুকুর', area: 30, depth: 5, allYear: true, start: addDays(T, -75), model: 'carp' };
+  const p2 = { id: 'p_field', name: 'মাঠের পুকুর', area: 50, depth: 6, allYear: true, start: addDays(T, -52), model: 'tilapia' };
+  s.ponds.push(p1, p2);
+  const rel = (pondId, sp, count, w, price, d) => s.stock.push({ id: uid(), pondId, sp, type: 'release', count, w, price, date: d });
+  rel('p_home', 'rui', 360, 25, 4, p1.start); rel('p_home', 'katla', 150, 30, 5, p1.start);
+  rel('p_home', 'mrigel', 300, 20, 3, p1.start); rel('p_home', 'silver', 150, 30, 3, p1.start);
+  rel('p_field', 'tilapia', 10000, 2, 1.5, p2.start); rel('p_field', 'silver', 180, 30, 3, p2.start); rel('p_field', 'katla', 60, 40, 5, p2.start);
+  s.stock.push({ id: uid(), pondId: 'p_home', sp: 'rui', type: 'harvest', count: 40, kg: 12, price: 280, date: addDays(T, -6) });
+  const smp = (pondId, sp, d, nW, avg) => s.samples.push({ id: uid(), pondId, sp, date: d, n: nW, totalG: Math.round(nW * avg) });
+  smp('p_home', 'rui', addDays(T, -45), 10, 110); smp('p_home', 'rui', addDays(T, -18), 10, 215);
+  smp('p_home', 'katla', addDays(T, -18), 6, 240); smp('p_home', 'mrigel', addDays(T, -18), 10, 160);
+  smp('p_home', 'silver', addDays(T, -18), 6, 260);
+  smp('p_field', 'tilapia', addDays(T, -30), 20, 28); smp('p_field', 'tilapia', addDays(T, -9), 20, 72);
+  smp('p_field', 'silver', addDays(T, -9), 5, 150); smp('p_field', 'katla', addDays(T, -9), 4, 210);
+  // daily feed over the whole cycle, ramping up with fish size (total ≈ FCR × weight gained)
+  const ramp = (pondId, startIso, totalKg, deaths, skip) => {
+    const D = daysBetween(startIso, T) - 1, sum = D * (D + 1) / 2;
+    for (let i = 1; i <= D; i++) {
+      const d = addDays(startIso, i);
+      if (skip && skip.includes(daysAgo(d))) continue;
+      const k = daysAgo(d);
+      s.logs.push({ id: uid(), pondId, date: d, feedKg: Math.round(totalKg * i / sum * 10) / 10, deaths: deaths[k] || 0, note: k === 1 && pondId === 'p_field' ? 'ভোরে কিছু মাছ উপরে ভাসছিল' : '' });
+    }
+  };
+  ramp('p_home', p1.start, 235, { 9: 3, 40: 6 });
+  ramp('p_field', p2.start, 900, { 2: 25, 1: 40, 30: 60 }, [4]);
+  const w = (pondId, d, o) => s.water.push(Object.assign({ id: uid(), pondId, date: d }, o));
+  w('p_home', addDays(T, -23), { ph: 7.5, do: 6, nh3: 0.25, temp: 29, secchi: 32 });
+  w('p_home', addDays(T, -9), { ph: 7, do: 5.5, nh3: 0.25, temp: 28, secchi: 30 });
+  w('p_field', addDays(T, -12), { ph: 8, do: 5, nh3: 0.5, temp: 30, secchi: 28 });
+  w('p_field', addDays(T, -1), { ph: 8.8, do: 3.5, nh3: 1.5, temp: 31, secchi: 18 });
+  const ex = (pondId, kind, cat, amount, d, note) => s.ledger.push({ id: uid(), pondId, kind, cat, amount, date: d, note: note || '' });
+  ex('p_home', 'exp', 'lease', 15000, addDays(p1.start, -10), 'এক বছরের লিজ');
+  ex('p_home', 'exp', 'med', 660, addDays(p1.start, -7), 'চুন ৩০ কেজি');
+  ex('p_home', 'exp', 'fry', 3330, p1.start, '');
+  ex('p_home', 'exp', 'feed', 8700, addDays(T, -60), '৬ বস্তা');
+  ex('p_home', 'exp', 'feed', 8700, addDays(T, -25), '৬ বস্তা');
+  ex('p_home', 'exp', 'labour', 3000, addDays(T, -6), 'জাল টানা');
+  ex('p_home', 'inc', 'sale', 3360, addDays(T, -6), 'রুই ১২ কেজি');
+  ex('p_field', 'exp', 'fry', 15840, p2.start, '');
+  ex('p_field', 'exp', 'feed', 29000, addDays(T, -40), '২০ বস্তা');
+  ex('p_field', 'exp', 'feed', 21750, addDays(T, -12), '১৫ বস্তা');
+  ex('p_field', 'exp', 'power', 2400, addDays(T, -15), 'পাম্প');
+  s.reminders.push({ id: uid(), pondId: 'p_home', time: '08:00', on: true }, { id: uid(), pondId: 'p_home', time: '16:00', on: true },
+    { id: uid(), pondId: 'p_field', time: '07:00', on: true }, { id: uid(), pondId: 'p_field', time: '12:00', on: false }, { id: uid(), pondId: 'p_field', time: '17:00', on: true });
+  s.questions.push(
+    { id: uid(), mine: false, by: 'করিম, ত্রিশাল', date: addDays(T, -3), q: 'তেলাপিয়া মাছের গায়ে লাল দাগ দেখা যাচ্ছে, কী করব?', a: 'প্রতি শতাংশে ১ কেজি চুন ও ১ কেজি লবণ দিন। খাবার ২ দিন কম দিন। দাগ না কমলে উপজেলা মৎস্য অফিসে যোগাযোগ করুন।', expert: true },
+    { id: uid(), mine: false, by: 'সালমা, যশোর', date: addDays(T, -5), q: 'পুকুরের পানি খুব সবুজ হয়ে গেছে, ভোরে মাছ ভাসে।', a: 'অক্সিজেন কমে যাচ্ছে। সার দেওয়া বন্ধ করুন, ভোরে এরেটর চালান বা নতুন পানি দিন।', expert: true },
+    { id: uid(), mine: false, by: 'আলমগীর, বগুড়া', date: addDays(T, -8), q: 'পাঙ্গাস বিক্রির আগে কত দিন খাবার বন্ধ রাখব?', a: 'বিক্রির আগের দিন খাবার বন্ধ রাখলেই যথেষ্ট। এতে পরিবহনে মাছ কম মরে।', expert: false },
+    { id: uid(), mine: true, by: 'আমি', date: addDays(T, -1), q: 'মাঠের পুকুরে কাল ৪০টা তেলাপিয়া মরেছে, পানি দুর্গন্ধ।', a: '', expert: false });
+  s.orders.push({ id: uid(), pid: 'p3', qty: 3, date: addDays(T, -12), status: 'delivered' });
+  return s;
+}
+function emptyState() {
+  return { v: 2, lang: S ? S.lang : 'bn', plan: 'free', profile: { name: '', district: 'mymensingh', phone: '' },
+    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: S ? S.checklist : {}, demo: false };
+}
+const KEY = 'machbondhu.v2';
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); if (s && s.v === 2) return s; } } catch (e) {}
+  return demoState();
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ===================== Engine ===================== */
+const pondById = id => S.ponds.find(p => p.id === id);
+function mainSpecies(pid) {
+  const rows = stockRows(pid, true);
+  let best = null; rows.forEach(r => { if (!best || r.bio > best.bio) best = r; });
+  return best ? best.sp : null;
+}
+function stockRows(pid, skipDeaths) {
+  const ev = S.stock.filter(e => e.pondId === pid);
+  const by = {};
+  ev.forEach(e => {
+    const r = by[e.sp] || (by[e.sp] = { sp: e.sp, rel: 0, relW: 0, dead: 0, harv: 0, harvKg: 0, firstDate: e.date });
+    if (e.type === 'release') { r.relW = (r.relW * r.rel + e.w * e.count) / (r.rel + e.count || 1); r.rel += e.count; if (e.date < r.firstDate) r.firstDate = e.date; }
+    if (e.type === 'death') r.dead += e.count;
+    if (e.type === 'harvest') { r.harv += e.count; r.harvKg += e.kg || 0; }
+  });
+  const rows = Object.values(by);
+  rows.forEach(r => {
+    const sm = S.samples.filter(x => x.pondId === pid && x.sp === r.sp).sort((a, b) => a.date < b.date ? 1 : -1)[0];
+    if (sm) { r.avgW = sm.totalG / sm.n; r.wDate = sm.date; r.measured = true; }
+    else { r.avgW = r.relW; r.wDate = r.firstDate; r.measured = false; }
+    r.live = Math.max(0, r.rel - r.dead - r.harv);
+    r.bio = r.live * r.avgW / 1000;
+  });
+  if (!skipDeaths && rows.length) {
+    const logDeaths = S.logs.filter(l => l.pondId === pid).reduce((a, l) => a + (l.deaths || 0), 0);
+    if (logDeaths) {
+      const m = rows.slice().sort((a, b) => b.bio - a.bio)[0];
+      m.logDead = logDeaths; m.live = Math.max(0, m.live - logDeaths); m.bio = m.live * m.avgW / 1000;
+    }
+  }
+  return rows.filter(r => r.rel > 0).sort((a, b) => b.bio - a.bio);
+}
+const totalBio = pid => stockRows(pid).reduce((a, r) => a + r.bio, 0);
+const totalLive = pid => stockRows(pid).reduce((a, r) => a + r.live, 0);
+function latestWater(pid) {
+  const rs = S.water.filter(w => w.pondId === pid).sort((a, b) => a.date < b.date ? 1 : -1);
+  const out = {};
+  rs.forEach(r => Object.keys(PARAMS).forEach(p => { if (out[p] === undefined && r[p] !== undefined && r[p] !== null && r[p] !== '') out[p] = { v: r[p], date: r.date }; }));
+  return { last: rs[0], vals: out };
+}
+const WEATHER = () => ({ cloud: 85, air: 31, rain: 40, hi: 33, lo: 25 }); // demo forecast
+function feedPlan(pid) {
+  const rows = stockRows(pid);
+  const w = latestWater(pid).vals;
+  const temp = (w.temp && daysAgo(w.temp.date) <= 3) ? w.temp.v : WEATHER().air - 1;
+  const kT = temp < 15 ? 0.3 : temp < 20 ? 0.6 : temp < 25 ? 0.85 : temp <= 32 ? 1 : 0.7;
+  const doLow = w.do && daysAgo(w.do.date) <= 2 && w.do.v < 3;
+  const kDO = doLow ? 0 : 1;
+  let mn = 0, mx = 0; const parts = [];
+  rows.forEach(r => {
+    const sp = SP[r.sp]; if (!sp || sp.nat || r.live <= 0) return;
+    const b = FEED[sp.type].find(x => r.avgW <= x[0]);
+    const a = r.bio * b[1] / 100 * kT * kDO, z = r.bio * b[2] / 100 * kT * kDO;
+    mn += a; mx += z; parts.push({ sp: r.sp, pct: [b[1], b[2]], kg: (a + z) / 2 });
+  });
+  const ms = mainSpecies(pid);
+  const times = ms ? FEED_TIMES[SP[ms].type] : ['08:00', '16:00'];
+  const mid = Math.round(((mn + mx) / 2) * 10) / 10;
+  return { min: mn, max: mx, kg: mid, perMeal: Math.round(mid / times.length * 10) / 10, times, temp, kT, kDO, parts, doLow };
+}
+function limeAdvice(ph, area) {
+  if (ph === undefined || ph === null) return null;
+  if (ph >= 8.5) return { kg: 0, msg: L('pH বেশি — চুন দেবেন না। কিছু পানি বদলান।', 'pH is high — do NOT apply lime. Exchange some water.'), tone: 'danger' };
+  if (ph < 6) return { kg: area * 1, msg: L(`প্রতি শতাংশে ১ কেজি — মোট ${n(area)} কেজি চুন দিন`, `1 kg per decimal — apply ${n(area)} kg lime in total`), tone: 'watch' };
+  if (ph < 6.5) return { kg: area * 0.5, msg: L(`প্রতি শতাংশে ৫০০ গ্রাম — মোট ${n(area * 0.5, 1)} কেজি চুন দিন`, `500 g per decimal — apply ${n(area * 0.5, 1)} kg lime in total`), tone: 'watch' };
+  return { kg: 0, msg: L('pH ঠিক আছে — এখন চুন লাগবে না।', 'pH is fine — no lime needed now.'), tone: 'safe' };
+}
+function fertAdvice(secchi, area, pid) {
+  if (secchi === undefined || secchi === null) return null;
+  const ms = pid ? mainSpecies(pid) : null;
+  if (ms && SP[ms].cat) return { msg: L('শিং/পাঙ্গাস প্রধান পুকুরে সার লাগে না।', 'Ponds mainly of catfish/pangas need no fertiliser.'), tone: 'safe' };
+  const cloudy = WEATHER().cloud > 80;
+  if (secchi < 25) return { msg: L('পানি খুব সবুজ — সার দেবেন না।', 'Water is too green — do not fertilise.'), tone: 'watch' };
+  if (secchi <= 40) return { msg: L('পানির রং ভালো — এখন সার লাগবে না।', 'Water colour is good — no fertiliser needed now.'), tone: 'safe' };
+  const u = secchi > 50 ? 150 : 100, t = secchi > 50 ? 75 : 50;
+  const base = L(`ইউরিয়া ${n(u * area / 1000, 1)} কেজি ও টিএসপি ${n(t * area / 1000, 1)} কেজি দিন (প্রতি শতাংশে ${n(u)} ও ${n(t)} গ্রাম)`,
+    `Apply urea ${n(u * area / 1000, 1)} kg and TSP ${n(t * area / 1000, 1)} kg (${u} g and ${t} g per decimal)`);
+  return { msg: cloudy ? base + L(' — তবে মেঘলা দিন শেষ হলে।', ' — but wait until the cloudy days pass.') : base, tone: 'watch' };
+}
+function money(pid) {
+  const es = S.ledger.filter(e => !pid || e.pondId === pid);
+  const exp = es.filter(e => e.kind === 'exp').reduce((a, e) => a + e.amount, 0);
+  const inc = es.filter(e => e.kind === 'inc').reduce((a, e) => a + e.amount, 0);
+  return { exp, inc, profit: inc - exp, entries: es };
+}
+function analytics(pid) {
+  const rows = stockRows(pid);
+  const feedKg = S.logs.filter(l => l.pondId === pid).reduce((a, l) => a + (l.feedKg || 0), 0);
+  const harvKg = rows.reduce((a, r) => a + r.harvKg, 0);
+  const startBio = rows.reduce((a, r) => a + r.rel * r.relW / 1000, 0);
+  const nowBio = rows.reduce((a, r) => a + r.bio, 0);
+  const gain = nowBio + harvKg - startBio;
+  const fcr = gain > 0 ? feedKg / gain : null;
+  const m = money(pid);
+  const projKg = rows.reduce((a, r) => a + r.live * Math.max(r.avgW, SP[r.sp].target) / 1000, 0) + harvKg;
+  const projIncome = rows.reduce((a, r) => a + r.live * Math.max(r.avgW, SP[r.sp].target) / 1000 * priceOf(r.sp), 0) + m.inc;
+  const ms = rows[0];
+  let harvestDate = null, daysLeft = null, adg = null;
+  if (ms) {
+    const sm = S.samples.filter(x => x.pondId === pid && x.sp === ms.sp).sort((a, b) => a.date < b.date ? -1 : 1);
+    if (sm.length >= 2) { const a = sm[sm.length - 2], b = sm[sm.length - 1]; adg = (b.totalG / b.n - a.totalG / a.n) / Math.max(1, daysBetween(a.date, b.date)); }
+    else if (sm.length === 1) adg = (sm[0].totalG / sm[0].n - ms.relW) / Math.max(1, daysBetween(ms.firstDate, sm[0].date));
+    if (!adg || adg <= 0) adg = SP[ms.sp].adg;
+    daysLeft = Math.max(0, Math.round((SP[ms.sp].target - ms.avgW) / adg) - daysAgo(ms.wDate));
+    harvestDate = addDays(today(), daysLeft);
+  }
+  const FEED_TK_PER_KG = 58; // ≈ ৳1,450 per 25 kg bag (sample price)
+  const remainingGain = Math.max(0, projKg - nowBio - harvKg);
+  const useFcr = fcr ? Math.min(2.2, Math.max(1.2, fcr)) : 1.5;
+  const projFeedCost = remainingGain * useFcr * FEED_TK_PER_KG;
+  const costPerKg = (nowBio + harvKg) > 0 ? m.exp / (nowBio + harvKg) : null;
+  const projCostPerKg = projKg > 0 ? (m.exp + projFeedCost) / projKg : null;
+  return { feedKg, harvKg, fcr, nowBio, startBio, projKg, projIncome, projFeedCost, projProfit: projIncome - m.exp - projFeedCost, costPerKg, projCostPerKg, harvestDate, daysLeft, adg, main: ms };
+}
+function priceOf(sp) { const d = DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0]; return Math.round(SP[sp].price * d.f); }
+function tasks(pid) {
+  const out = [];
+  const fp = feedPlan(pid);
+  const logged = S.logs.find(l => l.pondId === pid && l.date === today());
+  if (totalLive(pid) > 0) {
+    out.push({ kind: 'feed', state: logged ? 'done' : 'due',
+      title: logged ? L(`খাবার দেওয়া হয়েছে — ${n(logged.feedKg, 1)} কেজি`, `Fed today — ${n(logged.feedKg, 1)} kg`) :
+        fp.kDO === 0 ? L('আজ খাবার বন্ধ রাখুন', 'Do not feed today') : L(`আজ ${n(fp.kg, 1)} কেজি খাবার দিন`, `Give ${n(fp.kg, 1)} kg feed today`),
+      sub: logged ? L('আজকের হিসাব লেখা হয়েছে', "Today's log saved") : fp.kDO === 0 ? L('অক্সিজেন কম', 'Oxygen is low') :
+        L(`${dig(fp.times.length)} বারে, প্রতিবার ${n(fp.perMeal, 1)} কেজি`, `${fp.times.length} meals of ${n(fp.perMeal, 1)} kg`) });
+  }
+  const lw = latestWater(pid).last;
+  const wd = lw ? daysAgo(lw.date) : 99;
+  out.push({ kind: 'water', state: wd <= 7 ? 'done' : wd <= 14 ? 'due' : 'late',
+    title: wd <= 7 ? L('পানি পরীক্ষা হয়েছে', 'Water tested') : L('পানি পরীক্ষা করুন', 'Test the water'),
+    sub: lw ? L(`শেষ পরীক্ষা ${ago(lw.date)}`, `Last test ${ago(lw.date)}`) : L('এখনো পরীক্ষা হয়নি', 'Never tested') });
+  if (totalLive(pid) > 0) {
+    const ls = S.samples.filter(x => x.pondId === pid).sort((a, b) => a.date < b.date ? 1 : -1)[0];
+    const sd = ls ? daysAgo(ls.date) : daysAgo(pondById(pid).start);
+    out.push({ kind: 'sample', state: sd <= 15 ? 'done' : sd <= 30 ? 'due' : 'late',
+      title: sd <= 15 ? L('ওজন মাপা হয়েছে', 'Fish weighed') : L('কয়েকটি মাছের ওজন মাপুন', 'Weigh a few fish'),
+      sub: ls ? L(`শেষ মাপা ${ago(ls.date)}`, `Last weighed ${ago(ls.date)}`) : L('এখনো মাপা হয়নি', 'Not weighed yet') });
+  }
+  return out;
+}
+function health(pid) {
+  const lw = latestWater(pid);
+  const bands = Object.entries(lw.vals).filter(([p, o]) => daysAgo(o.date) <= 14).map(([p, o]) => band(p, o.v));
+  let b = worst(bands) || 'watch';
+  const ts = tasks(pid);
+  if (b === 'safe' && ts.some(t => t.state === 'late')) b = 'watch';
+  const dangerParams = Object.entries(lw.vals).filter(([p, o]) => daysAgo(o.date) <= 14 && band(p, o.v) === 'danger').map(([p]) => p);
+  const watchParams = Object.entries(lw.vals).filter(([p, o]) => daysAgo(o.date) <= 14 && band(p, o.v) === 'watch').map(([p]) => p);
+  return { band: b, dangerParams, watchParams };
+}
+function weatherRisk() {
+  const wx = WEATHER();
+  return S.ponds.filter(p => { const bio = totalBio(p.id); return wx.cloud > 80 && wx.air > 30 && bio / p.area > 2.5; });
+}
+
+/* ===================== UI state ===================== */
+const UI = { tab: 'today', stack: [], sheet: null, toast: null, sym: { step: 0, picks: [] }, undo: null, layerHtml: '' };
+function go(view, params) { UI.stack.push({ view, params: params || {} }); render(true); }
+function back() { if (UI.sheet) { UI.sheet = null; renderLayer(); return; } UI.stack.pop(); render(true); }
+window.mbBack = () => { if (UI.sheet || UI.stack.length) { back(); return true; } return false; };
+function setTab(t) { UI.tab = t; UI.stack = []; render(true); }
+function cur() { return UI.stack[UI.stack.length - 1] || { view: UI.tab, params: {} }; }
+function commit(msg, mutate) {
+  const before = JSON.stringify(S);
+  mutate();
+  S.demo = S.demo && true;
+  save();
+  UI.undo = before;
+  toast(msg, true);
+}
+let toastTimer;
+function toast(msg, canUndo) {
+  UI.toast = { msg, canUndo };
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { UI.toast = null; renderLayer(); }, canUndo ? 10000 : 3500);
+  renderLayer();
+}
+function tick(id) { if (!S.checklist[id]) { S.checklist[id] = true; save(); } }
+
+/* ===================== Components ===================== */
+const stepper = (id, val, step, unit, min) => `<div class="field"><div class="stepper"><button type="button" data-act="dec" data-for="${id}" data-step="${step}" data-min="${min ?? 0}" aria-label="${L('কমান', 'Decrease')}">−</button>
+  <input id="${id}" class="num" inputmode="decimal" value="${esc(val === '' || val === null || val === undefined ? '' : dig(val))}" aria-label="${esc(unit)}"><button type="button" data-act="inc" data-for="${id}" data-step="${step}" aria-label="${L('বাড়ান', 'Increase')}">+</button></div>${unit ? `<div class="unit">${unit}</div>` : ''}</div>`;
+const readNum = id => { const el = document.getElementById(id); if (!el) return null; const v = parseFloat(String(el.value).replace(/[০-৯]/g, d => BN_D.indexOf(d)).replace(/,/g, '')); return isFinite(v) ? v : null; };
+const readStr = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+const pick = (group, val, cur, label, icon) => `<button type="button" class="chip ${cur === val ? 'sel' : ''}" data-act="pick" data-group="${group}" data-val="${val}">${icon ? IC[icon] : ''}${label}</button>`;
+const statBox = (k, v, locked) => `<div class="stat ${locked ? 'locked' : ''}"><div class="k">${k}</div><div class="v num">${v}</div></div>`;
+const lockBadge = need => `<span class="badge lock">${IC.lock}${planName(need)}</span>`;
+function pondChips(sel, act) {
+  return `<div class="choice">${S.ponds.map(p => `<button type="button" class="chip ${p.id === sel ? 'sel' : ''}" data-act="${act || 'pick'}" data-group="pond" data-val="${p.id}">${IC.pond}${esc(p.name)}</button>`).join('')}</div>`;
+}
+function emptyBox(icon, title, sub, btn) {
+  return `<div class="card center" style="align-items:center;padding:28px 16px"><div class="tile" style="box-shadow:none;border:0;min-height:0;padding:0;background:none"><span class="ic">${IC[icon]}</span></div><h3>${title}</h3><p class="muted">${sub}</p>${btn || ''}</div>`;
+}
+
+/* ===================== Views ===================== */
+const VIEWS = {};
+VIEWS.today = () => {
+  const d = new Date();
+  const wx = WEATHER();
+  const risky = weatherRisk();
+  let h = `<div class="row"><div class="grow"><h2>${S.profile.name ? L('আসসালামু আলাইকুম, ', 'Hello, ') + esc(S.profile.name.split(' ')[0]) : L('আসসালামু আলাইকুম', 'Hello')}</h2>
+    <p class="muted">${(S.lang === 'en' ? DAY_EN : DAY_BN)[d.getDay()]}, ${fmtDate(today(), true)}</p></div></div>`;
+  h += `<div class="weather" role="group" aria-label="${L('আবহাওয়া', 'Weather')}"><div class="wic">${IC.cloud}</div><div class="grow" style="flex:1;min-width:0">
+     <div class="row" style="justify-content:space-between"><b>${L('আজকের আবহাওয়া', "Today's weather")}</b><span class="demo-tag">${L('নমুনা', 'Sample')}</span></div>
+     <div class="wcells"><div class="wcell"><b class="num">${n(wx.air)}°</b><span class="small muted">${L('গরম', 'Hot')}</span></div>
+     <div class="wcell"><b class="num">${n(wx.cloud)}%</b><span class="small muted">${L('মেঘলা', 'Cloudy')}</span></div>
+     <div class="wcell"><b class="num">${n(wx.rain)}%</b><span class="small muted">${L('বৃষ্টি', 'Rain')}</span></div></div></div></div>`;
+  // alerts
+  S.ponds.forEach(p => {
+    const hl = health(p.id);
+    if (hl.dangerParams.length) h += `<button type="button" class="alert" data-act="open" data-view="pond" data-id="${p.id}" data-sub="water" style="text-align:left;cursor:pointer;color:inherit">
+      <span class="ic">${IC.alert}</span><span><b>${esc(p.name)}: ${L('বিপদ', 'Danger')} — ${hl.dangerParams.map(x => tx(PARAMS[x])).join(', ')}</b>
+      <span class="small">${L('কী করবেন দেখতে চাপুন', 'Tap to see what to do')}</span></span></button>`;
+  });
+  if (risky.length) h += `<div class="alert watch"><span class="ic">${IC.cloud}</span><span><b>${L('মেঘলা গরম দিন — ভোরে অক্সিজেন কমতে পারে', 'Cloudy and hot — oxygen may drop at dawn')}</b>
+    <span class="small">${risky.map(p => esc(p.name)).join(', ')}: ${L('আজ খাবার একটু কম দিন, ভোরে মাছ দেখুন', 'feed a little less today and check fish at dawn')}</span></span></div>`;
+  if (!S.ponds.length) return h + emptyBox('pond', L('এখনো কোনো পুকুর নেই', 'No ponds yet'), L('প্রথম পুকুর যোগ করুন, তারপর অ্যাপ প্রতিদিনের কাজ দেখাবে', 'Add your first pond and the app will show daily tasks'),
+    `<button class="btn primary full" data-act="open" data-view="addPond">${IC.plus}${L('পুকুর যোগ করুন', 'Add a pond')}</button>`);
+  h += `<h2>${L('আজকের কাজ', "Today's work")}</h2>`;
+  S.ponds.forEach(p => {
+    const hl = health(p.id);
+    const ts = tasks(p.id);
+    const ms = mainSpecies(p.id);
+    h += `<div class="card"><button type="button" class="pond-head" data-act="open" data-view="pond" data-id="${p.id}" style="background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%">
+      <span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><span class="grow" style="flex:1;min-width:0"><h3>${esc(p.name)}</h3>
+      <span class="small muted">${ms ? spName(ms) + ' · ' : ''}${n(p.area)} ${L('শতাংশ', 'decimals')} · ${L(`${dig(daysAgo(p.start))} দিন`, `day ${daysAgo(p.start)}`)}</span><br>
+      <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span></span><span style="color:var(--ink-2)">${IC.next}</span></button>
+      <div class="stack">${ts.map(t => `<button type="button" class="task ${t.state}" data-act="task" data-kind="${t.kind}" data-id="${p.id}">
+        <span class="ic">${t.state === 'done' ? IC.check : IC[t.kind === 'feed' ? 'feed' : t.kind === 'water' ? 'drop' : 'scale']}</span><span class="grow" style="flex:1;min-width:0"><b>${t.title}</b><span>${t.sub}</span></span></button>`).join('')}</div></div>`;
+  });
+  return h;
+};
+
+VIEWS.ponds = () => {
+  let h = `<div class="row"><h2 class="grow">${L('আমার পুকুর', 'My ponds')}</h2><span class="badge">${n(S.ponds.length)} / ${S.plan === 'pro' ? '∞' : n(PLANS[S.plan].ponds)}</span></div>`;
+  if (!S.ponds.length) return h + emptyBox('pond', L('এখনো কোনো পুকুর নেই', 'No ponds yet'), L('নিচের বোতাম চেপে পুকুর যোগ করুন', 'Tap the button below to add a pond'),
+    `<button class="btn primary full" data-act="open" data-view="addPond">${IC.plus}${L('পুকুর যোগ করুন', 'Add a pond')}</button>`);
+  S.ponds.forEach(p => {
+    const hl = health(p.id), m = money(p.id);
+    h += `<button type="button" class="card" data-act="open" data-view="pond" data-id="${p.id}" style="text-align:left;cursor:pointer;color:inherit;font:inherit">
+      <div class="pond-head"><span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><div class="grow" style="flex:1;min-width:0"><h3>${esc(p.name)}</h3>
+      <span class="small muted">${n(p.area)} ${L('শতাংশ', 'decimals')} · ${n(p.depth)} ${L('ফুট গভীর', 'ft deep')}</span></div><span style="color:var(--ink-2)">${IC.next}</span></div>
+      <div class="grid3">${statBox(L('মাছ আছে', 'Fish'), n(totalLive(p.id)))}${statBox(L('মোট ওজন', 'Weight'), n(totalBio(p.id), 0) + ` <small>${L('কেজি', 'kg')}</small>`)}${statBox(L('লাভ/ক্ষতি', 'Profit'), `<span class="${m.profit >= 0 ? 'plus' : 'minus'}">${tk(m.profit)}</span>`)}</div></button>`;
+  });
+  h += `<button class="btn ghost full" data-act="open" data-view="addPond">${IC.plus}${L('নতুন পুকুর যোগ করুন', 'Add a new pond')}</button>`;
+  return h;
+};
+
+VIEWS.pond = ({ id, sub }) => {
+  const p = pondById(id); if (!p) return emptyBox('pond', L('পুকুর পাওয়া যায়নি', 'Pond not found'), '');
+  sub = sub || 'summary';
+  const subs = [['summary', 'pond', L('সারাংশ', 'Summary')], ['feed', 'feed', L('খাবার', 'Feed')], ['water', 'drop', L('পানি', 'Water')], ['growth', 'chart', L('বৃদ্ধি', 'Growth')], ['money', 'money', L('হিসাব', 'Money')], ['fish', 'fish', L('মাছ', 'Fish')]];
+  let h = `<div class="seg" role="tablist">${subs.map(s => `<button type="button" role="tab" class="${s[0] === sub ? 'on' : ''}" data-act="sub" data-sub="${s[0]}">${IC[s[1]]}${s[2]}</button>`).join('')}</div>`;
+  h += (SUBV[sub] || SUBV.summary)(p);
+  return h;
+};
+const SUBV = {};
+SUBV.summary = p => {
+  const rows = stockRows(p.id), hl = health(p.id), a = analytics(p.id), fp = feedPlan(p.id);
+  tick('pondDetail');
+  let h = `<div class="card"><div class="pond-head"><span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><div class="grow" style="flex:1"><h3>${esc(p.name)}</h3>
+    <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span>${hl.dangerParams.length ? `<span class="small"> — ${hl.dangerParams.map(x => tx(PARAMS[x])).join(', ')}</span>` : ''}</div></div>
+    <div class="grid2">${statBox(L('জীবিত মাছ', 'Live fish'), n(totalLive(p.id)))}${statBox(L('মোট ওজন', 'Total weight'), n(a.nowBio, 0) + ` <small>${L('কেজি', 'kg')}</small>`)}
+    ${statBox(L('চাষের দিন', 'Days farming'), n(daysAgo(p.start)))}${statBox(L('আজকের খাবার', "Today's feed"), fp.kDO === 0 ? `<span class="danger-t">${L('বন্ধ', 'Stop')}</span>` : n(fp.kg, 1) + ` <small>${L('কেজি', 'kg')}</small>`)}</div></div>`;
+  h += `<div class="card"><h3>${L('পুকুরে কোন মাছ কত', 'Fish in this pond')}</h3><div class="list">${rows.map(r => `<div class="li"><span class="ic">${IC.fish}</span><div class="grow"><b>${spName(r.sp)}</b>
+    <div class="small muted">${L('গড় ওজন', 'Avg weight')} ${n(r.avgW)} ${L('গ্রাম', 'g')}${r.measured ? '' : ' · ' + L('মাপা হয়নি', 'not weighed')}</div></div><div class="amt num">${n(r.live)}<span class="small muted"> ${L('টি', 'fish')}</span></div></div>`).join('') || `<p class="muted">${L('এখনো মাছ ছাড়া হয়নি', 'No fish stocked yet')}</p>`}</div>
+    <button class="btn ghost" data-act="open" data-view="stockEvent" data-id="${p.id}" data-type="release">${IC.plus}${L('মাছ ছাড়ুন', 'Stock fish')}</button></div>`;
+  if (a.main) h += `<div class="card"><h3>${L('কবে বিক্রি করা যাবে', 'When can I sell?')}</h3>
+    <p>${L(`${spName(a.main.sp)} ${n(SP[a.main.sp].target)} গ্রাম হতে আরও প্রায় <b>${n(a.daysLeft)} দিন</b> লাগবে — ${fmtDate(a.harvestDate, true)}`,
+      `${spName(a.main.sp)} needs about <b>${a.daysLeft} more days</b> to reach ${SP[a.main.sp].target} g — ${fmtDate(a.harvestDate, true)}`)}</p>
+    <p class="small muted">${L(`দৈনিক বৃদ্ধি ${n(a.adg, 1)} গ্রাম ধরে হিসাব`, `Based on ${n(a.adg, 1)} g growth per day`)}</p></div>`;
+  h += `<div class="grid2"><button class="btn line" data-act="open" data-view="editPond" data-id="${p.id}">${IC.edit}${L('পুকুর বদলান', 'Edit pond')}</button>
+    <button class="btn line" data-act="open" data-view="report" data-id="${p.id}">${IC.doc}${L('রিপোর্ট', 'Report')}</button></div>`;
+  return h;
+};
+SUBV.feed = p => {
+  const fp = feedPlan(p.id);
+  const logs = S.logs.filter(l => l.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
+  let h = `<div class="card"><h3>${L('আজ কত খাবার দেবেন', 'How much to feed today')}</h3>`;
+  if (fp.kDO === 0) h += `<div class="alert"><span class="ic">${IC.alert}</span><span><b>${L('অক্সিজেন কম — আজ খাবার দেবেন না', 'Oxygen is low — do not feed today')}</b></span></div>`;
+  else h += `<div class="center"><div class="big-num num">${n(fp.kg, 1)} <span style="font-size:22px">${L('কেজি', 'kg')}</span></div>
+    <p class="muted">${L('সীমা', 'Range')} ${n(fp.min, 1)}–${n(fp.max, 1)} ${L('কেজি', 'kg')}</p></div>
+    <div class="grid3">${fp.times.map(t => statBox(fmtTime(t), n(fp.perMeal, 1) + ` <small>${L('কেজি', 'kg')}</small>`)).join('')}</div>
+    <details><summary class="small muted" style="cursor:pointer;min-height:40px;display:flex;align-items:center">${L('হিসাব কীভাবে হলো', 'How this was calculated')}</summary>
+    <div class="small muted stack" style="margin-top:6px">${fp.parts.map(x => `<div>${spName(x.sp)}: ${L('শরীরের ওজনের', 'body weight')} ${n(x.pct[0])}–${n(x.pct[1])}% → ${n(x.kg, 1)} ${L('কেজি', 'kg')}</div>`).join('')}
+    <div>${L('পানির তাপ', 'Water temp')} ${n(fp.temp)}° → ×${n(fp.kT, 2)}</div><div>${L('সিলভার কার্প প্রাকৃতিক খাবার খায়, তাই বাদ', 'Silver carp eat natural food, so they are excluded')}</div></div></details>`;
+  h += `<button class="btn primary full" data-act="quickLog" data-id="${p.id}">${IC.feed}${L('আজকের খাবার লিখুন', "Log today's feed")}</button></div>`;
+  h += `<div class="card"><div class="row"><h3 class="grow">${L('খাবার দেওয়ার সময় মনে করানো', 'Feeding reminders')}</h3><button class="btn sm ghost" data-act="open" data-view="reminders">${L('বদলান', 'Change')}</button></div>
+    <div class="choice">${S.reminders.filter(r => r.pondId === p.id).map(r => `<span class="badge ${r.on ? 'safe' : ''}">${IC.bell}${fmtTime(r.time)}${r.on ? '' : ' · ' + L('বন্ধ', 'off')}</span>`).join('') || `<span class="muted">${L('কোনো সময় ঠিক করা নেই', 'No reminders set')}</span>`}</div></div>`;
+  h += `<div class="card"><h3>${L('খাবারের খাতা', 'Feed diary')}</h3><div class="list">${logs.slice(0, 20).map(l => `<div class="li"><span class="ic">${IC.feed}</span><div class="grow"><b>${fmtDate(l.date)}</b>
+    <div class="small muted">${l.deaths ? `<span class="danger-t">${L('মরেছে', 'Died')} ${n(l.deaths)}</span> · ` : ''}${esc(l.note)}</div></div><div class="amt num">${n(l.feedKg, 1)} ${L('কেজি', 'kg')}</div>
+    <button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delLog" data-id="${l.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('এখনো কিছু লেখা হয়নি', 'Nothing logged yet')}</p>`}</div></div>`;
+  return h;
+};
+SUBV.water = p => {
+  const lw = latestWater(p.id);
+  const rs = S.water.filter(w => w.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
+  let h = `<button class="btn primary full" data-act="open" data-view="waterTest" data-id="${p.id}">${IC.drop}${L('পানি পরীক্ষা করুন', 'Test the water')}</button>`;
+  h += `<div class="card"><h3>${L('পানির সর্বশেষ অবস্থা', 'Latest water condition')}</h3><div class="list">`;
+  Object.keys(PARAMS).forEach(k => {
+    const o = lw.vals[k];
+    const b = o ? band(k, o.v) : null;
+    h += `<div class="li"><span class="ic">${IC[PARAMS[k].icon]}</span><div class="grow"><b>${tx(PARAMS[k])}</b><div class="small muted">${o ? ago(o.date) : L('মাপা হয়নি', 'Not tested')}</div></div>
+      <div class="center"><div class="amt num">${o ? n(o.v, o.v % 1 ? (k === 'nh3' || k === 'no2' ? 2 : 1) : 0) : '–'}</div>${b ? `<span class="badge ${b}">${BAND_WORD(b)}</span>` : ''}</div></div>`;
+  });
+  h += `</div></div>`;
+  const acts = Object.entries(lw.vals).filter(([k, o]) => daysAgo(o.date) <= 14).map(([k, o]) => ({ k, a: actionFor(k, o.v), b: band(k, o.v) })).filter(x => x.a);
+  if (acts.length) h += `<div class="card"><h3>${L('এখন কী করবেন', 'What to do now')}</h3>${acts.map(x => `<div class="alert ${x.b === 'watch' ? 'watch' : ''}"><span class="ic">${IC.alert}</span><span><b>${tx(PARAMS[x.k])}</b>${x.a.map(t => `<span style="display:block">• ${t}</span>`).join('')}</span></div>`).join('')}</div>`;
+  const la = lw.vals.ph ? limeAdvice(lw.vals.ph.v, p.area) : null, fa = lw.vals.secchi ? fertAdvice(lw.vals.secchi.v, p.area, p.id) : null;
+  if (la || fa) h += `<div class="card"><h3>${L('চুন ও সার', 'Lime and fertiliser')}</h3>${la ? `<div class="row"><span class="badge ${la.tone}">${L('চুন', 'Lime')}</span><span class="grow">${la.msg}</span></div>` : ''}
+    ${fa ? `<div class="row"><span class="badge ${fa.tone}">${L('সার', 'Fertiliser')}</span><span class="grow">${fa.msg}</span></div>` : ''}</div>`;
+  h += `<div class="card"><h3>${L('আগের পরীক্ষা', 'Past tests')}</h3><div class="list">${rs.map(r => `<div class="li"><span class="ic">${IC.drop}</span><div class="grow"><b>${fmtDate(r.date, true)}</b>
+    <div class="small">${Object.keys(PARAMS).filter(k => r[k] !== undefined && r[k] !== null && r[k] !== '').map(k => `<span class="${band(k, r[k])}-t">${tx(PARAMS[k]).split(' (')[0]} ${n(r[k], r[k] % 1 ? 2 : 0)}</span>`).join(' · ')}</div></div>
+    <button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delWater" data-id="${r.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('এখনো পরীক্ষা হয়নি', 'No tests yet')}</p>`}</div></div>`;
+  return h;
+};
+SUBV.growth = p => {
+  const rows = stockRows(p.id);
+  const ms = rows[0];
+  let h = `<button class="btn primary full" data-act="open" data-view="sample" data-id="${p.id}">${IC.scale}${L('মাছের ওজন মাপুন', 'Weigh fish')}</button>`;
+  if (ms) {
+    const sm = S.samples.filter(x => x.pondId === p.id && x.sp === ms.sp).sort((a, b) => a.date < b.date ? -1 : 1);
+    const pts = [{ d: 0, w: ms.relW }].concat(sm.map(x => ({ d: daysBetween(p.start, x.date), w: x.totalG / x.n })));
+    h += `<div class="card"><h3>${spName(ms.sp)} — ${L('ওজন কত বাড়ছে', 'how weight is growing')}</h3>${growthChart(pts, SP[ms.sp], daysAgo(p.start))}
+      <div class="legend"><span><i style="background:var(--pond)"></i>${L('আপনার মাছ', 'Your fish')}</span><span><i style="background:var(--turmeric)"></i>${L('আদর্শ বৃদ্ধি', 'Expected growth')}</span></div></div>`;
+  }
+  const a = analytics(p.id);
+  const locked = !hasPlan('plus');
+  h += `<div class="card ${locked ? 'paywall' : ''}"><div class="row"><h3 class="grow">${L('খাবার কতটা কাজে লাগছে', 'How well feed is working')}</h3>${locked ? lockBadge('plus') : ''}</div>
+    <div class="grid2">${statBox(L('মোট খাবার দেওয়া', 'Total feed given'), n(a.feedKg, 0) + ` <small>${L('কেজি', 'kg')}</small>`)}${statBox(L('ওজন বেড়েছে', 'Weight gained'), n(a.nowBio + a.harvKg - a.startBio, 0) + ` <small>${L('কেজি', 'kg')}</small>`)}
+    ${statBox(L('এফসিআর (খাবার ÷ বৃদ্ধি)', 'FCR (feed ÷ gain)'), a.fcr ? n(a.fcr, 2) : '–', locked)}${statBox(L('দৈনিক বৃদ্ধি', 'Daily growth'), n(a.adg, 1) + ` <small>${L('গ্রাম', 'g')}</small>`, locked)}</div>
+    ${locked ? `<button class="btn warn full" data-act="paywall" data-need="plus" data-why="fcr">${IC.lock}${L('প্লাস চালু করে দেখুন', 'Unlock with Plus')}</button>` :
+      `<p class="small muted">${a.fcr ? (a.fcr <= 1.6 ? L('এফসিআর ভালো — খাবার ঠিকমতো কাজে লাগছে।', 'FCR is good — feed is being used well.') : L('এফসিআর বেশি — খাবার নষ্ট হতে পারে, কম দিন।', 'FCR is high — feed may be wasted, give less.')) : ''}</p>`}</div>`;
+  const sms = S.samples.filter(x => x.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
+  h += `<div class="card"><h3>${L('ওজন মাপার খাতা', 'Weighing diary')}</h3><div class="list">${sms.map(x => `<div class="li"><span class="ic">${IC.scale}</span><div class="grow"><b>${spName(x.sp)}</b><div class="small muted">${fmtDate(x.date, true)} · ${n(x.n)} ${L('টি মাছ', 'fish')}</div></div>
+    <div class="amt num">${n(x.totalG / x.n)} ${L('গ্রাম', 'g')}</div><button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delSample" data-id="${x.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('এখনো মাপা হয়নি', 'Not weighed yet')}</p>`}</div></div>`;
+  return h;
+};
+function growthChart(pts, sp, nowDay) {
+  const W = 340, H = 190, l = 40, r = 12, t = 12, b = 28;
+  const maxD = Math.max(nowDay + 30, 120), maxW = Math.max(sp.target * 0.6, ...pts.map(p => p.w)) * 1.15;
+  const X = d => l + d / maxD * (W - l - r), Y = w => H - b - w / maxW * (H - t - b);
+  const ref = []; for (let d = 0; d <= maxD; d += 10) ref.push([d, Math.min(sp.target, pts[0].w + sp.adg * d)]);
+  const stepY = maxW > 600 ? 200 : maxW > 300 ? 100 : 50; const yt = []; for (let v = 0; v <= maxW; v += stepY) yt.push(v);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${L('বৃদ্ধির চার্ট', 'Growth chart')}">
+    ${yt.map(v => `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${l - 6}" y="${Y(v) + 4}" text-anchor="end">${n(v)}</text>`).join('')}
+    <text x="${l}" y="${H - 8}">${L('দিন', 'day')} ${n(0)}</text><text x="${W - r}" y="${H - 8}" text-anchor="end">${n(maxD)}</text>
+    <line x1="${X(nowDay)}" x2="${X(nowDay)}" y1="${t}" y2="${H - b}" stroke="var(--ink-2)" stroke-dasharray="3 3"/><text x="${X(nowDay) + 4}" y="${t + 10}">${L('আজ', 'today')}</text>
+    <polyline fill="none" stroke="var(--turmeric)" stroke-width="2" stroke-dasharray="5 4" points="${ref.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}"/>
+    <polyline fill="none" stroke="var(--pond)" stroke-width="3" points="${pts.map(p => X(p.d) + ',' + Y(p.w)).join(' ')}"/>
+    ${pts.map(p => `<circle cx="${X(p.d)}" cy="${Y(p.w)}" r="4.5" fill="var(--pond)"/>`).join('')}
+    <text x="${X(pts[pts.length - 1].d) + 7}" y="${Y(pts[pts.length - 1].w) - 6}" style="fill:var(--ink);font-weight:600">${n(pts[pts.length - 1].w)}${L('গ্রা', 'g')}</text></svg>`;
+}
+SUBV.money = p => {
+  const m = money(p.id), a = analytics(p.id), locked = !hasPlan('plus');
+  let h = `<div class="card"><h3>${L('এই চাষের হিসাব', 'This cycle in taka')}</h3><div class="grid3">${statBox(L('খরচ', 'Spent'), `<span class="minus">${tk(m.exp)}</span>`)}${statBox(L('আয়', 'Earned'), `<span class="plus">${tk(m.inc)}</span>`)}
+    ${statBox(m.profit >= 0 ? L('লাভ', 'Profit') : L('এখন পর্যন্ত', 'So far'), `<span class="${m.profit >= 0 ? 'plus' : 'minus'}">${tk(m.profit)}</span>`)}</div>
+    <div class="grid2"><button class="btn primary" data-act="open" data-view="ledgerAdd" data-id="${p.id}" data-kind="exp">${IC.minus || IC.money}${L('খরচ লিখুন', 'Add expense')}</button>
+    <button class="btn ghost" data-act="open" data-view="ledgerAdd" data-id="${p.id}" data-kind="inc">${IC.plus}${L('আয় লিখুন', 'Add income')}</button></div></div>`;
+  h += `<div class="card ${locked ? 'paywall' : ''}"><div class="row"><h3 class="grow">${L('লাভের হিসাব ও অনুমান', 'Profit insight')}</h3>${locked ? lockBadge('plus') : ''}</div>
+    <div class="grid2">${statBox(L('প্রতি কেজি খরচ (এখন পর্যন্ত)', 'Cost per kg (so far)'), a.costPerKg ? tk(a.costPerKg) : '–', locked)}${statBox(L('বিক্রি দর (আপনার জেলা)', 'Sale price (your district)'), a.main ? tk(priceOf(a.main.sp)) : '–')}
+    ${statBox(L('বিক্রি পর্যন্ত প্রতি কেজি খরচ', 'Cost per kg at harvest'), a.projCostPerKg ? tk(a.projCostPerKg) : '–', locked)}${statBox(L('আরও খাবারের খরচ লাগবে', 'Feed cost still to come'), tk(a.projFeedCost), locked)}
+    ${statBox(L('বিক্রিতে আনুমানিক আয়', 'Expected income'), tk(a.projIncome), locked)}${statBox(L('আনুমানিক লাভ', 'Expected profit'), `<span class="${a.projProfit >= 0 ? 'plus' : 'minus'}">${tk(a.projProfit)}</span>`, locked)}</div>
+    ${locked ? `<button class="btn warn full" data-act="paywall" data-need="plus" data-why="profit">${IC.lock}${L('প্লাস চালু করে দেখুন', 'Unlock with Plus')}</button>` : `<p class="small muted">${L('অনুমান: বাকি মাছ লক্ষ্য ওজনে পৌঁছালে ও আজকের দরে বিক্রি হলে। খাবারের দাম কেজি ৳৫৮ ধরা হয়েছে।', 'Estimate: if remaining fish reach target weight and sell at today\'s price. Feed is counted at ৳58 per kg.')}</p>`}</div>`;
+  const es = m.entries.slice().sort((a, b) => a.date < b.date ? 1 : -1);
+  h += `<div class="card"><h3>${L('হিসাবের খাতা', 'Money diary')}</h3><div class="list">${es.map(e => `<div class="li"><span class="ic">${catIcon(e.cat)}</span><div class="grow"><b>${catLabel(e.cat)}</b><div class="small muted">${fmtDate(e.date, true)}${e.note ? ' · ' + esc(e.note) : ''}</div></div>
+    <div class="amt num ${e.kind === 'inc' ? 'plus' : 'minus'}">${e.kind === 'inc' ? '+' : '−'}${tk(e.amount)}</div><button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delLedger" data-id="${e.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('এখনো কোনো হিসাব নেই', 'No entries yet')}</p>`}</div></div>`;
+  return h;
+};
+SUBV.fish = p => {
+  const ev = S.stock.filter(e => e.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
+  const word = { release: L('ছাড়া হয়েছে', 'Stocked'), death: L('মরেছে', 'Died'), harvest: L('ধরা/বিক্রি', 'Harvested') };
+  let h = `<div class="grid3" style="grid-template-columns:repeat(3,1fr)">
+    <button class="tile" data-act="open" data-view="stockEvent" data-id="${p.id}" data-type="release"><span class="ic">${IC.fish}</span>${L('মাছ ছাড়ুন', 'Stock fish')}</button>
+    <button class="tile" data-act="open" data-view="stockEvent" data-id="${p.id}" data-type="death"><span class="ic" style="color:var(--danger);background:var(--danger-bg)">${IC.skull}</span>${L('মরা মাছ', 'Dead fish')}</button>
+    <button class="tile" data-act="open" data-view="stockEvent" data-id="${p.id}" data-type="harvest"><span class="ic" style="color:var(--safe);background:var(--safe-bg)">${IC.net}</span>${L('মাছ ধরুন', 'Harvest')}</button></div>`;
+  h += `<div class="card"><h3>${L('মাছের খাতা', 'Fish diary')}</h3><div class="list">${ev.map(e => `<div class="li"><span class="ic">${e.type === 'release' ? IC.fish : e.type === 'death' ? IC.skull : IC.net}</span><div class="grow"><b>${spName(e.sp)} — ${word[e.type]}</b>
+    <div class="small muted">${fmtDate(e.date, true)}${e.type === 'release' ? ` · ${L('গড়', 'avg')} ${n(e.w)} ${L('গ্রাম', 'g')}` : ''}${e.type === 'harvest' ? ` · ${n(e.kg, 1)} ${L('কেজি', 'kg')}` : ''}</div></div>
+    <div class="amt num">${n(e.count)}</div><button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delStock" data-id="${e.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('কিছু নেই', 'Nothing yet')}</p>`}</div></div>`;
+  return h;
+};
+
+/* ---- Add / edit pond wizard ---- */
+VIEWS.addPond = ({ step, draft }) => {
+  if (!UI.draft) UI.draft = { name: '', area: 20, depth: 5, allYear: true, model: 'carp', start: today() };
+  const d = UI.draft; step = step || 1;
+  if (step === 1 && S.ponds.length >= PLANS[S.plan].ponds) {
+    return `<div class="card paywall"><div class="lockrow">${IC.lock}${L('পুকুরের সীমা পূর্ণ', 'Pond limit reached')}</div>
+      <p>${L(`ফ্রি প্ল্যানে ${dig(PLANS.free.ponds)}টি পুকুর রাখা যায়। প্লাসে ${dig(PLANS.plus.ponds)}টি, প্রো-তে যত খুশি।`, `Free allows ${PLANS.free.ponds} ponds. Plus allows ${PLANS.plus.ponds}, Pro unlimited.`)}</p>
+      <button class="btn warn full" data-act="paywall" data-need="plus" data-why="ponds">${IC.star}${L('প্লাস দেখুন', 'See Plus')}</button></div>`;
+  }
+  let h = `<div class="dots">${[1, 2, 3].map(i => `<i class="${i <= step ? 'on' : ''}"></i>`).join('')}</div>`;
+  if (step === 1) h += `<div class="card"><h3>${L('ধাপ ১: পুকুরের নাম ও মাপ', 'Step 1: Name and size')}</h3>
+    <div class="field"><label class="lbl" for="f_name">${IC.pond}${L('পুকুরের নাম', 'Pond name')}</label><input id="f_name" class="inp" value="${esc(d.name)}" placeholder="${L('যেমন: বাড়ির পুকুর', 'e.g. Home pond')}"></div>
+    <label class="lbl">${IC.pond}${L('পুকুরের আয়তন', 'Pond size')}</label>${stepper('f_area', d.area, 5, L('শতাংশ (১ বিঘা = ৩৩ শতাংশ)', 'decimals (1 bigha = 33 decimals)'), 1)}
+    <label class="lbl">${IC.drop}${L('পানির গভীরতা', 'Water depth')}</label>${stepper('f_depth', d.depth, 0.5, L('ফুট', 'feet'), 1)}
+    <button class="btn primary full" data-act="pondStep" data-step="2">${L('পরের ধাপ', 'Next')}${IC.next}</button></div>`;
+  if (step === 2) h += `<div class="card"><h3>${L('ধাপ ২: পানি ও চাষের ধরন', 'Step 2: Water and farming type')}</h3>
+    <label class="lbl">${IC.drop}${L('সারা বছর পানি থাকে?', 'Water all year round?')}</label>
+    <div class="yn">${pick('allYear', 'yes', d.allYear ? 'yes' : 'no', L('হ্যাঁ, থাকে', 'Yes'), 'check')}${pick('allYear', 'no', d.allYear ? 'yes' : 'no', L('না, শুকিয়ে যায়', 'No, it dries'), 'sun')}</div>
+    <label class="lbl">${IC.fish}${L('কোন মাছ চাষ করবেন?', 'Which fish will you farm?')}</label>
+    <div class="tiles">${MODELS.map(m => `<button type="button" class="tile ${d.model === m.id ? 'sel' : ''}" data-act="pick" data-group="model" data-val="${m.id}"><span class="ic">${IC.fish}</span>${tx(m)}</button>`).join('')}</div>
+    <div class="grid2"><button class="btn line" data-act="pondStep" data-step="1">${IC.back}${L('আগের ধাপ', 'Back')}</button><button class="btn primary" data-act="pondStep" data-step="3">${L('পরের ধাপ', 'Next')}${IC.next}</button></div></div>`;
+  if (step === 3) {
+    const m = MODELS.find(x => x.id === d.model);
+    h += `<div class="card"><h3>${L('ধাপ ৩: কত পোনা ছাড়বেন', 'Step 3: How many fry to stock')}</h3>
+      <p class="muted small">${L(`${n(d.area)} শতাংশ পুকুরের জন্য পরামর্শ। দরকার হলে বদলান।`, `Suggested for ${d.area} decimals. Change if needed.`)}</p>`;
+    Object.entries(m.mix).forEach(([sp, r]) => {
+      const sug = Math.round((r[0] + r[1]) / 2 * d.area);
+      h += `<div class="field"><label class="lbl">${IC.fish}${spName(sp)} <span class="small muted">(${n(r[0] * d.area)}–${n(r[1] * d.area)})</span></label>${stepper('f_sp_' + sp, sug, sp === 'tilapia' || sp === 'koi' || sp === 'shing' || sp === 'pabda' || sp === 'pangas' ? 100 : 10, L('টি পোনা', 'fry'), 0)}</div>`;
+    });
+    h += `<label class="lbl">${IC.scale}${L('পোনার গড় ওজন', 'Average fry weight')}</label>${stepper('f_fryw', 10, 1, L('গ্রাম', 'grams'), 1)}
+      <div class="grid2"><button class="btn line" data-act="pondStep" data-step="2">${IC.back}${L('আগের ধাপ', 'Back')}</button><button class="btn primary" data-act="savePond">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>
+      <button class="btn ghost full" data-act="savePond" data-nofish="1">${L('মাছ পরে ছাড়ব', 'I will stock fish later')}</button></div>`;
+  }
+  return h;
+};
+VIEWS.editPond = ({ id }) => {
+  const p = pondById(id);
+  return `<div class="card"><h3>${L('পুকুরের তথ্য বদলান', 'Edit pond')}</h3>
+    <div class="field"><label class="lbl" for="e_name">${IC.pond}${L('পুকুরের নাম', 'Pond name')}</label><input id="e_name" class="inp" value="${esc(p.name)}"></div>
+    <label class="lbl">${IC.pond}${L('আয়তন', 'Size')}</label>${stepper('e_area', p.area, 5, L('শতাংশ', 'decimals'), 1)}
+    <label class="lbl">${IC.drop}${L('গভীরতা', 'Depth')}</label>${stepper('e_depth', p.depth, 0.5, L('ফুট', 'feet'), 1)}
+    <button class="btn primary full" data-act="saveEditPond" data-id="${p.id}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>
+    <div class="card"><h3>${L('পুকুর মুছে ফেলুন', 'Delete this pond')}</h3><p class="muted small">${L('এই পুকুরের সব খাতা মুছে যাবে।', 'All records for this pond will be removed.')}</p>
+    <button class="btn danger full" data-act="askDelPond" data-id="${p.id}">${IC.trash}${L('পুকুর মুছুন', 'Delete pond')}</button></div>`;
+};
+
+/* ---- Water test ---- */
+const PH_SW = [[5, '#E2532B'], [5.5, '#EE7A2B'], [6, '#F3A230'], [6.5, '#E9C33A'], [7, '#B8C83E'], [7.5, '#6FB54A'], [8, '#3C9C6B'], [8.5, '#2E8A8E'], [9, '#3168A4'], [9.5, '#4A4BA0'], [10, '#5E3A93']];
+const NH3_SW = [[0, '#F2E25B'], [0.25, '#D9DE5A'], [0.5, '#B9D35A'], [1, '#8DC45D'], [2, '#5DAE69'], [4, '#3B8E70'], [8, '#2A6F69']];
+const NO2_SW = [[0, '#F7EEF2'], [0.1, '#F2D2E0'], [0.25, '#EAB0CB'], [0.5, '#DE85B0'], [1, '#C95A93'], [2, '#A83977']];
+VIEWS.waterTest = ({ id }) => {
+  const p = pondById(id);
+  UI.wt = UI.wt && UI.wt.pond === id ? UI.wt : { pond: id };
+  const sw = (key, arr) => `<div class="swatches">${arr.map(([v, c]) => `<button type="button" class="sw ${UI.wt[key] === v ? 'sel' : ''}" data-act="sw" data-key="${key}" data-val="${v}"><i style="background:${c}"></i><span class="num">${n(v, v % 1 ? (key === 'ph' ? 1 : 2) : 0)}</span></button>`).join('')}</div>`;
+  return `<p class="muted">${L('কিট দিয়ে যা মেপেছেন শুধু সেগুলো দিন। বাকিগুলো খালি রাখুন।', 'Enter only what you measured with the kit. Leave the rest empty.')}</p>
+  <div class="card"><label class="lbl">${IC.drop}${L('পিএইচ — কিটের রঙের সাথে মেলান', 'pH — match the kit colour')}</label>${sw('ph', PH_SW)}</div>
+  <div class="card"><label class="lbl">${IC.stink}${L('অ্যামোনিয়া — কিটের রঙের সাথে মেলান', 'Ammonia — match the kit colour')}</label>${sw('nh3', NH3_SW)}</div>
+  <div class="card"><label class="lbl">${IC.wind}${L('অক্সিজেন (DO)', 'Oxygen (DO)')}</label>${stepper('w_do', UI.wt.do ?? '', 0.5, 'mg/L', 0)}<p class="small muted">${L('৫-এর বেশি ভালো, ৩-এর কম বিপদ', 'Above 5 is good, below 3 is danger')}</p></div>
+  <div class="card"><label class="lbl">${IC.temp}${L('পানির তাপমাত্রা', 'Water temperature')}</label>${stepper('w_temp', UI.wt.temp ?? '', 1, '°C', 0)}</div>
+  <div class="card"><label class="lbl">${IC.leaf}${L('পানির স্বচ্ছতা (সেকি ডিস্ক)', 'Water clearness (Secchi disk)')}</label>
+    <div class="secchi">${secchiPic()}<p class="small">${L('সাদা-কালো চাকতি ধীরে ধীরে পানিতে নামান। যেখানে আর দেখা যায় না, সেই গভীরতা লিখুন।', 'Lower the black-and-white disk slowly. Write the depth where it disappears.')}</p></div>${stepper('w_secchi', UI.wt.secchi ?? '', 5, L('সেমি', 'cm'), 0)}</div>
+  <div class="card"><label class="lbl">${IC.pill}${L('নাইট্রাইট (যদি মাপেন)', 'Nitrite (if measured)')}</label>${sw('no2', NO2_SW)}</div>
+  <button class="btn primary full" data-act="saveWater" data-id="${id}">${IC.check}${L('ফলাফল দেখুন ও সংরক্ষণ', 'Save and see result')}</button>`;
+};
+function secchiPic() {
+  return `<svg viewBox="0 0 90 110" aria-hidden="true"><rect x="0" y="20" width="90" height="90" rx="6" fill="var(--pond-2)"/><path d="M0 22c10 0 10-4 22-4s12 4 23 4 11-4 22-4 12 4 23 4" fill="none" stroke="var(--pond)" stroke-width="2"/>
+  <line x1="45" y1="0" x2="45" y2="70" stroke="var(--ink)" stroke-width="2"/><ellipse cx="45" cy="72" rx="22" ry="7" fill="#fff" stroke="var(--ink)"/><path d="M23 72a22 7 0 0 0 22 7v-7zM67 72a22 7 0 0 0-22-7v7z" fill="#222"/>
+  <text x="62" y="50" style="font-size:11px;fill:var(--ink)">? ${L('সেমি', 'cm')}</text></svg>`;
+}
+
+/* ---- Sample ---- */
+VIEWS.sample = ({ id }) => {
+  const rows = stockRows(id);
+  if (!rows.length) return emptyBox('fish', L('আগে মাছ ছাড়ুন', 'Stock fish first'), L('ওজন মাপতে পুকুরে মাছ থাকতে হবে', 'There must be fish in the pond to weigh'));
+  UI.smp = UI.smp && UI.smp.pond === id ? UI.smp : { pond: id, sp: rows[0].sp };
+  return `<div class="card"><h3>${L('কোন মাছ মাপছেন?', 'Which fish are you weighing?')}</h3><div class="choice">${rows.map(r => pick('smpSp', r.sp, UI.smp.sp, spName(r.sp), 'fish')).join('')}</div></div>
+  <div class="card"><h3>${L('জাল দিয়ে কয়েকটি মাছ ধরে একসাথে ওজন করুন', 'Net a few fish and weigh them together')}</h3>
+    <label class="lbl">${IC.fish}${L('কয়টি মাছ ধরেছেন', 'How many fish')}</label>${stepper('s_n', 10, 1, L('টি', 'fish'), 1)}
+    <label class="lbl">${IC.scale}${L('সবগুলোর মোট ওজন', 'Their total weight')}</label>${stepper('s_kg', 2, 0.1, L('কেজি', 'kg'), 0)}
+    <button class="btn primary full" data-act="saveSample" data-id="${id}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
+};
+
+/* ---- Stock events ---- */
+VIEWS.stockEvent = ({ id, type }) => {
+  const rows = stockRows(id);
+  const sps = type === 'release' ? Object.keys(SP) : rows.map(r => r.sp);
+  if (!sps.length) return emptyBox('fish', L('পুকুরে মাছ নেই', 'No fish in this pond'), '');
+  UI.se = UI.se && UI.se.pond === id && UI.se.type === type ? UI.se : { pond: id, type, sp: sps[0] };
+  const title = { release: L('কোন মাছ ছাড়ছেন?', 'Which fish are you stocking?'), death: L('কোন মাছ মরেছে?', 'Which fish died?'), harvest: L('কোন মাছ ধরেছেন?', 'Which fish did you harvest?') }[type];
+  const live = rows.find(r => r.sp === UI.se.sp);
+  let h = `<div class="card"><h3>${title}</h3><div class="choice">${sps.map(sp => pick('seSp', sp, UI.se.sp, spName(sp), 'fish')).join('')}</div>
+    ${live && type !== 'release' ? `<p class="small muted">${L('এখন আছে প্রায়', 'Currently about')} ${n(live.live)} ${L('টি', 'fish')}</p>` : ''}</div><div class="card">`;
+  h += `<label class="lbl">${IC.fish}${L('কয়টি মাছ', 'How many fish')}</label>${stepper('se_n', type === 'release' ? 100 : 10, type === 'release' ? 50 : 1, L('টি', 'fish'), 1)}`;
+  if (type === 'release') h += `<label class="lbl">${IC.scale}${L('একটি পোনার গড় ওজন', 'Average weight of one fry')}</label>${stepper('se_w', 10, 1, L('গ্রাম', 'grams'), 1)}
+    <label class="lbl">${IC.money}${L('প্রতিটি পোনার দাম', 'Price per fry')}</label>${stepper('se_p', SP[UI.se.sp].fry, 0.5, L('টাকা (খরচে যোগ হবে)', 'taka (added to expenses)'), 0)}`;
+  if (type === 'harvest') h += `<label class="lbl">${IC.scale}${L('মোট ওজন', 'Total weight')}</label>${stepper('se_kg', 10, 1, L('কেজি', 'kg'), 0)}
+    <label class="lbl">${IC.money}${L('বিক্রি দর (প্রতি কেজি)', 'Sale price per kg')}</label>${stepper('se_p', priceOf(UI.se.sp), 5, L('টাকা (আয়ে যোগ হবে)', 'taka (added to income)'), 0)}`;
+  h += `<button class="btn primary full" data-act="saveStock" data-id="${id}" data-type="${type}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
+  return h;
+};
+
+/* ---- Ledger add ---- */
+VIEWS.ledgerAdd = ({ id, kind }) => {
+  const cats = kind === 'inc' ? INC_CATS : EXP_CATS;
+  UI.lg = UI.lg && UI.lg.kind === kind ? UI.lg : { kind, cat: cats[0][0], pond: id || (S.ponds[0] && S.ponds[0].id) };
+  return `<div class="card"><h3>${kind === 'inc' ? L('কিসের আয়?', 'Income from?') : L('কিসের খরচ?', 'Spent on?')}</h3>
+    <div class="tiles" style="grid-template-columns:repeat(3,1fr)">${cats.map(c => `<button type="button" class="tile ${UI.lg.cat === c[0] ? 'sel' : ''}" data-act="pick" data-group="lgCat" data-val="${c[0]}" style="min-height:96px"><span class="ic">${IC[c[1]]}</span>${tx(c[2])}</button>`).join('')}</div></div>
+  <div class="card"><label class="lbl">${IC.money}${L('কত টাকা', 'How much')}</label>${stepper('l_amt', 1000, 100, L('টাকা', 'taka'), 0)}
+    <label class="lbl">${IC.pond}${L('কোন পুকুর', 'Which pond')}</label>${pondChips(UI.lg.pond, 'pick').replace(/data-group="pond"/g, 'data-group="lgPond"')}
+    <div class="field"><label class="lbl" for="l_note">${IC.edit}${L('নোট (না দিলেও চলবে)', 'Note (optional)')}</label><input id="l_note" class="inp"></div>
+    <div class="field"><label class="lbl" for="l_photo">${IC.camera}${L('রসিদের ছবি (না দিলেও চলবে)', 'Receipt photo (optional)')}</label><input id="l_photo" type="file" accept="image/*" class="inp"></div>
+    <button class="btn primary full" data-act="saveLedger" data-kind="${kind}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
+};
+
+/* ---- Help tab ---- */
+VIEWS.help = () => `<h2>${L('কী সাহায্য দরকার?', 'What help do you need?')}</h2>
+  <div class="tiles">
+  <button class="tile" data-act="open" data-view="symptom"><span class="ic" style="color:var(--danger);background:var(--danger-bg)">${IC.fish}</span>${L('মাছ অসুস্থ?', 'Fish sick?')}</button>
+  <button class="tile" data-act="open" data-view="diseases"><span class="ic">${IC.pill}</span>${L('রোগের তালিকা', 'Disease guide')}</button>
+  <button class="tile" data-act="open" data-view="calcStock"><span class="ic">${IC.calc}</span>${L('কত পোনা ছাড়বেন', 'Fry calculator')}</button>
+  <button class="tile" data-act="open" data-view="calcFeed"><span class="ic">${IC.feed}</span>${L('খাবারের হিসাব', 'Feed calculator')}</button>
+  <button class="tile" data-act="open" data-view="calcLime"><span class="ic">${IC.drop}</span>${L('চুন ও সারের হিসাব', 'Lime & fertiliser')}</button>
+  <button class="tile" data-act="open" data-view="articles"><span class="ic">${IC.book}</span>${L('শিখুন', 'Learn')}</button>
+  <button class="tile" data-act="open" data-view="qa"><span class="ic">${IC.chat}</span>${L('প্রশ্ন-উত্তর', 'Questions')}</button>
+  <button class="tile" data-act="open" data-view="expert">${hasPlan('plus') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.doctor}</span>${L('বিশেষজ্ঞকে জিজ্ঞেস', 'Ask an expert')}</button>
+  </div>
+  <div class="card"><div class="row"><span class="ic" style="color:var(--pond)">${IC.phone}</span><div class="grow"><b>${L('জরুরি সাহায্য', 'Urgent help')}</b><p class="small muted">${L('উপজেলা মৎস্য অফিস বা কৃষি কল সেন্টার', 'Upazila fisheries office or the agriculture call centre')}</p></div><b class="num" style="font-size:22px">${dig('16123')}</b></div></div>`;
+
+VIEWS.symptom = () => {
+  const st = UI.sym;
+  if (st.step >= SYMPTOM_STEPS.length) return symptomResult();
+  const s = SYMPTOM_STEPS[st.step];
+  return `<div class="dots">${SYMPTOM_STEPS.map((x, i) => `<i class="${i <= st.step ? 'on' : ''}"></i>`).join('')}</div>
+  <h2>${tx(s.q)}</h2><p class="muted small">${L('যতগুলো মেলে সব চাপুন', 'Tap all that match')}</p>
+  <div class="tiles">${s.opts.map(o => `<button type="button" class="tile ${st.picks.includes(o[0]) ? 'sel' : ''}" data-act="symPick" data-val="${o[0]}"><span class="ic">${IC[o[1]]}</span>${tx(o[2])}</button>`).join('')}</div>
+  <div class="grid2">${st.step ? `<button class="btn line" data-act="symStep" data-d="-1">${IC.back}${L('আগে', 'Back')}</button>` : '<span></span>'}<button class="btn primary" data-act="symStep" data-d="1">${st.step === SYMPTOM_STEPS.length - 1 ? L('ফলাফল', 'Result') : L('পরের ধাপ', 'Next')}${IC.next}</button></div>`;
+};
+function symptomResult() {
+  const picks = UI.sym.picks.filter(x => x !== 'normal' && x !== 'none');
+  tick('symptom');
+  if (!picks.length) return `<div class="card"><h3>${L('কোনো লক্ষণ বাছাই করা হয়নি', 'No signs selected')}</h3><p>${L('মাছ সুস্থ মনে হচ্ছে। নিয়মিত পানি পরীক্ষা চালিয়ে যান।', 'The fish seem healthy. Keep testing water regularly.')}</p>
+    <button class="btn ghost full" data-act="symReset">${IC.reset}${L('আবার শুরু', 'Start again')}</button></div>`;
+  const scored = DISEASES.map(d => { const hit = d.f.filter(f => picks.includes(f)).length; return { d, score: hit / Math.max(picks.length, 2) + hit * 0.1, hit }; })
+    .filter(x => x.hit > 0).sort((a, b) => b.score - a.score).slice(0, 3);
+  const max = scored.length ? scored[0].score : 1;
+  let h = `<h2>${L('সম্ভাব্য কারণ', 'Likely causes')}</h2><p class="small muted">${L('এটি পরামর্শ মাত্র, চিকিৎসা নয়। নিশ্চিত হতে মৎস্য কর্মকর্তাকে দেখান।', 'This is guidance, not a diagnosis. Show a fisheries officer to be sure.')}</p>`;
+  scored.forEach((x, i) => {
+    const pct = Math.round(Math.min(95, 45 + 50 * x.score / max) - i * 12);
+    h += `<div class="card"><div class="row"><h3 class="grow">${tx(x.d)}</h3><span class="badge ${i === 0 ? 'danger' : 'watch'}">${L('মিল', 'Match')} ${n(pct)}%</span></div>
+      <b>${L('এখনই যা করবেন', 'Do this now')}</b>${x.d.aid.map((a, k) => `<div class="row"><span class="badge">${n(k + 1)}</span><span class="grow">${tx(a)}</span></div>`).join('')}
+      <button class="btn line sm" data-act="open" data-view="disease" data-id="${x.d.id}">${L('বিস্তারিত', 'Details')}${IC.next}</button></div>`;
+  });
+  if (!scored.length) h += `<div class="card"><p>${L('মিল পাওয়া যায়নি। বিশেষজ্ঞকে ছবি পাঠান।', 'No match found. Send a photo to an expert.')}</p></div>`;
+  h += `<button class="btn warn full" data-act="open" data-view="expert">${IC.doctor}${L('বিশেষজ্ঞকে ছবি পাঠান', 'Send a photo to an expert')}</button>
+    <button class="btn ghost full" data-act="symReset">${IC.reset}${L('আবার শুরু', 'Start again')}</button>`;
+  return h;
+}
+VIEWS.diseases = () => `<div class="list card">${DISEASES.map(d => `<button type="button" class="li" data-act="open" data-view="disease" data-id="${d.id}" style="background:none;border:0;border-bottom:1px solid var(--line);text-align:left;cursor:pointer;width:100%;color:inherit;font:inherit">
+  <span class="ic">${IC.pill}</span><span class="grow"><b>${tx(d)}</b><div class="small muted">${tx(d.sym[0])}</div></span>${IC.next}</button>`).join('')}</div>`;
+VIEWS.disease = ({ id }) => {
+  const d = DISEASES.find(x => x.id === id);
+  const sec = (t, arr, icon) => `<div class="card"><h3 class="row">${IC[icon]}${t}</h3>${arr.map(a => `<p>• ${tx(a)}</p>`).join('')}</div>`;
+  return `<h2>${tx(d)}</h2>${sec(L('লক্ষণ', 'Signs'), d.sym, 'info')}${sec(L('কারণ', 'Cause'), d.cause, 'alert')}${sec(L('এখনই যা করবেন', 'First aid'), d.aid, 'help')}${sec(L('প্রতিরোধ', 'Prevention'), d.prev, 'check')}
+    <p class="small muted">${L('ওষুধ ব্যবহারের আগে মৎস্য কর্মকর্তার পরামর্শ নিন।', 'Ask a fisheries officer before using any medicine.')}</p>`;
+};
+VIEWS.calcStock = () => {
+  UI.cs = UI.cs || { model: 'carp', area: 30, allYear: 'yes' };
+  const ms = MODELS.filter(m => UI.cs.allYear === 'yes' || m.seasonal);
+  if (!ms.find(m => m.id === UI.cs.model)) UI.cs.model = ms[0].id;
+  const m = MODELS.find(x => x.id === UI.cs.model);
+  let costMin = 0, costMax = 0;
+  const rows = Object.entries(m.mix).map(([sp, r]) => { costMin += r[0] * UI.cs.area * SP[sp].fry; costMax += r[1] * UI.cs.area * SP[sp].fry; return `<div class="li"><span class="ic">${IC.fish}</span><div class="grow"><b>${spName(sp)}</b><div class="small muted">${L('প্রতি শতাংশে', 'per decimal')} ${n(r[0])}–${n(r[1])}</div></div><div class="amt num">${n(r[0] * UI.cs.area)}–${n(r[1] * UI.cs.area)}</div></div>`; }).join('');
+  tick('calcStock');
+  return `<div class="card"><label class="lbl">${IC.drop}${L('সারা বছর পানি থাকে?', 'Water all year?')}</label><div class="yn">${pick('csYear', 'yes', UI.cs.allYear, L('হ্যাঁ', 'Yes'), 'check')}${pick('csYear', 'no', UI.cs.allYear, L('না', 'No'), 'sun')}</div>
+    <label class="lbl">${IC.pond}${L('পুকুরের আয়তন', 'Pond size')}</label>${stepper('cs_area', UI.cs.area, 5, L('শতাংশ', 'decimals'), 1)}
+    <button class="btn ghost sm" data-act="csCalc">${IC.calc}${L('হিসাব করুন', 'Calculate')}</button>
+    <label class="lbl">${IC.fish}${L('চাষের ধরন', 'Farming type')}</label><div class="choice">${ms.map(x => pick('csModel', x.id, UI.cs.model, tx(x))).join('')}</div></div>
+  <div class="card"><h3>${n(UI.cs.area)} ${L('শতাংশে কত পোনা', 'decimals: fry to stock')}</h3><div class="list">${rows}</div>
+    <div class="stat"><div class="k">${L('পোনার আনুমানিক খরচ', 'Estimated fry cost')}</div><div class="v num">${tk(costMin)} – ${tk(costMax)}</div></div>
+    ${UI.cs.allYear === 'no' ? `<p class="small muted">${L('পানি সারা বছর না থাকলে দ্রুত বাড়ে এমন মাছই ভালো।', 'If water dries up, choose fast-growing fish only.')}</p>` : ''}</div>`;
+};
+VIEWS.calcFeed = () => {
+  UI.cf = UI.cf || { sp: 'rui', count: 500, w: 150, temp: 29 };
+  const sp = SP[UI.cf.sp], bnd = FEED[sp.type].find(x => UI.cf.w <= x[0]);
+  const bio = UI.cf.count * UI.cf.w / 1000;
+  const kT = UI.cf.temp < 15 ? 0.3 : UI.cf.temp < 20 ? 0.6 : UI.cf.temp < 25 ? 0.85 : UI.cf.temp <= 32 ? 1 : 0.7;
+  const mn = bio * bnd[1] / 100 * kT, mx = bio * bnd[2] / 100 * kT;
+  tick('calcFeed');
+  return `<div class="card"><label class="lbl">${IC.fish}${L('কোন মাছ', 'Which fish')}</label><div class="choice">${Object.keys(SP).filter(k => !SP[k].nat).map(k => pick('cfSp', k, UI.cf.sp, spName(k))).join('')}</div>
+    <label class="lbl">${IC.fish}${L('মাছের সংখ্যা', 'Number of fish')}</label>${stepper('cf_n', UI.cf.count, 50, L('টি', 'fish'), 1)}
+    <label class="lbl">${IC.scale}${L('একটি মাছের গড় ওজন', 'Average weight of one fish')}</label>${stepper('cf_w', UI.cf.w, 10, L('গ্রাম', 'grams'), 1)}
+    <label class="lbl">${IC.temp}${L('পানির তাপমাত্রা', 'Water temperature')}</label>${stepper('cf_t', UI.cf.temp, 1, '°C', 5)}
+    <button class="btn primary full" data-act="cfCalc">${IC.calc}${L('হিসাব করুন', 'Calculate')}</button></div>
+  <div class="card center"><p class="muted">${L('প্রতিদিন খাবার দিন', 'Feed per day')}</p><div class="big-num num">${kgOrG((mn + mx) / 2)}</div>
+    <p class="small muted">${L('সীমা', 'Range')} ${kgOrG(mn)} – ${kgOrG(mx)} · ${L('মোট মাছের ওজন', 'total fish weight')} ${n(bio, 1)} ${L('কেজি', 'kg')} · ${L('শরীরের ওজনের', 'body weight')} ${n(bnd[1])}–${n(bnd[2])}%</p></div>`;
+};
+VIEWS.calcLime = () => {
+  UI.cl = UI.cl || { area: 30, ph: 6, secchi: 45 };
+  const la = limeAdvice(UI.cl.ph, UI.cl.area), fa = fertAdvice(UI.cl.secchi, UI.cl.area, null);
+  tick('calcLime');
+  return `<div class="card"><label class="lbl">${IC.pond}${L('পুকুরের আয়তন', 'Pond size')}</label>${stepper('cl_area', UI.cl.area, 5, L('শতাংশ', 'decimals'), 1)}
+    <label class="lbl">${IC.drop}${L('পিএইচ', 'pH')}</label><div class="swatches">${PH_SW.map(([v, c]) => `<button type="button" class="sw ${UI.cl.ph === v ? 'sel' : ''}" data-act="clPh" data-val="${v}"><i style="background:${c}"></i><span class="num">${n(v, 1)}</span></button>`).join('')}</div>
+    <label class="lbl">${IC.leaf}${L('পানির স্বচ্ছতা', 'Water clearness')}</label>${stepper('cl_secchi', UI.cl.secchi, 5, L('সেমি', 'cm'), 0)}
+    <button class="btn primary full" data-act="clCalc">${IC.calc}${L('হিসাব করুন', 'Calculate')}</button></div>
+  <div class="card"><h3>${L('চুন', 'Lime')}</h3><div class="alert ${la.tone === 'danger' ? '' : 'watch'}" style="${la.tone === 'safe' ? 'border-color:var(--safe);background:var(--safe-bg)' : ''}"><span class="ic" style="${la.tone === 'safe' ? 'color:var(--safe)' : ''}">${BAND_ICON(la.tone)}</span><span>${la.msg}</span></div>
+    <h3>${L('সার', 'Fertiliser')}</h3><div class="alert watch" style="${fa.tone === 'safe' ? 'border-color:var(--safe);background:var(--safe-bg)' : ''}"><span class="ic" style="${fa.tone === 'safe' ? 'color:var(--safe)' : ''}">${BAND_ICON(fa.tone)}</span><span>${fa.msg}</span></div></div>`;
+};
+VIEWS.articles = () => `<div class="tiles">${ARTICLES.map(a => `<button class="tile" data-act="open" data-view="article" data-id="${a.id}"><span class="ic">${IC[a.icon]}</span>${tx(a.t)}</button>`).join('')}</div>`;
+VIEWS.article = ({ id }) => {
+  const a = ARTICLES.find(x => x.id === id); tick('article');
+  UI.fs = UI.fs || 18;
+  return `<div class="row"><h2 class="grow">${tx(a.t)}</h2><button class="btn sm ghost" data-act="fontSize" aria-label="${L('লেখা বড় করুন', 'Bigger text')}">অ/A+</button></div>
+  <div class="card" style="font-size:${UI.fs}px">${a.steps.map((s, i) => `<div class="row" style="align-items:flex-start"><span class="badge" style="font-size:16px;min-width:32px;justify-content:center">${n(i + 1)}</span><span class="grow">${tx(s)}</span></div>`).join('')}</div>`;
+};
+VIEWS.qa = () => `<button class="btn primary full" data-act="open" data-view="ask">${IC.chat}${L('প্রশ্ন করুন', 'Ask a question')}</button>
+  ${S.questions.slice().sort((a, b) => a.date < b.date ? 1 : -1).map(q => `<div class="card"><div class="row"><b class="grow">${esc(q.mine ? L('আমার প্রশ্ন', 'My question') : q.by)}</b><span class="small muted">${ago(q.date)}</span></div>
+    <p>${esc(q.q)}</p>${q.photo ? `<img src="${q.photo}" alt="" style="border-radius:12px;max-height:180px;object-fit:cover">` : ''}
+    ${q.a ? `<div class="stat"><div class="row"><b class="grow">${L('উত্তর', 'Answer')}</b>${q.expert ? `<span class="badge safe">${IC.check}${L('বিশেষজ্ঞ', 'Expert')}</span>` : ''}</div><p>${esc(q.a)}</p></div>` :
+      `<span class="badge watch">${IC.clock}${L('উত্তরের অপেক্ষায়', 'Waiting for an answer')}</span>`}</div>`).join('')}`;
+VIEWS.ask = () => `<div class="card"><div class="field"><label class="lbl" for="q_text">${IC.chat}${L('আপনার প্রশ্ন লিখুন', 'Write your question')}</label><textarea id="q_text" class="inp" placeholder="${L('যেমন: মাছের গায়ে লাল দাগ, কী করব?', 'e.g. Red spots on fish, what to do?')}"></textarea></div>
+  <div class="field"><label class="lbl" for="q_photo">${IC.camera}${L('মাছের ছবি দিন (না দিলেও চলবে)', 'Add a fish photo (optional)')}</label><input id="q_photo" type="file" accept="image/*" class="inp"></div>
+  <button class="btn primary full" data-act="saveQ">${IC.check}${L('প্রশ্ন পাঠান', 'Send question')}</button></div>
+  <p class="small muted">${L('ডেমো: প্রশ্নটি শুধু এই ফোনে জমা থাকবে।', 'Demo: the question is only saved on this phone.')}</p>`;
+VIEWS.expert = () => {
+  if (!hasPlan('plus')) return paywallCard('plus', 'expert');
+  const used = S.tickets.filter(t => t.date.slice(0, 7) === today().slice(0, 7)).length;
+  const limit = S.plan === 'pro' ? Infinity : 2;
+  return `<div class="card"><div class="row"><h3 class="grow">${L('বিশেষজ্ঞকে ছবি পাঠান', 'Send a photo to an expert')}</h3><span class="badge">${S.plan === 'pro' ? L('সীমাহীন', 'Unlimited') : `${n(used)}/${n(2)}`}</span></div>
+    <p class="small muted">${L('২৪ ঘণ্টার মধ্যে মৎস্য বিশেষজ্ঞ উত্তর দেবেন।', 'A fish expert replies within 24 hours.')}</p>
+    <label class="lbl">${IC.pond}${L('কোন পুকুর', 'Which pond')}</label>${pondChips(UI.tkPond || (S.ponds[0] && S.ponds[0].id), 'pick').replace(/data-group="pond"/g, 'data-group="tkPond"')}
+    <div class="field"><label class="lbl" for="t_photo">${IC.camera}${L('মাছের ছবি', 'Fish photo')}</label><input id="t_photo" type="file" accept="image/*" class="inp"></div>
+    <div class="field"><label class="lbl" for="t_text">${IC.edit}${L('কী সমস্যা দেখছেন', 'What problem do you see')}</label><textarea id="t_text" class="inp"></textarea></div>
+    <button class="btn primary full" data-act="saveTicket" ${used >= limit ? 'disabled' : ''}>${IC.check}${used >= limit ? L('এই মাসের সীমা শেষ', 'Monthly limit used') : L('পাঠান', 'Send')}</button></div>
+    ${S.tickets.map(t => `<div class="card"><div class="row"><b class="grow">${esc(t.text || L('ছবি পাঠানো হয়েছে', 'Photo sent'))}</b><span class="badge ${t.status === 'answered' ? 'safe' : 'watch'}">${t.status === 'answered' ? L('উত্তর এসেছে', 'Answered') : L('অপেক্ষায়', 'Waiting')}</span></div>
+      <p class="small muted">${fmtDate(t.date, true)}</p>${t.answer ? `<div class="stat"><p>${esc(t.answer)}</p></div>` : ''}</div>`).join('')}`;
+};
+function paywallCard(need, why) {
+  const perks = need === 'plus' ? [L('১০টি পর্যন্ত পুকুর', 'Up to 10 ponds'), L('প্রতি কেজি খরচ, এফসিআর ও লাভের অনুমান', 'Cost per kg, FCR and profit forecast'), L('মাসে ২ বার বিশেষজ্ঞের পরামর্শ', '2 expert photo checks a month'), L('৩০ দিনের বাজার দর', '30-day price trends'), L('পুকুরের রিপোর্ট (ঋণের জন্য)', 'Pond report (for loans)')] :
+    [L('যত খুশি পুকুর', 'Unlimited ponds'), L('সীমাহীন বিশেষজ্ঞ পরামর্শ', 'Unlimited expert help'), L('ক্রেতার কাছে মাছ বিক্রির তালিকা', 'List harvest to buyers'), L('কর্মী যোগ করুন', 'Add workers'), L('অক্সিজেন সেন্সর', 'Oxygen sensor')];
+  const price = need === 'plus' ? L('৳৯৯/মাস বা ৳৯৯৯/বছর', '৳99/month or ৳999/year') : L('৳২৯৯/মাস বা ৳২,৯৯৯/বছর', '৳299/month or ৳2,999/year');
+  return `<div class="card paywall"><div class="lockrow">${IC.star}${L(`মাছবন্ধু ${planName(need)}`, `Machbondhu ${planName(need)}`)}</div>
+    ${why === 'profit' || why === 'fcr' ? `<p><b>${L('জানুন কোথায় টাকা নষ্ট হচ্ছে — প্রতি কেজিতে কত খরচ, কত লাভ।', 'See where money is lost — cost and profit per kg.')}</b></p>` : ''}
+    ${perks.map(p => `<div class="row">${IC.check}<span>${p}</span></div>`).join('')}<div class="big-num num" style="font-size:28px">${price}</div>
+    <button class="btn warn full" data-act="setPlan" data-plan="${need}">${IC.star}${L('ডেমো: এখনই চালু করুন (বিনামূল্যে)', 'Demo: turn on now (free)')}</button>
+    <p class="small muted">${L('আসল অ্যাপে বিকাশ/নগদ দিয়ে টাকা দেওয়া যাবে। এই ডেমোতে কোনো টাকা লাগবে না।', 'The real app takes bKash/Nagad. No payment in this demo.')}</p></div>`;
+}
+
+/* ---- Market tab ---- */
+VIEWS.market = () => {
+  const d = DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0];
+  tick('market');
+  return `<div class="row"><h2 class="grow">${L('আজকের বাজার দর', "Today's prices")}</h2><span class="demo-tag">${L('নমুনা', 'Sample')}</span></div>
+  <div class="choice">${DISTRICTS.map(x => `<button type="button" class="chip ${x.id === d.id ? 'sel' : ''}" data-act="setDistrict" data-val="${x.id}">${tx(x)}</button>`).join('')}</div>
+  <div class="card"><div class="list">${Object.keys(SP).map(k => { const p = priceOf(k); const ch = Math.round(Math.sin(k.length * 7 + new Date().getDate()) * 8);
+    return `<div class="li"><span class="ic">${IC.fish}</span><div class="grow"><b>${spName(k)}</b><div class="small muted">${L('প্রতি কেজি, পাইকারি', 'per kg, wholesale')}</div></div>
+    <div class="center"><div class="amt num">${tk(p)}</div><span class="small ${ch >= 0 ? 'price-up' : 'price-dn'}">${ch >= 0 ? '▲' : '▼'} ${tk(Math.abs(ch))}</span></div></div>`; }).join('')}</div></div>
+  <div class="tiles">
+    <button class="tile" data-act="open" data-view="trend">${hasPlan('plus') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.chart}</span>${L('৩০ দিনের দর', '30-day trend')}</button>
+    <button class="tile" data-act="open" data-view="shop"><span class="ic">${IC.cart}</span>${L('খাবার ও উপকরণ কিনুন', 'Buy feed & supplies')}</button>
+    <button class="tile" data-act="open" data-view="orders"><span class="ic">${IC.truck}</span>${L('আমার অর্ডার', 'My orders')}</button>
+    <button class="tile" data-act="open" data-view="sell">${hasPlan('pro') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.net}</span>${L('ক্রেতার কাছে মাছ বিক্রি', 'Sell to buyers')}</button></div>`;
+};
+VIEWS.trend = () => {
+  if (!hasPlan('plus')) return paywallCard('plus', 'trend');
+  UI.trSp = UI.trSp || 'rui';
+  const base = priceOf(UI.trSp);
+  const pts = Array.from({ length: 30 }, (_, i) => Math.round(base * (1 + 0.06 * Math.sin((i + UI.trSp.length * 3) / 4.5) + 0.03 * Math.cos(i / 2.2)) - (29 - i) * 0.4));
+  const W = 340, H = 170, l = 40, r = 12, t = 14, b = 26, mn = Math.min(...pts) - 5, mx = Math.max(...pts) + 5;
+  const X = i => l + i / 29 * (W - l - r), Y = v => H - b - (v - mn) / (mx - mn) * (H - t - b);
+  tick('trend');
+  return `<div class="choice">${Object.keys(SP).map(k => pick('trSp', k, UI.trSp, spName(k))).join('')}</div>
+  <div class="card"><div class="row"><h3 class="grow">${spName(UI.trSp)} — ${L('৩০ দিন', '30 days')}</h3><span class="demo-tag">${L('নমুনা', 'Sample')}</span></div>
+  <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${L('দামের চার্ট', 'Price chart')}">
+    ${[mn, (mn + mx) / 2, mx].map(v => `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${l - 6}" y="${Y(v) + 4}" text-anchor="end">${n(v)}</text>`).join('')}
+    <path d="M${X(0)},${H - b} ${pts.map((v, i) => `L${X(i)},${Y(v)}`).join(' ')} L${X(29)},${H - b}Z" fill="var(--pond)" opacity=".12"/>
+    <polyline fill="none" stroke="var(--pond)" stroke-width="2.5" points="${pts.map((v, i) => X(i) + ',' + Y(v)).join(' ')}"/>
+    <circle cx="${X(29)}" cy="${Y(pts[29])}" r="5" fill="var(--pond)"/><text x="${X(29) - 6}" y="${Y(pts[29]) - 9}" text-anchor="end" style="fill:var(--ink);font-weight:600">${tk(pts[29])}</text>
+    <text x="${l}" y="${H - 6}">${L('৩০ দিন আগে', '30 days ago')}</text><text x="${W - r}" y="${H - 6}" text-anchor="end">${L('আজ', 'today')}</text></svg>
+  <label class="row" style="cursor:pointer"><input type="checkbox" id="pa" ${S.priceAlert ? 'checked' : ''} data-act="priceAlert" style="width:26px;height:26px"> <span>${L(`দাম ${tk(base + 20)}-এর বেশি হলে জানান`, `Alert me when price goes above ${tk(base + 20)}`)}</span></label></div>`;
+};
+VIEWS.shop = () => `<p class="muted small">${L('নমুনা পণ্য ও দাম। ডিলার বাড়িতে পৌঁছে দেবে, টাকা দেবেন পণ্য পেয়ে।', 'Sample products and prices. A dealer delivers; you pay on delivery.')}</p>
+  <div class="card list">${PRODUCTS.map(p => `<button type="button" class="li" data-act="open" data-view="product" data-id="${p.id}" style="background:none;border:0;border-bottom:1px solid var(--line);width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit">
+    <span class="ic">${IC[p.icon]}</span><span class="grow"><b>${tx(p)}</b></span><span class="amt num">${tk(p.price)}</span></button>`).join('')}</div>`;
+VIEWS.product = ({ id }) => {
+  const p = PRODUCTS.find(x => x.id === id);
+  const d = DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0];
+  return `<div class="card center" style="align-items:center"><span class="tile" style="box-shadow:none;border:0;min-height:0;padding:0;background:none"><span class="ic" style="width:80px;height:80px">${IC[p.icon]}</span></span>
+    <h2>${tx(p)}</h2><div class="big-num num">${tk(p.price)}</div><p class="small muted">${L('বিক্রেতা', 'Seller')}: ${L('নমুনা ডিলার', 'Sample dealer')}, ${tx(d)} · ${L('২–৩ দিনে পৌঁছাবে', 'Delivered in 2–3 days')}</p></div>
+  <div class="card"><label class="lbl">${IC.cart}${L('কয়টি', 'Quantity')}</label>${stepper('o_qty', 1, 1, '', 1)}
+    <label class="row" style="cursor:pointer;min-height:44px"><input type="checkbox" id="o_ledger" checked style="width:26px;height:26px"><span>${L('খরচের খাতায় যোগ করুন', 'Add to my expenses')}</span></label>
+    ${S.ponds.length ? `<div id="o_pondwrap">${pondChips(UI.oPond || S.ponds[0].id, 'pick').replace(/data-group="pond"/g, 'data-group="oPond"')}</div>` : ''}
+    <button class="btn primary full" data-act="placeOrder" data-id="${p.id}">${IC.check}${L('অর্ডার করুন (পণ্য পেয়ে টাকা)', 'Order (cash on delivery)')}</button></div>`;
+};
+VIEWS.orders = () => {
+  const st = { placed: [L('অর্ডার হয়েছে', 'Ordered'), 'watch'], shipped: [L('পথে আছে', 'On the way'), 'watch'], delivered: [L('পৌঁছেছে', 'Delivered'), 'safe'] };
+  return S.orders.length ? `<div class="card list">${S.orders.slice().reverse().map(o => { const p = PRODUCTS.find(x => x.id === o.pid);
+    return `<div class="li"><span class="ic">${IC[p.icon]}</span><div class="grow"><b>${tx(p)} × ${n(o.qty)}</b><div class="small muted">${fmtDate(o.date, true)} · ${tk(p.price * o.qty)}</div></div><span class="badge ${st[o.status][1]}">${st[o.status][0]}</span></div>`; }).join('')}</div>`
+    : emptyBox('cart', L('কোনো অর্ডার নেই', 'No orders yet'), '');
+};
+VIEWS.sell = () => {
+  if (!hasPlan('pro')) return paywallCard('pro', 'sell');
+  UI.sl = UI.sl || { sp: 'rui' };
+  return `<div class="card"><h3>${L('কোন মাছ বিক্রি করবেন', 'Which fish to sell')}</h3><div class="choice">${Object.keys(SP).map(k => pick('slSp', k, UI.sl.sp, spName(k))).join('')}</div>
+    <label class="lbl">${IC.scale}${L('আনুমানিক কত কেজি', 'About how many kg')}</label>${stepper('sl_kg', 300, 50, L('কেজি', 'kg'), 10)}
+    <label class="lbl">${IC.money}${L('চাওয়া দর (প্রতি কেজি)', 'Asking price per kg')}</label>${stepper('sl_p', priceOf(UI.sl.sp), 5, L('টাকা', 'taka'), 1)}
+    <div class="field"><label class="lbl" for="sl_date">${IC.clock}${L('কবে ধরবেন', 'Harvest date')}</label><input id="sl_date" type="date" class="inp" value="${addDays(today(), 7)}"></div>
+    <button class="btn primary full" data-act="saveListing">${IC.check}${L('ক্রেতাদের দেখান', 'Show to buyers')}</button></div>
+    ${S.listings.slice().reverse().map(x => `<div class="card"><div class="row"><b class="grow">${spName(x.sp)} · ${n(x.kg)} ${L('কেজি', 'kg')}</b><span class="badge">${fmtDate(x.date)}</span></div>
+      <p class="small muted">${L('চাওয়া দর', 'Asking')} ${tk(x.price)}/${L('কেজি', 'kg')}</p>${x.bids.map(b => `<div class="li"><span class="ic">${IC.truck}</span><div class="grow"><b>${esc(b.who)}</b><div class="small muted">${L('নমুনা ক্রেতা', 'Sample buyer')}</div></div><div class="amt num">${tk(b.price)}</div></div>`).join('')}</div>`).join('')}`;
+};
+
+/* ---- Me tab ---- */
+VIEWS.me = () => `<div class="card"><div class="row"><span class="ring" style="border-color:var(--pond);background:var(--pond-2);color:var(--pond)">${IC.me}</span><div class="grow"><h3>${esc(S.profile.name || L('নাম দেওয়া হয়নি', 'No name yet'))}</h3>
+  <p class="small muted">${tx(DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0])} · ${L('প্ল্যান', 'Plan')}: <b>${planName(S.plan)}</b></p></div></div>
+  <button class="btn line" data-act="open" data-view="profile">${IC.edit}${L('নাম ও জেলা বদলান', 'Change name and district')}</button></div>
+  <div class="card"><h3>${L('ভাষা', 'Language')}</h3><div class="yn"><button class="chip ${S.lang === 'bn' ? 'sel' : ''}" data-act="lang" data-val="bn">বাংলা</button><button class="chip ${S.lang === 'en' ? 'sel' : ''}" data-act="lang" data-val="en">English</button></div></div>
+  <div class="card"><div class="row"><h3 class="grow">${L('প্ল্যান (ডেমোতে বদলে দেখুন)', 'Plan (switch to test in demo)')}</h3></div>
+    <div class="grid3">${['free', 'plus', 'pro'].map(p => `<button class="chip ${S.plan === p ? 'sel' : ''}" style="justify-content:center;border-radius:14px" data-act="setPlan" data-plan="${p}">${planName(p)}</button>`).join('')}</div>
+    <p class="small muted">${L('ফ্রি: ২টি পুকুর ও সব জরুরি সতর্কতা। প্লাস: লাভের হিসাব, বিশেষজ্ঞ, রিপোর্ট। প্রো: মাছ বিক্রি, কর্মী, সেন্সর।', 'Free: 2 ponds and all safety alerts. Plus: profit insight, expert, reports. Pro: selling, workers, sensors.')}</p></div>
+  <div class="tiles">
+    <button class="tile" data-act="open" data-view="reminders"><span class="ic">${IC.bell}</span>${L('খাবারের সময় মনে করানো', 'Feeding reminders')}</button>
+    <button class="tile" data-act="open" data-view="money"><span class="ic">${IC.money}</span>${L('সব পুকুরের হিসাব', 'All ponds money')}</button>
+    <button class="tile" data-act="open" data-view="team">${hasPlan('pro') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.team}</span>${L('কর্মী যোগ করুন', 'Add workers')}</button>
+    <button class="tile" data-act="open" data-view="sensor">${hasPlan('pro') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.sensor}</span>${L('অক্সিজেন সেন্সর', 'Oxygen sensor')}</button>
+    <button class="tile" data-act="open" data-view="checklist"><span class="ic" style="color:var(--turmeric);background:var(--watch-bg)">${IC.list}</span>${L('সব ফিচার পরীক্ষা', 'Test every feature')}</button>
+    <button class="tile" data-act="open" data-view="about"><span class="ic">${IC.info}</span>${L('অ্যাপ সম্পর্কে', 'About the app')}</button></div>
+  <div class="card"><h3>${L('ডেমো তথ্য', 'Demo data')}</h3><div class="grid2"><button class="btn line" data-act="askReset" data-mode="demo">${IC.reset}${L('নমুনা তথ্য ফেরত', 'Restore sample data')}</button>
+    <button class="btn line" data-act="askReset" data-mode="empty">${IC.trash}${L('সব মুছে শুরু', 'Start empty')}</button></div></div>`;
+VIEWS.profile = () => `<div class="card"><div class="field"><label class="lbl" for="pr_name">${IC.me}${L('আপনার নাম', 'Your name')}</label><input id="pr_name" class="inp" value="${esc(S.profile.name)}"></div>
+  <label class="lbl">${IC.globe}${L('জেলা', 'District')}</label><div class="choice">${DISTRICTS.map(x => pick('prDist', x.id, UI.prDist || S.profile.district, tx(x))).join('')}</div>
+  <button class="btn primary full" data-act="saveProfile">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
+VIEWS.reminders = () => `<p class="muted small">${L('অ্যাপ খোলা থাকলে সময় হলে বার্তা দেখাবে। আসল অ্যান্ড্রয়েড অ্যাপে ফোন বন্ধ থাকলেও অ্যালার্ম বাজবে।', 'While the app is open, a message appears on time. In the Android app, the alarm rings even when the phone is locked.')}</p>
+  ${S.ponds.map(p => `<div class="card"><h3>${esc(p.name)}</h3>${S.reminders.filter(r => r.pondId === p.id).sort((a, b) => a.time < b.time ? -1 : 1).map(r => `<div class="row"><span class="ic" style="color:var(--pond)">${IC.bell}</span><b class="grow num" style="font-size:20px">${fmtTime(r.time)}</b>
+    <button class="chip ${r.on ? 'sel' : ''}" data-act="remToggle" data-id="${r.id}">${r.on ? L('চালু', 'On') : L('বন্ধ', 'Off')}</button><button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:44px;height:44px" data-act="remDel" data-id="${r.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('')}
+    <div class="row"><input type="time" id="rt_${p.id}" class="inp" value="09:00" style="flex:1"><button class="btn ghost sm" data-act="remAdd" data-id="${p.id}">${IC.plus}${L('যোগ', 'Add')}</button></div></div>`).join('')}
+  <button class="btn warn full" data-act="remTest">${IC.bell}${L('এখনই একটি পরীক্ষা বার্তা দেখান', 'Show a test reminder now')}</button>`;
+VIEWS.money = () => {
+  const m = money(null);
+  const byCat = {}; m.entries.filter(e => e.kind === 'exp').forEach(e => byCat[e.cat] = (byCat[e.cat] || 0) + e.amount);
+  const max = Math.max(1, ...Object.values(byCat));
+  return `<div class="card"><h3>${L('সব পুকুর মিলিয়ে', 'All ponds together')}</h3><div class="grid3">${statBox(L('খরচ', 'Spent'), `<span class="minus">${tk(m.exp)}</span>`)}${statBox(L('আয়', 'Earned'), `<span class="plus">${tk(m.inc)}</span>`)}${statBox(L('ফলাফল', 'Result'), `<span class="${m.profit >= 0 ? 'plus' : 'minus'}">${tk(m.profit)}</span>`)}</div></div>
+  <div class="card"><h3>${L('কোথায় বেশি খরচ', 'Where money goes')}</h3>${Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([c, v]) => `<div class="stack" style="gap:4px"><div class="row"><span class="grow">${catLabel(c)}</span><b class="num">${tk(v)}</b></div>
+    <div style="height:12px;border-radius:6px;background:var(--pond-2)"><div style="height:12px;border-radius:6px;background:var(--pond);width:${Math.round(v / max * 100)}%"></div></div></div>`).join('') || `<p class="muted">${L('কোনো খরচ নেই', 'No expenses')}</p>`}</div>
+  <div class="grid2"><button class="btn primary" data-act="open" data-view="ledgerAdd" data-kind="exp">${L('খরচ লিখুন', 'Add expense')}</button><button class="btn ghost" data-act="open" data-view="ledgerAdd" data-kind="inc">${L('আয় লিখুন', 'Add income')}</button></div>`;
+};
+VIEWS.team = () => hasPlan('pro') ? `<div class="card"><h3>${L('কর্মী', 'Workers')}</h3><div class="li"><span class="ic">${IC.me}</span><div class="grow"><b>${esc(S.profile.name || L('আপনি', 'You'))}</b><div class="small muted">${L('মালিক', 'Owner')}</div></div></div>
+  ${(S.team || []).map(t => `<div class="li"><span class="ic">${IC.team}</span><div class="grow"><b>${esc(t.name)}</b><div class="small muted">${L('কর্মী — খাবার ও পানির খাতা লিখতে পারবে', 'Worker — can log feed and water')}</div></div></div>`).join('')}
+  <div class="row"><input id="tm_name" class="inp" placeholder="${L('কর্মীর নাম', 'Worker name')}" style="flex:1"><button class="btn ghost sm" data-act="addTeam">${IC.plus}${L('যোগ', 'Add')}</button></div>
+  <p class="small muted">${L('ডেমো: আসল অ্যাপে কর্মীর ফোনে আমন্ত্রণ যাবে।', 'Demo: the real app sends an invite to the worker\'s phone.')}</p></div>` : paywallCard('pro', 'team');
+VIEWS.sensor = () => {
+  if (!hasPlan('pro')) return paywallCard('pro', 'sensor');
+  const pts = Array.from({ length: 24 }, (_, i) => +(6.2 + 1.6 * Math.sin((i - 9) / 24 * Math.PI * 2) - (i >= 3 && i <= 6 ? 1.8 : 0)).toFixed(1));
+  const W = 340, H = 160, l = 34, r = 10, t = 12, b = 26, X = i => l + i / 23 * (W - l - r), Y = v => H - b - v / 10 * (H - t - b);
+  return `<div class="card"><div class="row"><h3 class="grow">${L('অক্সিজেন — গত ২৪ ঘণ্টা', 'Oxygen — last 24 hours')}</h3><span class="demo-tag">${L('নমুনা সেন্সর', 'Sample sensor')}</span></div>
+  <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${L('অক্সিজেন চার্ট', 'Oxygen chart')}"><rect x="${l}" y="${Y(3)}" width="${W - l - r}" height="${Y(0) - Y(3)}" fill="var(--danger)" opacity=".1"/>
+  ${[0, 3, 5, 10].map(v => `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${l - 6}" y="${Y(v) + 4}" text-anchor="end">${n(v)}</text>`).join('')}
+  <polyline fill="none" stroke="var(--pond)" stroke-width="2.5" points="${pts.map((v, i) => X(i) + ',' + Y(v)).join(' ')}"/>${pts.map((v, i) => v < 5 ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="${v < 3 ? 'var(--danger)' : 'var(--watch)'}"/>` : '').join('')}
+  <text x="${l}" y="${H - 6}">${L('রাত ১২টা', '12 AM')}</text><text x="${X(5)}" y="${H - 6}" text-anchor="middle">${L('ভোর', 'dawn')}</text><text x="${W - r}" y="${H - 6}" text-anchor="end">${L('এখন', 'now')}</text></svg>
+  <div class="alert watch"><span class="ic">${IC.wind}</span><span><b>${L('ভোর ৪–৬টায় অক্সিজেন কম ছিল', 'Oxygen was low at 4–6 AM')}</b><span class="small">${L('এরেটর নিজে চালু হয়েছিল (ডেমো)', 'The aerator switched on automatically (demo)')}</span></span></div></div>`;
+};
+VIEWS.report = ({ id }) => {
+  if (!hasPlan('plus')) return paywallCard('plus', 'report');
+  const p = pondById(id), a = analytics(id), m = money(id), rows = stockRows(id);
+  tick('report');
+  return `<div class="card"><h2>${L('পুকুরের রিপোর্ট', 'Pond report')}</h2><p class="muted">${esc(p.name)} · ${esc(S.profile.name)} · ${fmtDate(today(), true)}</p><hr>
+  <div class="grid2">${statBox(L('আয়তন', 'Area'), n(p.area) + ` <small>${L('শতাংশ', 'dec')}</small>`)}${statBox(L('চাষ শুরু', 'Started'), fmtDate(p.start, true))}
+  ${statBox(L('জীবিত মাছ', 'Live fish'), n(totalLive(id)))}${statBox(L('মোট ওজন', 'Biomass'), n(a.nowBio, 0) + ` <small>${L('কেজি', 'kg')}</small>`)}
+  ${statBox(L('খরচ', 'Spent'), tk(m.exp))}${statBox(L('আয়', 'Earned'), tk(m.inc))}${statBox(L('এফসিআর', 'FCR'), a.fcr ? n(a.fcr, 2) : '–')}${statBox(L('প্রতি কেজি খরচ', 'Cost/kg'), a.costPerKg ? tk(a.costPerKg) : '–')}</div><hr>
+  ${rows.map(r => `<div class="row"><span class="grow">${spName(r.sp)}</span><span class="num">${n(r.live)} ${L('টি', 'fish')} · ${n(r.avgW)} ${L('গ্রাম', 'g')}</span></div>`).join('')}
+  <p class="small muted">${L('আসল অ্যাপে এই রিপোর্ট PDF হিসেবে ব্যাংক বা এনজিও-তে পাঠানো যাবে।', 'In the real app this report downloads as a PDF for banks or NGOs.')}</p></div>`;
+};
+const CHECKS = [
+  ['pondDetail', L0('একটি পুকুর খুলে দেখুন', 'Open a pond')], ['addPond', L0('নতুন পুকুর যোগ করুন', 'Add a new pond')], ['quickLog', L0('আজকের খাবার লিখুন (+ লিখুন বোতাম)', 'Log today\'s feed (+ Log button)')],
+  ['water', L0('পানি পরীক্ষা করুন', 'Test the water')], ['danger', L0('বিপদ সতর্কতা দেখুন (অক্সিজেন ২ দিন)', 'See a danger alert (enter oxygen 2)')], ['sample', L0('মাছের ওজন মাপুন', 'Weigh fish')],
+  ['stock', L0('মাছ ছাড়ুন / মরা মাছ / মাছ ধরুন', 'Stock / dead / harvest fish')], ['ledger', L0('খরচ বা আয় লিখুন', 'Add an expense or income')], ['undo', L0('সংরক্ষণের পর "ফিরিয়ে নিন" চাপুন', 'Tap "Undo" after a save')],
+  ['symptom', L0('মাছ অসুস্থ? — লক্ষণ দিয়ে কারণ খুঁজুন', 'Fish sick? — find the cause')], ['calcStock', L0('পোনার হিসাব', 'Fry calculator')], ['calcFeed', L0('খাবারের হিসাব', 'Feed calculator')], ['calcLime', L0('চুন ও সারের হিসাব', 'Lime & fertiliser calculator')],
+  ['article', L0('একটি শিক্ষা পড়ুন', 'Read a lesson')], ['question', L0('একটি প্রশ্ন করুন', 'Ask a question')], ['market', L0('বাজার দর দেখুন', 'See market prices')], ['order', L0('একটি পণ্য অর্ডার করুন', 'Order a product')],
+  ['plan', L0('প্লাস/প্রো চালু করে লক করা ফিচার দেখুন', 'Turn on Plus/Pro and open locked features')], ['trend', L0('৩০ দিনের দর (প্লাস)', '30-day prices (Plus)')], ['report', L0('পুকুরের রিপোর্ট (প্লাস)', 'Pond report (Plus)')], ['ticket', L0('বিশেষজ্ঞকে ছবি পাঠান (প্লাস)', 'Send photo to expert (Plus)')],
+  ['listing', L0('ক্রেতার কাছে মাছ বিক্রি (প্রো)', 'Sell to buyers (Pro)')], ['reminder', L0('পরীক্ষা মনে করানো বার্তা', 'Test reminder message')], ['lang', L0('ভাষা বদলান', 'Switch language')], ['reset', L0('নমুনা তথ্য ফেরত / খালি শুরু', 'Restore sample / start empty')],
+];
+VIEWS.checklist = () => {
+  const done = CHECKS.filter(c => S.checklist[c[0]]).length;
+  return `<div class="card"><div class="row"><h3 class="grow">${L('ফিচার পরীক্ষার তালিকা', 'Feature test list')}</h3><span class="badge ${done === CHECKS.length ? 'safe' : ''}">${n(done)}/${n(CHECKS.length)}</span></div>
+  <p class="small muted">${L('আপনি কোনো কাজ করলে নিজে থেকেই টিক পড়বে। হাতে টিক দিতেও পারেন।', 'Items tick themselves when you do them. You can also tick by hand.')}</p>
+  <div>${CHECKS.map(c => `<div class="check-li ${S.checklist[c[0]] ? 'ok' : ''}" role="checkbox" tabindex="0" aria-checked="${!!S.checklist[c[0]]}" data-act="checkToggle" data-id="${c[0]}"><span class="box">${S.checklist[c[0]] ? IC.check : ''}</span><span>${tx(c[1])}</span></div>`).join('')}</div>
+  <button class="btn line full" data-act="checkClear">${IC.reset}${L('তালিকা খালি করুন', 'Clear the list')}</button></div>`;
+};
+VIEWS.about = () => `<div class="card"><h2>${L('মাছবন্ধু', 'Machbondhu')}</h2><p>${L('ছোট ও মাঝারি মাছচাষিদের জন্য পুকুর, খাবার, পানি আর টাকার হিসাব — এক জায়গায়।', 'Pond, feed, water and money records for small and medium fish farmers — in one place.')}</p>
+  <p class="small muted">${L('এটি একটি ডেমো। সব তথ্য শুধু এই ফোনে থাকে। দর, আবহাওয়া, ক্রেতা ও বিশেষজ্ঞের উত্তর নমুনা। খাবার, চুন ও পানির মান বিশেষজ্ঞ দিয়ে যাচাই করা দরকার।', 'This is a demo. All data stays on this phone. Prices, weather, buyers and expert replies are samples. Feed, lime and water thresholds still need expert review.')}</p>
+  <p class="small muted">${L('সংস্করণ', 'Version')} ${dig('0.1.0')} (${L('ডেমো', 'demo')})</p></div>`;
+
+/* ===================== Titles ===================== */
+function titleOf(v) {
+  const p = v.params && v.params.id && pondById(v.params.id);
+  const T = {
+    today: L('মাছবন্ধু', 'Machbondhu'), ponds: L('পুকুর', 'Ponds'), help: L('সাহায্য', 'Help'), market: L('বাজার', 'Market'), me: L('আমি', 'Me'),
+    pond: p ? p.name : '', addPond: L('নতুন পুকুর', 'New pond'), editPond: L('পুকুর বদলান', 'Edit pond'), waterTest: L('পানি পরীক্ষা', 'Water test') + (p ? ' · ' + p.name : ''),
+    sample: L('ওজন মাপা', 'Weigh fish'), stockEvent: { release: L('মাছ ছাড়ুন', 'Stock fish'), death: L('মরা মাছ', 'Dead fish'), harvest: L('মাছ ধরুন', 'Harvest') }[v.params.type],
+    ledgerAdd: v.params.kind === 'inc' ? L('আয় লিখুন', 'Add income') : L('খরচ লিখুন', 'Add expense'), symptom: L('মাছ অসুস্থ?', 'Fish sick?'), diseases: L('রোগের তালিকা', 'Disease guide'),
+    disease: L('রোগ', 'Disease'), calcStock: L('কত পোনা ছাড়বেন', 'Fry calculator'), calcFeed: L('খাবারের হিসাব', 'Feed calculator'), calcLime: L('চুন ও সার', 'Lime & fertiliser'),
+    articles: L('শিখুন', 'Learn'), article: L('শিখুন', 'Learn'), qa: L('প্রশ্ন-উত্তর', 'Questions'), ask: L('প্রশ্ন করুন', 'Ask'), expert: L('বিশেষজ্ঞ', 'Expert'),
+    trend: L('৩০ দিনের দর', '30-day prices'), shop: L('কেনাকাটা', 'Shop'), product: L('পণ্য', 'Product'), orders: L('আমার অর্ডার', 'My orders'), sell: L('মাছ বিক্রি', 'Sell fish'),
+    profile: L('প্রোফাইল', 'Profile'), reminders: L('মনে করানো', 'Reminders'), money: L('টাকার হিসাব', 'Money'), team: L('কর্মী', 'Workers'), sensor: L('সেন্সর', 'Sensor'),
+    report: L('রিপোর্ট', 'Report'), checklist: L('ফিচার পরীক্ষা', 'Feature test'), about: L('অ্যাপ সম্পর্কে', 'About'), paywall: L('আপগ্রেড', 'Upgrade'),
+  };
+  return T[v.view] || '';
+}
+VIEWS.paywall = ({ need, why }) => paywallCard(need, why);
+
+/* ===================== Render ===================== */
+function render(scrollTop) {
+  document.documentElement.lang = S.lang;
+  const v = cur();
+  const top = document.getElementById('top');
+  const isRoot = !UI.stack.length;
+  top.innerHTML = `${isRoot ? '' : `<button class="iconbtn" data-act="back" aria-label="${L('পেছনে', 'Back')}">${IC.back}</button>`}<h1>${esc(titleOf(v))}</h1>
+    ${S.plan !== 'free' ? `<span class="planchip">${planName(S.plan)}</span>` : ''}<button class="langbtn" data-act="lang" data-val="${S.lang === 'bn' ? 'en' : 'bn'}" aria-label="Language">${S.lang === 'bn' ? 'EN' : 'বাং'}</button>`;
+  const fn = VIEWS[v.view];
+  let html = '';
+  try { html = fn ? fn(v.params) : ''; } catch (e) { console.error(e); html = `<div class="alert"><span class="ic">${IC.alert}</span><span>${L('কিছু ভুল হয়েছে। পেছনে যান।', 'Something went wrong. Go back.')}</span></div>`; }
+  document.getElementById('app').innerHTML = html;
+  const tabs = [['today', 'today', L('আজ', 'Today')], ['ponds', 'pond', L('পুকুর', 'Ponds')], ['help', 'help', L('সাহায্য', 'Help')], ['market', 'market', L('বাজার', 'Market')], ['me', 'me', L('আমি', 'Me')]];
+  document.getElementById('tabs').innerHTML = tabs.map(t => `<button class="${UI.tab === t[0] ? 'on' : ''}" data-act="tab" data-tab="${t[0]}" aria-current="${UI.tab === t[0] ? 'page' : 'false'}"><span class="pill">${IC[t[1]]}</span>${t[2]}</button>`).join('');
+  if (scrollTop) window.scrollTo(0, 0);
+  renderLayer();
+}
+function renderLayer() {
+  let h = '';
+  const v = cur();
+  const fabViews = ['today', 'ponds'];
+  if (fabViews.includes(v.view) && !UI.stack.length && S.ponds.length && !UI.sheet) h += `<button class="fab" data-act="quickLog">${IC.plus}${L('লিখুন', 'Log')}</button>`;
+  if (UI.sheet) h += UI.sheet();
+  if (UI.toast) h += `<div class="toast" role="status"><span>${UI.toast.msg}</span>${UI.toast.canUndo && UI.undo ? `<button data-act="undo">${L('ফিরিয়ে নিন', 'Undo')}</button>` : ''}</div>`;
+  document.getElementById('layer').innerHTML = h;
+}
+
+/* ===================== Sheets ===================== */
+function openQuickLog(pid) {
+  UI.ql = { pond: pid || (S.ponds[0] && S.ponds[0].id) };
+  UI.sheet = () => {
+    const fp = feedPlan(UI.ql.pond);
+    const ex = S.logs.find(l => l.pondId === UI.ql.pond && l.date === today());
+    return `<div class="scrim" data-act="closeSheet"><div class="sheet" role="dialog" aria-modal="true" aria-label="${L('আজকের খাতা', "Today's log")}" data-stop="1"><div class="grab"></div>
+    <h2>${L('আজকের খাতা', "Today's log")}</h2>${pondChips(UI.ql.pond, 'qlPond')}
+    <label class="lbl">${IC.feed}${L('কত কেজি খাবার দিয়েছেন', 'Feed given (kg)')}</label>
+    ${stepper('ql_feed', ex ? ex.feedKg : (fp.kDO === 0 ? 0 : fp.kg), 0.5, fp.kDO === 0 ? L('অক্সিজেন কম — আজ খাবার না দেওয়াই ভালো', 'Oxygen low — better not to feed today') : L(`পরামর্শ: ${n(fp.kg, 1)} কেজি`, `Suggested: ${n(fp.kg, 1)} kg`), 0)}
+    <label class="lbl">${IC.skull}${L('আজ কয়টি মাছ মরেছে', 'Fish died today')}</label>${stepper('ql_dead', ex ? ex.deaths : 0, 1, L('টি', 'fish'), 0)}
+    <div class="field"><label class="lbl" for="ql_note">${IC.edit}${L('নোট (না দিলেও চলবে)', 'Note (optional)')}</label><input id="ql_note" class="inp" value="${esc(ex ? ex.note : '')}"></div>
+    <button class="btn primary full" data-act="saveQuickLog">${IC.check}${ex ? L('আজকের খাতা বদলান', 'Update today\'s log') : L('সংরক্ষণ', 'Save')}</button></div></div>`;
+  };
+  renderLayer();
+}
+function confirmSheet(msg, okLabel, onOk) {
+  UI.onOk = onOk;
+  UI.sheet = () => `<div class="scrim" data-act="closeSheet"><div class="sheet" role="alertdialog" aria-modal="true" data-stop="1"><div class="grab"></div><h2>${msg}</h2>
+    <div class="grid2"><button class="btn line" data-act="closeSheet">${L('না', 'No')}</button><button class="btn danger" data-act="confirmOk">${okLabel}</button></div></div></div>`;
+  renderLayer();
+}
+function dangerScreen(pond, items) {
+  UI.sheet = () => `<div class="danger-full" role="alertdialog" aria-modal="true"><div style="width:64px;height:64px">${IC.alert}</div><h2>${L('বিপদ!', 'Danger!')} ${esc(pond.name)}</h2>
+    <p style="font-size:19px">${items.map(i => `${tx(PARAMS[i.k])}: <b>${n(i.v, i.v % 1 ? 2 : 0)}</b>`).join(' · ')}</p>
+    ${(actionFor(items[0].k, items[0].v) || []).slice(0, 3).map((a, k) => `<div class="step"><b>${n(k + 1)}</b>${a}</div>`).join('')}
+    <div style="flex:1"></div><button class="btn full" data-act="closeSheet">${L('বুঝেছি', 'I understand')}</button></div>`;
+  tick('danger');
+  renderLayer();
+}
+
+/* ===================== Actions ===================== */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  if (el.dataset.act === 'closeSheet' && e.target.closest('[data-stop]') && !e.target.closest('button[data-act="closeSheet"]')) return;
+  const a = el.dataset.act, ds = el.dataset;
+  const v = cur();
+  switch (a) {
+    case 'tab': setTab(ds.tab); break;
+    case 'back': back(); break;
+    case 'open': {
+      if (ds.view === 'addPond') { UI.draft = null; }
+      if (ds.view === 'symptom') UI.sym = { step: 0, picks: [] };
+      const params = { id: ds.id, sub: ds.sub, type: ds.type, kind: ds.kind };
+      go(ds.view, params); break;
+    }
+    case 'sub': v.params.sub = ds.sub; render(false); break;
+    case 'lang': S.lang = ds.val; save(); tick('lang'); render(false); break;
+    case 'task': {
+      if (ds.kind === 'feed') openQuickLog(ds.id);
+      if (ds.kind === 'water') go('waterTest', { id: ds.id });
+      if (ds.kind === 'sample') go('sample', { id: ds.id });
+      break;
+    }
+    case 'quickLog': openQuickLog(ds.id || (v.params && v.params.id)); break;
+    case 'qlPond': UI.ql.pond = ds.val; renderLayer(); break;
+    case 'closeSheet': UI.sheet = null; renderLayer(); break;
+    case 'confirmOk': { const f = UI.onOk; UI.sheet = null; renderLayer(); f && f(); break; }
+    case 'inc': case 'dec': {
+      const inp = document.getElementById(ds.for); const step = parseFloat(ds.step) || 1;
+      let val = readNum(ds.for) || 0; val = a === 'inc' ? val + step : Math.max(parseFloat(ds.min || 0), val - step);
+      inp.value = dig(Math.round(val * 100) / 100); break;
+    }
+    case 'pick': {
+      const g = ds.group, val = ds.val;
+      if (g === 'allYear') UI.draft.allYear = val === 'yes';
+      else if (g === 'model') UI.draft.model = val;
+      else if (g === 'smpSp') UI.smp.sp = val;
+      else if (g === 'seSp') UI.se.sp = val;
+      else if (g === 'lgCat') UI.lg.cat = val;
+      else if (g === 'lgPond') UI.lg.pond = val;
+      else if (g === 'csYear') { UI.cs.allYear = val; UI.cs.area = readNum('cs_area') || UI.cs.area; }
+      else if (g === 'csModel') { UI.cs.model = val; UI.cs.area = readNum('cs_area') || UI.cs.area; }
+      else if (g === 'cfSp') { stashCF(); UI.cf.sp = val; }
+      else if (g === 'trSp') UI.trSp = val;
+      else if (g === 'slSp') UI.sl.sp = val;
+      else if (g === 'prDist') { UI.prName = readStr('pr_name'); UI.prDist = val; }
+      else if (g === 'tkPond') UI.tkPond = val;
+      else if (g === 'oPond') UI.oPond = val;
+      // keep typed values for wizard step 1 & quick fields
+      if (g === 'prDist') { render(false); const el2 = document.getElementById('pr_name'); if (el2) el2.value = UI.prName; break; }
+      if (g === 'lgCat' || g === 'lgPond') { const amt = readNum('l_amt'), note = readStr('l_note'); render(false); if (amt !== null) document.getElementById('l_amt').value = dig(amt); document.getElementById('l_note').value = note; break; }
+      if (g === 'seSp' || g === 'smpSp') { const keep = ['se_n', 's_n', 's_kg', 'se_w', 'se_kg'].map(id => [id, readNum(id)]); render(false); keep.forEach(([id, val]) => { const x = document.getElementById(id); if (x && val !== null) x.value = dig(val); }); break; }
+      render(false); break;
+    }
+    case 'pondStep': {
+      const d = UI.draft;
+      if (cur().params.step === 1 || !cur().params.step) {
+        if (document.getElementById('f_name')) {
+          d.name = readStr('f_name'); d.area = readNum('f_area') || 0; d.depth = readNum('f_depth') || 0;
+          if (!d.name) { toast(L('পুকুরের একটি নাম দিন', 'Please give the pond a name')); document.getElementById('f_name').focus(); return; }
+          if (d.area <= 0) { toast(L('আয়তন ০-এর বেশি হতে হবে', 'Size must be more than 0')); return; }
+        }
+      }
+      cur().params.step = +ds.step; render(true); break;
+    }
+    case 'savePond': {
+      const d = UI.draft; const pid = 'p_' + uid();
+      const m = MODELS.find(x => x.id === d.model);
+      const fryW = readNum('f_fryw') || 10;
+      const counts = ds.nofish ? [] : Object.keys(m.mix).map(sp => [sp, Math.round(readNum('f_sp_' + sp) || 0)]).filter(x => x[1] > 0);
+      commit(L('পুকুর যোগ হয়েছে', 'Pond added'), () => {
+        S.ponds.push({ id: pid, name: d.name, area: d.area, depth: d.depth, allYear: d.allYear, start: today(), model: d.model });
+        let cost = 0;
+        counts.forEach(([sp, c]) => { S.stock.push({ id: uid(), pondId: pid, sp, type: 'release', count: c, w: fryW, price: SP[sp].fry, date: today() }); cost += c * SP[sp].fry; });
+        if (cost) S.ledger.push({ id: uid(), pondId: pid, kind: 'exp', cat: 'fry', amount: Math.round(cost), date: today(), note: L('পোনা কেনা', 'Fry purchase') });
+        (FEED_TIMES[(SP[Object.keys(m.mix)[0]] || SP.rui).type]).forEach(t => S.reminders.push({ id: uid(), pondId: pid, time: t, on: true }));
+      });
+      tick('addPond'); UI.draft = null; UI.stack = []; UI.tab = 'ponds'; go('pond', { id: pid }); break;
+    }
+    case 'saveEditPond': {
+      const p = pondById(ds.id), name = readStr('e_name'), area = readNum('e_area'), depth = readNum('e_depth');
+      if (!name || !area) { toast(L('নাম ও আয়তন দিন', 'Enter name and size')); return; }
+      commit(L('পুকুরের তথ্য বদলানো হয়েছে', 'Pond updated'), () => { p.name = name; p.area = area; p.depth = depth || p.depth; });
+      back(); break;
+    }
+    case 'askDelPond': confirmSheet(L('পুকুরটি মুছে ফেলবেন?', 'Delete this pond?'), L('হ্যাঁ, মুছুন', 'Yes, delete'), () => {
+      const id = ds.id;
+      commit(L('পুকুর মুছে ফেলা হয়েছে', 'Pond deleted'), () => { ['stock', 'logs', 'water', 'samples', 'ledger', 'reminders'].forEach(k => S[k] = S[k].filter(x => x.pondId !== id)); S.ponds = S.ponds.filter(p => p.id !== id); });
+      UI.stack = []; UI.tab = 'ponds'; render(true);
+    }); break;
+    case 'saveQuickLog': {
+      const pid = UI.ql.pond, feed = readNum('ql_feed'), dead = Math.round(readNum('ql_dead') || 0), note = readStr('ql_note');
+      if (feed === null || feed < 0) { toast(L('খাবারের পরিমাণ দিন', 'Enter feed amount')); return; }
+      commit(L('আজকের খাতা সংরক্ষণ হয়েছে', "Today's log saved"), () => {
+        const ex = S.logs.find(l => l.pondId === pid && l.date === today());
+        if (ex) Object.assign(ex, { feedKg: feed, deaths: dead, note }); else S.logs.push({ id: uid(), pondId: pid, date: today(), feedKg: feed, deaths: dead, note });
+      });
+      tick('quickLog'); UI.sheet = null; render(false); break;
+    }
+    case 'sw': {
+      const k = ds.key, val = parseFloat(ds.val);
+      if (UI.wt) { UI.wt[k] = UI.wt[k] === val ? undefined : val; }
+      el.parentElement.querySelectorAll('.sw').forEach(x => x.classList.toggle('sel', x === el && UI.wt[k] !== undefined)); break;
+    }
+    case 'saveWater': {
+      const p = pondById(ds.id);
+      const r = { id: uid(), pondId: p.id, date: today() };
+      if (UI.wt.ph !== undefined) r.ph = UI.wt.ph;
+      if (UI.wt.nh3 !== undefined) r.nh3 = UI.wt.nh3;
+      if (UI.wt.no2 !== undefined) r.no2 = UI.wt.no2;
+      ['do', 'temp', 'secchi'].forEach(k => { const x = readNum('w_' + k); if (x !== null) r[k] = x; });
+      if (Object.keys(r).length <= 3) { toast(L('অন্তত একটি মাপ দিন', 'Enter at least one reading')); return; }
+      commit(L('পানির পরীক্ষা সংরক্ষণ হয়েছে', 'Water test saved'), () => S.water.push(r));
+      tick('water'); UI.wt = null;
+      UI.stack.pop(); if (cur().view === 'pond') cur().params.sub = 'water'; else go('pond', { id: p.id, sub: 'water' });
+      render(true);
+      const dang = Object.keys(PARAMS).filter(k => r[k] !== undefined && band(k, r[k]) === 'danger').map(k => ({ k, v: r[k] }));
+      if (dang.length) { dang.sort((a, b) => (a.k === 'do' ? -1 : 1)); dangerScreen(p, dang); }
+      break;
+    }
+    case 'saveSample': {
+      const c = Math.round(readNum('s_n') || 0), kg = readNum('s_kg') || 0;
+      if (c < 1 || kg <= 0) { toast(L('মাছের সংখ্যা ও ওজন দিন', 'Enter number and weight')); return; }
+      commit(L(`গড় ওজন ${n(kg * 1000 / c)} গ্রাম — সংরক্ষণ হয়েছে`, `Average ${Math.round(kg * 1000 / c)} g — saved`), () => S.samples.push({ id: uid(), pondId: ds.id, sp: UI.smp.sp, date: today(), n: c, totalG: Math.round(kg * 1000) }));
+      tick('sample'); UI.smp = null; back(); if (cur().view === 'pond') { cur().params.sub = 'growth'; render(false); } break;
+    }
+    case 'saveStock': {
+      const type = ds.type, c = Math.round(readNum('se_n') || 0);
+      if (c < 1) { toast(L('মাছের সংখ্যা দিন', 'Enter number of fish')); return; }
+      const live = (stockRows(ds.id).find(r => r.sp === UI.se.sp) || {}).live || 0;
+      if (type !== 'release' && c > live) { toast(L(`পুকুরে মাত্র ${n(live)}টি আছে`, `Only ${live} in the pond`)); return; }
+      const ev = { id: uid(), pondId: ds.id, sp: UI.se.sp, type, count: c, date: today() };
+      let led = null;
+      if (type === 'release') { ev.w = readNum('se_w') || 10; ev.price = readNum('se_p') || 0; if (ev.price) led = { kind: 'exp', cat: 'fry', amount: Math.round(ev.price * c), note: spName(ev.sp) + ' ' + n(c) }; }
+      if (type === 'harvest') { ev.kg = readNum('se_kg') || 0; ev.price = readNum('se_p') || 0; if (ev.price && ev.kg) led = { kind: 'inc', cat: 'sale', amount: Math.round(ev.price * ev.kg), note: spName(ev.sp) + ' ' + n(ev.kg, 1) + ' ' + L('কেজি', 'kg') }; }
+      commit(L('মাছের খাতা সংরক্ষণ হয়েছে', 'Fish record saved'), () => { S.stock.push(ev); if (led) S.ledger.push(Object.assign({ id: uid(), pondId: ds.id, date: today() }, led)); });
+      tick('stock'); UI.se = null; back(); if (cur().view === 'pond') { cur().params.sub = 'fish'; render(false); } break;
+    }
+    case 'saveLedger': {
+      const amt = readNum('l_amt');
+      if (!amt || amt <= 0) { toast(L('টাকার পরিমাণ দিন', 'Enter an amount')); return; }
+      if (!UI.lg.pond) { toast(L('আগে একটি পুকুর যোগ করুন', 'Add a pond first')); return; }
+      commit(L('হিসাব সংরক্ষণ হয়েছে', 'Entry saved'), () => S.ledger.push({ id: uid(), pondId: UI.lg.pond, kind: ds.kind, cat: UI.lg.cat, amount: Math.round(amt), date: today(), note: readStr('l_note') }));
+      tick('ledger'); UI.lg = null; back(); break;
+    }
+    case 'delLog': case 'delWater': case 'delSample': case 'delStock': case 'delLedger': {
+      const key = { delLog: 'logs', delWater: 'water', delSample: 'samples', delStock: 'stock', delLedger: 'ledger' }[a];
+      commit(L('মুছে ফেলা হয়েছে', 'Deleted'), () => S[key] = S[key].filter(x => x.id !== ds.id)); render(false); break;
+    }
+    case 'undo': if (UI.undo) { S = JSON.parse(UI.undo); UI.undo = null; save(); tick('undo'); UI.toast = null; render(false); toast(L('আগের অবস্থায় ফেরানো হয়েছে', 'Change undone')); } break;
+    case 'symPick': {
+      const p = UI.sym.picks, i = p.indexOf(ds.val);
+      if (i >= 0) p.splice(i, 1); else p.push(ds.val);
+      el.classList.toggle('sel'); break;
+    }
+    case 'symStep': UI.sym.step = Math.max(0, UI.sym.step + (+ds.d)); render(true); break;
+    case 'symReset': UI.sym = { step: 0, picks: [] }; render(true); break;
+    case 'csCalc': UI.cs.area = readNum('cs_area') || UI.cs.area; render(false); break;
+    case 'cfCalc': stashCF(); render(false); break;
+    case 'clPh': UI.cl.ph = parseFloat(ds.val); UI.cl.area = readNum('cl_area') || UI.cl.area; UI.cl.secchi = readNum('cl_secchi') ?? UI.cl.secchi; render(false); break;
+    case 'clCalc': UI.cl.area = readNum('cl_area') || UI.cl.area; UI.cl.secchi = readNum('cl_secchi') ?? UI.cl.secchi; render(false); break;
+    case 'fontSize': UI.fs = UI.fs >= 24 ? 16 : UI.fs + 2; render(false); break;
+    case 'saveQ': {
+      const q = readStr('q_text');
+      if (q.length < 5) { toast(L('প্রশ্নটি একটু বিস্তারিত লিখুন', 'Please write a bit more')); return; }
+      readPhoto('q_photo', photo => {
+        commit(L('প্রশ্ন পাঠানো হয়েছে', 'Question sent'), () => S.questions.push({ id: uid(), mine: true, by: L('আমি', 'Me'), date: today(), q, a: '', photo }));
+        tick('question'); back();
+      });
+      break;
+    }
+    case 'saveTicket': {
+      const text = readStr('t_text');
+      readPhoto('t_photo', photo => {
+        commit(L('বিশেষজ্ঞের কাছে পাঠানো হয়েছে', 'Sent to an expert'), () => S.tickets.unshift({ id: uid(), pond: UI.tkPond || (S.ponds[0] && S.ponds[0].id), text, date: today(), status: 'answered',
+          answer: L('ডেমো উত্তর: ছবিতে লাল দাগ দেখা যাচ্ছে। প্রতি শতাংশে ১ কেজি চুন ও ১ কেজি লবণ দিন, ২ দিন খাবার কম দিন, ৩ দিন পর আবার ছবি পাঠান।', 'Demo answer: the photo shows red spots. Apply 1 kg lime and 1 kg salt per decimal, feed less for 2 days, and send a new photo after 3 days.') }));
+        tick('ticket'); render(false);
+      });
+      break;
+    }
+    case 'paywall': go('paywall', { need: ds.need, why: ds.why }); break;
+    case 'setPlan': {
+      S.plan = ds.plan; save(); if (ds.plan !== 'free') tick('plan');
+      toast(L(`${planName(ds.plan)} প্ল্যান চালু হয়েছে (ডেমো)`, `${planName(ds.plan)} plan on (demo)`));
+      if (cur().view === 'paywall') back(); else render(false); break;
+    }
+    case 'setDistrict': S.profile.district = ds.val; save(); render(false); break;
+    case 'priceAlert': S.priceAlert = el.checked; save(); toast(el.checked ? L('দামের সতর্কতা চালু', 'Price alert on') : L('দামের সতর্কতা বন্ধ', 'Price alert off')); break;
+    case 'placeOrder': {
+      const p = PRODUCTS.find(x => x.id === ds.id), q = Math.max(1, Math.round(readNum('o_qty') || 1)), addL = document.getElementById('o_ledger') && document.getElementById('o_ledger').checked;
+      const pid = UI.oPond || (S.ponds[0] && S.ponds[0].id);
+      commit(L('অর্ডার হয়েছে — ডিলার ফোন করবে (ডেমো)', 'Ordered — the dealer will call (demo)'), () => {
+        S.orders.push({ id: uid(), pid: p.id, qty: q, date: today(), status: 'placed' });
+        if (addL && pid) S.ledger.push({ id: uid(), pondId: pid, kind: 'exp', cat: p.cat === 'feed' ? 'feed' : p.cat === 'care' ? 'med' : 'other', amount: p.price * q, date: today(), note: tx(p) + ' × ' + n(q) });
+      });
+      tick('order'); UI.stack = [{ view: 'orders', params: {} }]; render(true); break;
+    }
+    case 'saveListing': {
+      const kg = readNum('sl_kg') || 0, price = readNum('sl_p') || 0, date = readStr('sl_date') || addDays(today(), 7);
+      if (kg <= 0) { toast(L('কত কেজি দিন', 'Enter kg')); return; }
+      commit(L('ক্রেতাদের কাছে পাঠানো হয়েছে (ডেমো)', 'Shared with buyers (demo)'), () => S.listings.push({ id: uid(), sp: UI.sl.sp, kg, price, date,
+        bids: [{ who: L('আড়তদার জামাল, ' + tx(DISTRICTS[0]), 'Jamal Arot, ' + tx(DISTRICTS[0])), price: price - 5 }, { who: L('ফ্রেশ ফিশ সাপ্লাই', 'Fresh Fish Supply'), price: price + 3 }] }));
+      tick('listing'); render(false); break;
+    }
+    case 'saveProfile': {
+      S.profile.name = readStr('pr_name'); if (UI.prDist) S.profile.district = UI.prDist; UI.prDist = null; save(); toast(L('সংরক্ষণ হয়েছে', 'Saved')); back(); break;
+    }
+    case 'remToggle': { const r = S.reminders.find(x => x.id === ds.id); r.on = !r.on; save(); render(false); break; }
+    case 'remDel': commit(L('মুছে ফেলা হয়েছে', 'Deleted'), () => S.reminders = S.reminders.filter(x => x.id !== ds.id)); render(false); break;
+    case 'remAdd': { const t = readStr('rt_' + ds.id); if (!t) return; commit(L('সময় যোগ হয়েছে', 'Time added'), () => S.reminders.push({ id: uid(), pondId: ds.id, time: t, on: true })); render(false); break; }
+    case 'remTest': { const p = S.ponds[0]; showReminder(p ? p.id : null, true); tick('reminder'); break; }
+    case 'addTeam': { const nm = readStr('tm_name'); if (!nm) return; S.team = S.team || []; S.team.push({ name: nm }); save(); toast(L('কর্মী যোগ হয়েছে (ডেমো)', 'Worker added (demo)')); render(false); break; }
+    case 'askReset': confirmSheet(ds.mode === 'demo' ? L('সব তথ্য মুছে নমুনা তথ্য ফেরত আনবেন?', 'Replace everything with sample data?') : L('সব তথ্য মুছে খালি অ্যাপ শুরু করবেন?', 'Delete everything and start empty?'), L('হ্যাঁ', 'Yes'), () => {
+      const lang = S.lang, ck = S.checklist;
+      S = ds.mode === 'demo' ? demoState() : emptyState(); S.lang = lang; S.checklist = ck; S.checklist.reset = true; save();
+      UI.stack = []; UI.tab = 'today'; render(true); toast(ds.mode === 'demo' ? L('নমুনা তথ্য ফেরত এসেছে', 'Sample data restored') : L('খালি অ্যাপ শুরু', 'Started empty'));
+    }); break;
+    case 'checkToggle': S.checklist[ds.id] = !S.checklist[ds.id]; save(); render(false); break;
+    case 'checkClear': S.checklist = {}; save(); render(false); break;
+  }
+});
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="checkbox"]')) { e.preventDefault(); e.target.click(); } if (e.key === 'Escape' && UI.sheet) { UI.sheet = null; renderLayer(); } });
+function stashCF() { UI.cf.count = readNum('cf_n') || UI.cf.count; UI.cf.w = readNum('cf_w') || UI.cf.w; UI.cf.temp = readNum('cf_t') || UI.cf.temp; }
+function readPhoto(id, cb) {
+  const f = document.getElementById(id); const file = f && f.files && f.files[0];
+  if (!file) { cb(null); return; }
+  const rd = new FileReader();
+  rd.onload = () => {
+    const img = new Image();
+    img.onload = () => { const c = document.createElement('canvas'), s = Math.min(1, 640 / Math.max(img.width, img.height)); c.width = img.width * s; c.height = img.height * s; c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', 0.7)); };
+    img.onerror = () => cb(null); img.src = rd.result;
+  };
+  rd.onerror = () => cb(null); rd.readAsDataURL(file);
+}
+function showReminder(pid, test) {
+  const p = pid && pondById(pid);
+  const fp = p ? feedPlan(p.id) : null;
+  UI.sheet = () => `<div class="scrim" data-act="closeSheet"><div class="sheet" role="alertdialog" aria-modal="true" data-stop="1"><div class="grab"></div>
+    <div class="row"><span class="ring watch">${IC.bell}</span><div class="grow"><h2>${L('খাবার দেওয়ার সময়', 'Time to feed')}</h2><p class="muted">${p ? esc(p.name) : ''}${test ? ' · ' + L('পরীক্ষা', 'test') : ''}</p></div></div>
+    ${fp ? `<div class="big-num num center">${n(fp.perMeal, 1)} ${L('কেজি', 'kg')}</div>` : ''}
+    <div class="grid2"><button class="btn line" data-act="closeSheet">${L('পরে', 'Later')}</button><button class="btn primary" data-act="quickLog" data-id="${p ? p.id : ''}">${IC.check}${L('দিয়েছি', 'Done')}</button></div></div></div>`;
+  renderLayer();
+}
+let lastFired = '';
+setInterval(() => {
+  const d = new Date(), hm = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (hm === lastFired) return;
+  const r = S.reminders.find(x => x.on && x.time === hm && pondById(x.pondId));
+  if (r && !UI.sheet) { lastFired = hm; showReminder(r.pondId, false); }
+}, 20000);
+
+/* ===================== Boot ===================== */
+S = load();
+render(true);
+// Android hardware back button when wrapped as an app (Capacitor)
+try { const App = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if (App) App.addListener('backButton', () => { if (!window.mbBack()) App.exitApp(); }); } catch (e) {}
+</script>
