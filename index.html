@@ -43,6 +43,8 @@ button{font:inherit;color:inherit}
 input,select,textarea{font:inherit;color:var(--ink)}
 :focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
 .num{font-variant-numeric:tabular-nums}
+svg:not(.chart){width:24px;height:24px;flex:none}
+.danger-full > div > svg{width:64px;height:64px}
 
 /* Top bar */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);color:#fff;
@@ -233,6 +235,19 @@ hr{border:0;border-top:1px solid var(--line);margin:0;width:100%}
 .center{text-align:center}
 .big-num{font-family:var(--f-display);font-weight:700;font-size:40px;line-height:1.1}
 .price-up{color:var(--safe)} .price-dn{color:var(--danger)}
+.tiles.t3{grid-template-columns:repeat(3,1fr);gap:10px}
+.tiles.t3 .tile{min-height:104px;font-size:15px;padding:10px 6px;gap:6px}
+.tiles.t3 .tile .ic{width:46px;height:46px}
+.wxstrip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.wxd{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:12.5px;color:var(--ink-2);padding:6px 0;border-radius:12px;min-width:0}
+.wxd svg{width:24px;height:24px;color:var(--ink)}
+.wxd b{font-size:15px;color:var(--ink)}
+.wxd.on{background:var(--pond-2)}
+.rainmm{font-size:11px;color:var(--pond)}
+.warnrow{background:none;border:0;border-bottom:1px solid var(--line);width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.warnrow:last-child{border-bottom:0}
+.warnrow > svg{width:20px;height:20px;color:var(--ink-2);flex:none}
+.li .ic.danger{background:var(--danger-bg);color:var(--danger)} .li .ic.watch{background:var(--watch-bg);color:var(--watch)} .li .ic.safe{background:var(--safe-bg);color:var(--safe)}
 @media (prefers-reduced-motion: no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}}
 @media (max-width:360px){.tiles{gap:8px}.tile{min-height:104px;font-size:16px}.grid3{grid-template-columns:1fr 1fr}}
 </style>
@@ -351,15 +366,21 @@ const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(3
 
 /* ===================== Reference data (demo values; to be expert-validated) ===================== */
 const SP = {
-  rui:     { bn: 'রুই', en: 'Rohu', type: 'carp', target: 900, adg: 4, price: 300, fry: 4 },
-  katla:   { bn: 'কাতলা', en: 'Catla', type: 'carp', target: 1000, adg: 4.5, price: 320, fry: 5 },
-  mrigel:  { bn: 'মৃগেল', en: 'Mrigal', type: 'carp', target: 700, adg: 3, price: 260, fry: 3 },
-  silver:  { bn: 'সিলভার কার্প', en: 'Silver carp', type: 'carp', nat: true, target: 900, adg: 4, price: 180, fry: 3 },
-  tilapia: { bn: 'তেলাপিয়া', en: 'Tilapia', type: 'tilapia', target: 250, adg: 2.2, price: 180, fry: 1.5 },
-  pangas:  { bn: 'পাঙ্গাস', en: 'Pangas', type: 'pangas', cat: true, target: 1200, adg: 7, price: 170, fry: 6 },
-  koi:     { bn: 'কৈ', en: 'Koi (climbing perch)', type: 'perch', target: 120, adg: 1, price: 280, fry: 1.2 },
-  shing:   { bn: 'শিং', en: 'Shing', type: 'perch', cat: true, target: 100, adg: 0.8, price: 450, fry: 1.5 },
-  pabda:   { bn: 'পাবদা', en: 'Pabda', type: 'perch', target: 80, adg: 0.7, price: 550, fry: 2 },
+  rui:     { bn: 'রুই', en: 'Rohu', type: 'carp', target: 900, adg: 4, price: 280, fry: 4 },
+  katla:   { bn: 'কাতলা', en: 'Catla', type: 'carp', target: 1000, adg: 4.5, price: 300, fry: 5 },
+  mrigel:  { bn: 'মৃগেল', en: 'Mrigal', type: 'carp', target: 700, adg: 3, price: 230, fry: 3 },
+  silver:  { bn: 'সিলভার কার্প', en: 'Silver carp', type: 'carp', nat: true, target: 900, adg: 4, price: 140, fry: 3 },
+  grass:   { bn: 'গ্রাস কার্প', en: 'Grass carp', type: 'carp', target: 1500, adg: 6, price: 220, fry: 5 },
+  sarpunti:{ bn: 'সরপুঁটি', en: 'Sarpunti', type: 'carp', target: 150, adg: 1, price: 200, fry: 1.5 },
+  tilapia: { bn: 'তেলাপিয়া', en: 'Tilapia', type: 'tilapia', target: 250, adg: 2.2, price: 160, fry: 1.5 },
+  pangas:  { bn: 'পাঙ্গাস', en: 'Pangas', type: 'pangas', cat: true, target: 1200, adg: 7, price: 150, fry: 6 },
+  koi:     { bn: 'কৈ', en: 'Koi (climbing perch)', type: 'perch', target: 120, adg: 1, price: 200, fry: 1.2 },
+  shing:   { bn: 'শিং', en: 'Shing', type: 'perch', cat: true, target: 100, adg: 0.8, price: 330, fry: 1.5 },
+  magur:   { bn: 'মাগুর', en: 'Magur', type: 'perch', cat: true, target: 150, adg: 1, price: 380, fry: 2 },
+  pabda:   { bn: 'পাবদা', en: 'Pabda', type: 'perch', target: 80, adg: 0.7, price: 360, fry: 2 },
+  gulsha:  { bn: 'গুলশা', en: 'Gulsha', type: 'perch', cat: true, target: 60, adg: 0.4, price: 450, fry: 1.5 },
+  golda:   { bn: 'গলদা চিংড়ি', en: 'Golda prawn', type: 'prawn', target: 60, adg: 0.45, price: 750, fry: 2.5 },
+  bagda:   { bn: 'বাগদা চিংড়ি', en: 'Bagda shrimp', type: 'prawn', salt: true, target: 35, adg: 0.3, price: 700, fry: 0.8 },
 };
 const spName = id => SP[id] ? L(SP[id].bn, SP[id].en) : id;
 // [upper weight g, min % body weight, max %]
@@ -368,8 +389,9 @@ const FEED = {
   tilapia: [[10, 10, 15], [30, 6, 8], [90, 4, 5], [180, 3, 3.5], [1e9, 2, 2.5]],
   pangas:  [[30, 10, 12], [100, 6, 8], [300, 4, 5], [700, 3, 3.5], [1e9, 1.5, 2]],
   perch:   [[10, 10, 12], [30, 7, 8], [60, 5, 6], [1e9, 3, 4]],
+  prawn:   [[5, 8, 10], [15, 5, 6], [30, 3, 4], [1e9, 2, 3]],
 };
-const FEED_TIMES = { carp: ['08:00', '16:00'], tilapia: ['07:00', '12:00', '17:00'], pangas: ['07:00', '17:00'], perch: ['07:00', '18:00'] };
+const FEED_TIMES = { carp: ['08:00', '16:00'], tilapia: ['07:00', '12:00', '17:00'], pangas: ['07:00', '17:00'], perch: ['07:00', '18:00'], prawn: ['07:00', '18:00'] };
 // stocking models: fish per decimal [min,max]
 const MODELS = [
   { id: 'carp', bn: 'রুই জাতীয় মিশ্র চাষ', en: 'Carp polyculture', seasonal: true, mix: { rui: [10, 12], katla: [4, 6], mrigel: [8, 10], silver: [4, 6] } },
@@ -378,6 +400,10 @@ const MODELS = [
   { id: 'koi', bn: 'কৈ চাষ', en: 'Koi', mix: { koi: [300, 400], silver: [3, 4] } },
   { id: 'shing', bn: 'শিং চাষ', en: 'Shing', mix: { shing: [300, 500] } },
   { id: 'pabda', bn: 'পাবদা চাষ', en: 'Pabda', mix: { pabda: [150, 200], silver: [2, 3] } },
+  { id: 'gulsha', bn: 'গুলশা চাষ', en: 'Gulsha', mix: { gulsha: [400, 500], silver: [2, 3] } },
+  { id: 'magur', bn: 'মাগুর চাষ', en: 'Magur', mix: { magur: [200, 300] } },
+  { id: 'golda', bn: 'গলদা চিংড়ি + রুই', en: 'Golda prawn + carp', seasonal: true, mix: { golda: [50, 80], rui: [3, 5], katla: [1, 2] } },
+  { id: 'bagda', bn: 'বাগদা চিংড়ি (ঘের)', en: 'Bagda shrimp (gher)', seasonal: true, mix: { bagda: [60, 100] } },
 ];
 const PARAMS = {
   ph:    { bn: 'পিএইচ (pH)', en: 'pH', unit: '', icon: 'drop' },
@@ -386,6 +412,7 @@ const PARAMS = {
   temp:  { bn: 'পানির তাপমাত্রা', en: 'Water temperature', unit: '°C', icon: 'temp' },
   secchi:{ bn: 'পানির স্বচ্ছতা', en: 'Water clearness (Secchi)', unit: L('সেমি', 'cm'), icon: 'leaf' },
   no2:   { bn: 'নাইট্রাইট', en: 'Nitrite', unit: 'mg/L', icon: 'pill' },
+  sal:   { bn: 'লবণাক্ততা', en: 'Salinity', unit: 'ppt', icon: 'drop' },
 };
 function band(p, v) {
   if (v === null || v === undefined || v === '' || !isFinite(v)) return null;
@@ -396,6 +423,7 @@ function band(p, v) {
     case 'temp': return (v >= 25 && v <= 32) ? 'safe' : (v >= 20 && v <= 34) ? 'watch' : 'danger';
     case 'secchi': return (v >= 25 && v <= 40) ? 'safe' : (v >= 20 && v <= 50) ? 'watch' : 'danger';
     case 'no2': return v < 0.1 ? 'safe' : v <= 0.5 ? 'watch' : 'danger';
+    case 'sal': return (v >= 10 && v <= 25) ? 'safe' : (v >= 5 && v <= 30) ? 'watch' : 'danger';
   }
   return null;
 }
@@ -411,6 +439,7 @@ function actionFor(p, v) {
     case 'nh3': return [L('খাবার অর্ধেক করুন', 'Cut feed by half'), L('কিছু পানি বদলান', 'Exchange some water'), L('জিওলাইট দিন', 'Apply zeolite')];
     case 'temp': return v < 25 ? [L('খাবার কম দিন', 'Feed less'), L('দুপুরে খাবার দিন', 'Feed at midday')] : [L('খাবার কম দিন', 'Feed less'), L('পানি বাড়ান বা ছায়া দিন', 'Add water depth or shade')];
     case 'secchi': return v < 25 ? [L('সার দেওয়া বন্ধ করুন', 'Stop fertiliser'), L('ভোরে অক্সিজেন দেখুন', 'Watch oxygen at dawn')] : [L('সার দিন (নিচে পরিমাণ দেখুন)', 'Apply fertiliser (see below)')];
+    case 'sal': return v < 10 ? [L('লবণাক্ততা কম — বাগদার বৃদ্ধি কমবে', 'Salinity low — bagda grow slower'), L('খাবার কিছুটা কমান', 'Feed a little less')] : [L('মিঠা পানি যোগ করুন', 'Add fresh water'), L('খাবার কমান', 'Feed less')];
     case 'no2': return [L('প্রতি শতাংশে ২৫০ গ্রাম লবণ দিন', 'Apply 250 g salt per decimal'), L('কিছু পানি বদলান', 'Exchange some water')];
   }
 }
@@ -446,6 +475,16 @@ const DISEASES = [
     cause: [L0('বেশি খাবার, পচা তলা, বেশি মাছ', 'Too much feed, rotten bottom, too many fish')],
     aid: [L0('খাবার অর্ধেক বা বন্ধ করুন', 'Halve or stop feeding'), L0('প্রতি শতাংশে ২০০ গ্রাম জিওলাইট দিন', 'Apply 200 g zeolite per decimal'), L0('কিছু পানি বদলান', 'Exchange some water')],
     prev: [L0('খাবারের সঠিক হিসাব মেনে চলুন', 'Follow the feed calculator'), L0('প্রতি সপ্তাহে পানি পরীক্ষা করুন', 'Test water every week')] },
+  { id: 'lice', bn: 'উকুন (আরগুলাস)', en: 'Fish lice (Argulus)', f: ['lice', 'erratic', 'red'],
+    sym: [L0('গায়ে চ্যাপ্টা ছোট পোকা দেখা যায়', 'Small flat bugs visible on the body'), L0('মাছ লাফায় ও গা ঘষে', 'Fish jump and rub their bodies')],
+    cause: [L0('পরজীবী, পুরনো কাদা ও নোংরা পানিতে বাড়ে', 'A parasite that thrives in old mud and dirty water')],
+    aid: [L0('মৎস্য কর্মকর্তার পরামর্শে উকুনের ওষুধ দিন', 'Use lice medicine as advised by a fisheries officer'), L0('প্রতি শতাংশে ২৫০ গ্রাম লবণ দিন', 'Apply 250 g salt per decimal')],
+    prev: [L0('প্রতি বছর তলার কাদা পরিষ্কার করুন', 'Clean bottom mud every year')] },
+  { id: 'gill', bn: 'ফুলকা পচা রোগ', en: 'Gill rot', f: ['gill', 'gasp', 'noeat', 'foul'],
+    sym: [L0('ফুলকা ফ্যাকাশে বা কালচে, পচা', 'Gills pale or dark and rotting'), L0('মাছ উপরে খাবি খায়', 'Fish gasp at the surface')],
+    cause: [L0('ব্যাকটেরিয়া/ছত্রাক, বেশি খাবার ও নোংরা তলা', 'Bacteria or fungus, overfeeding, dirty bottom')],
+    aid: [L0('প্রতি শতাংশে ৫০০ গ্রাম চুন দিন', 'Apply 500 g lime per decimal'), L0('খাবার কমান, কিছু পানি বদলান', 'Feed less and exchange some water'), L0('মৎস্য কর্মকর্তার পরামর্শ নিন', 'Ask a fisheries officer')],
+    prev: [L0('অতিরিক্ত খাবার দেবেন না', 'Do not overfeed')] },
 ];
 function L0(bn, en) { return { bn, en }; }
 const tx = o => (S.lang === 'en' ? o.en : o.bn);
@@ -461,6 +500,8 @@ const SYMPTOM_STEPS = [
     ['white', 'whitespot', L0('সাদা ছোট দানা', 'Small white spots')],
     ['belly', 'belly', L0('পেট ফোলা', 'Swollen belly')],
     ['fin', 'finrot', L0('লেজ/পাখনা পচা', 'Rotting tail or fins')],
+    ['lice', 'whitespot', L0('গায়ে পোকা/উকুন', 'Bugs or lice on body')],
+    ['gill', 'redspot', L0('ফুলকা পচা/ফ্যাকাশে', 'Gills rotting or pale')],
     ['none', 'ok', L0('কিছু দেখছি না', 'Nothing visible')]] },
   { q: L0('কখন বা কেমন অবস্থায় হচ্ছে?', 'When or in what conditions?'), opts: [
     ['dawn', 'moon', L0('ভোরবেলা বেশি', 'Worse at dawn')],
@@ -504,12 +545,18 @@ const ARTICLES = [
 ];
 
 const DISTRICTS = [
-  { id: 'mymensingh', bn: 'ময়মনসিংহ', en: 'Mymensingh', f: 0.95 },
-  { id: 'jessore', bn: 'যশোর', en: 'Jessore', f: 1.0 },
-  { id: 'bogura', bn: 'বগুড়া', en: 'Bogura', f: 1.02 },
-  { id: 'cumilla', bn: 'কুমিল্লা', en: 'Cumilla', f: 1.05 },
-  { id: 'khulna', bn: 'খুলনা', en: 'Khulna', f: 1.03 },
-  { id: 'dhaka', bn: 'ঢাকা', en: 'Dhaka', f: 1.12 },
+  { id: 'mymensingh', bn: 'ময়মনসিংহ', en: 'Mymensingh', f: 0.95, lat: 24.75, lon: 90.41, sp: ['pangas', 'tilapia', 'shing', 'koi', 'rui'] },
+  { id: 'cumilla', bn: 'কুমিল্লা', en: 'Cumilla', f: 1.0, lat: 23.46, lon: 91.18, sp: ['rui', 'katla', 'tilapia'] },
+  { id: 'jessore', bn: 'যশোর', en: 'Jessore', f: 1.0, lat: 23.17, lon: 89.21, sp: ['rui', 'katla', 'golda'] },
+  { id: 'rajshahi', bn: 'রাজশাহী', en: 'Rajshahi', f: 1.0, lat: 24.37, lon: 88.6, sp: ['rui', 'katla', 'pabda'] },
+  { id: 'bogura', bn: 'বগুড়া', en: 'Bogura', f: 1.02, lat: 24.85, lon: 89.37, sp: ['rui', 'pabda', 'gulsha'] },
+  { id: 'khulna', bn: 'খুলনা', en: 'Khulna', f: 1.03, lat: 22.85, lon: 89.54, sp: ['golda', 'bagda', 'tilapia'] },
+  { id: 'satkhira', bn: 'সাতক্ষীরা', en: 'Satkhira', f: 1.02, lat: 22.72, lon: 89.07, sp: ['bagda', 'golda'] },
+  { id: 'bagerhat', bn: 'বাগেরহাট', en: 'Bagerhat', f: 1.02, lat: 22.66, lon: 89.79, sp: ['golda', 'bagda', 'rui'] },
+  { id: 'noakhali', bn: 'নোয়াখালী', en: 'Noakhali', f: 1.03, lat: 22.87, lon: 91.1, sp: ['tilapia', 'rui'] },
+  { id: 'sylhet', bn: 'সিলেট', en: 'Sylhet', f: 1.06, lat: 24.89, lon: 91.87, sp: ['rui', 'katla', 'koi'] },
+  { id: 'chattogram', bn: 'চট্টগ্রাম', en: 'Chattogram', f: 1.08, lat: 22.36, lon: 91.78, sp: ['tilapia', 'rui'] },
+  { id: 'dhaka', bn: 'ঢাকা', en: 'Dhaka', f: 1.12, lat: 23.81, lon: 90.41, sp: ['tilapia', 'pangas'] },
 ];
 const PRODUCTS = [
   { id: 'p1', cat: 'feed', icon: 'feed', bn: 'ভাসমান খাবার – গ্রোয়ার (২৫ কেজি)', en: 'Floating feed – grower (25 kg)', price: 1450 },
@@ -533,10 +580,10 @@ const hasPlan = need => (need === 'plus' ? ['plus', 'pro'] : ['pro']).includes(S
 /* ===================== Demo data ===================== */
 function demoState() {
   const T = today();
-  const s = { v: 2, lang: 'bn', plan: 'free', profile: { name: 'রহিম মিয়া', district: 'mymensingh', phone: '' },
-    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: {}, demo: true };
-  const p1 = { id: 'p_home', name: 'বাড়ির পুকুর', area: 30, depth: 5, allYear: true, start: addDays(T, -75), model: 'carp' };
-  const p2 = { id: 'p_field', name: 'মাঠের পুকুর', area: 50, depth: 6, allYear: true, start: addDays(T, -52), model: 'tilapia' };
+  const s = { v: 3, lang: 'bn', plan: 'free', profile: { name: 'রহিম মিয়া', district: 'mymensingh', phone: '' },
+    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: {}, demo: true, dues: [], feedIn: [], diary: [], cycles: [] };
+  const p1 = { id: 'p_home', name: 'বাড়ির পুকুর', area: 30, depth: 5, allYear: true, start: addDays(T, -75), model: 'carp', system: 'pond' };
+  const p2 = { id: 'p_field', name: 'মাঠের পুকুর', area: 50, depth: 6, allYear: true, start: addDays(T, -52), model: 'tilapia', system: 'pond' };
   s.ponds.push(p1, p2);
   const rel = (pondId, sp, count, w, price, d) => s.stock.push({ id: uid(), pondId, sp, type: 'release', count, w, price, date: d });
   rel('p_home', 'rui', 360, 25, 4, p1.start); rel('p_home', 'katla', 150, 30, 5, p1.start);
@@ -586,18 +633,27 @@ function demoState() {
     { id: uid(), mine: false, by: 'আলমগীর, বগুড়া', date: addDays(T, -8), q: 'পাঙ্গাস বিক্রির আগে কত দিন খাবার বন্ধ রাখব?', a: 'বিক্রির আগের দিন খাবার বন্ধ রাখলেই যথেষ্ট। এতে পরিবহনে মাছ কম মরে।', expert: false },
     { id: uid(), mine: true, by: 'আমি', date: addDays(T, -1), q: 'মাঠের পুকুরে কাল ৪০টা তেলাপিয়া মরেছে, পানি দুর্গন্ধ।', a: '', expert: false });
   s.orders.push({ id: uid(), pid: 'p3', qty: 3, date: addDays(T, -12), status: 'delivered' });
+  const fi = (d, bags, amount, note) => s.feedIn.push({ id: uid(), date: d, kg: bags * 25, amount, note });
+  fi(addDays(T, -60), 6, 8700, 'করিম ফিড হাউস'); fi(addDays(T, -40), 20, 29000, 'করিম ফিড হাউস'); fi(addDays(T, -25), 6, 8700, ''); fi(addDays(T, -12), 15, 21750, 'করিম ফিড হাউস (বাকি)');
+  s.dues.push({ id: uid(), kind: 'payable', who: 'করিম ফিড হাউস', amount: 21750, date: addDays(T, -12), due: addDays(T, 2), paid: [{ date: addDays(T, -5), amount: 10000 }], note: '১৫ বস্তা খাবার' },
+    { id: uid(), kind: 'loan', who: 'আশা এনজিও', amount: 50000, rate: 2, date: addDays(T, -70), due: addDays(T, 20), paid: [{ date: addDays(T, -40), amount: 15000 }], note: 'মাছ চাষ ঋণ' },
+    { id: uid(), kind: 'receivable', who: 'আড়তদার জামাল', amount: 3360, date: addDays(T, -6), due: addDays(T, -2), paid: [], note: 'রুই ১২ কেজি' });
+  s.diary.push({ id: uid(), pondId: 'p_field', date: addDays(T, -1), text: 'ভোরে কিছু তেলাপিয়া উপরে ভাসছিল, পানিতে হালকা দুর্গন্ধ।', photo: null, tag: 'water' },
+    { id: uid(), pondId: 'p_home', date: addDays(T, -6), text: '৪০টি রুই ধরে আড়তে বিক্রি করলাম, গড়ে ৩০০ গ্রাম।', photo: null, tag: 'work' });
+  s.cycles.push({ id: uid(), pondId: 'p_home', pondName: 'বাড়ির পুকুর', start: addDays(T, -420), end: addDays(T, -110), days: 310, area: 30, harvKg: 1250, feedKg: 2150, fcr: 1.72,
+    exp: 248000, inc: 330000, profit: 82000, species: ['rui', 'katla', 'mrigel', 'silver'] });
   return s;
 }
 function emptyState() {
-  return { v: 2, lang: S ? S.lang : 'bn', plan: 'free', profile: { name: '', district: 'mymensingh', phone: '' },
-    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: S ? S.checklist : {}, demo: false };
+  return { v: 3, lang: S ? S.lang : 'bn', plan: 'free', profile: { name: '', district: (S && S.profile.district) || 'mymensingh', phone: '' },
+    ponds: [], stock: [], logs: [], water: [], samples: [], ledger: [], reminders: [], questions: [], orders: [], listings: [], tickets: [], checklist: S ? S.checklist : {}, demo: false, dues: [], feedIn: [], diary: [], cycles: [] };
 }
-const KEY = 'machbondhu.v2';
+const KEY = 'machbondhu.v3';
 function load() {
-  try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); if (s && s.v === 2) return s; } } catch (e) {}
+  try { const raw = localStorage.getItem(KEY); if (raw) { const s = JSON.parse(raw); if (s && s.v === 3) return migrate(s); } } catch (e) {}
   return demoState();
 }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); return true; } catch (e) { if (typeof toast === 'function' && UI) setTimeout(() => toast(L('ফোনে জায়গা কম — কিছু ছবি মুছুন', 'Phone storage full — delete some photos')), 0); return false; } }
 
 /* ===================== Engine ===================== */
 const pondById = id => S.ponds.find(p => p.id === id);
@@ -640,25 +696,26 @@ function latestWater(pid) {
   rs.forEach(r => Object.keys(PARAMS).forEach(p => { if (out[p] === undefined && r[p] !== undefined && r[p] !== null && r[p] !== '') out[p] = { v: r[p], date: r.date }; }));
   return { last: rs[0], vals: out };
 }
-const WEATHER = () => ({ cloud: 85, air: 31, rain: 40, hi: 33, lo: 25 }); // demo forecast
+const WEATHER = () => { const d = wxDays()[0]; return { cloud: d.cloud, air: d.tmax, lo: d.tmin, rain: d.rain }; };
 function feedPlan(pid) {
   const rows = stockRows(pid);
   const w = latestWater(pid).vals;
-  const temp = (w.temp && daysAgo(w.temp.date) <= 3) ? w.temp.v : WEATHER().air - 1;
+  const temp = (w.temp && daysAgo(w.temp.date) <= 3) ? w.temp.v : Math.round((WEATHER().air + WEATHER().lo) / 2 + 1);
   const kT = temp < 15 ? 0.3 : temp < 20 ? 0.6 : temp < 25 ? 0.85 : temp <= 32 ? 1 : 0.7;
   const doLow = w.do && daysAgo(w.do.date) <= 2 && w.do.v < 3;
   const kDO = doLow ? 0 : 1;
+  const app = lastApp(pid), kA = app === 'all' ? 1.05 : app === 'some' ? 0.9 : app === 'none' ? 0.5 : 1;
   let mn = 0, mx = 0; const parts = [];
   rows.forEach(r => {
     const sp = SP[r.sp]; if (!sp || sp.nat || r.live <= 0) return;
     const b = FEED[sp.type].find(x => r.avgW <= x[0]);
-    const a = r.bio * b[1] / 100 * kT * kDO, z = r.bio * b[2] / 100 * kT * kDO;
+    const a = r.bio * b[1] / 100 * kT * kDO * kA, z = r.bio * b[2] / 100 * kT * kDO * kA;
     mn += a; mx += z; parts.push({ sp: r.sp, pct: [b[1], b[2]], kg: (a + z) / 2 });
   });
   const ms = mainSpecies(pid);
   const times = ms ? FEED_TIMES[SP[ms].type] : ['08:00', '16:00'];
   const mid = Math.round(((mn + mx) / 2) * 10) / 10;
-  return { min: mn, max: mx, kg: mid, perMeal: Math.round(mid / times.length * 10) / 10, times, temp, kT, kDO, parts, doLow };
+  return { min: mn, max: mx, kg: mid, perMeal: Math.round(mid / times.length * 10) / 10, times, temp, kT, kDO, kA, app, parts, doLow };
 }
 function limeAdvice(ph, area) {
   if (ph === undefined || ph === null) return null;
@@ -796,43 +853,6 @@ function emptyBox(icon, title, sub, btn) {
 
 /* ===================== Views ===================== */
 const VIEWS = {};
-VIEWS.today = () => {
-  const d = new Date();
-  const wx = WEATHER();
-  const risky = weatherRisk();
-  let h = `<div class="row"><div class="grow"><h2>${S.profile.name ? L('আসসালামু আলাইকুম, ', 'Hello, ') + esc(S.profile.name.split(' ')[0]) : L('আসসালামু আলাইকুম', 'Hello')}</h2>
-    <p class="muted">${(S.lang === 'en' ? DAY_EN : DAY_BN)[d.getDay()]}, ${fmtDate(today(), true)}</p></div></div>`;
-  h += `<div class="weather" role="group" aria-label="${L('আবহাওয়া', 'Weather')}"><div class="wic">${IC.cloud}</div><div class="grow" style="flex:1;min-width:0">
-     <div class="row" style="justify-content:space-between"><b>${L('আজকের আবহাওয়া', "Today's weather")}</b><span class="demo-tag">${L('নমুনা', 'Sample')}</span></div>
-     <div class="wcells"><div class="wcell"><b class="num">${n(wx.air)}°</b><span class="small muted">${L('গরম', 'Hot')}</span></div>
-     <div class="wcell"><b class="num">${n(wx.cloud)}%</b><span class="small muted">${L('মেঘলা', 'Cloudy')}</span></div>
-     <div class="wcell"><b class="num">${n(wx.rain)}%</b><span class="small muted">${L('বৃষ্টি', 'Rain')}</span></div></div></div></div>`;
-  // alerts
-  S.ponds.forEach(p => {
-    const hl = health(p.id);
-    if (hl.dangerParams.length) h += `<button type="button" class="alert" data-act="open" data-view="pond" data-id="${p.id}" data-sub="water" style="text-align:left;cursor:pointer;color:inherit">
-      <span class="ic">${IC.alert}</span><span><b>${esc(p.name)}: ${L('বিপদ', 'Danger')} — ${hl.dangerParams.map(x => tx(PARAMS[x])).join(', ')}</b>
-      <span class="small">${L('কী করবেন দেখতে চাপুন', 'Tap to see what to do')}</span></span></button>`;
-  });
-  if (risky.length) h += `<div class="alert watch"><span class="ic">${IC.cloud}</span><span><b>${L('মেঘলা গরম দিন — ভোরে অক্সিজেন কমতে পারে', 'Cloudy and hot — oxygen may drop at dawn')}</b>
-    <span class="small">${risky.map(p => esc(p.name)).join(', ')}: ${L('আজ খাবার একটু কম দিন, ভোরে মাছ দেখুন', 'feed a little less today and check fish at dawn')}</span></span></div>`;
-  if (!S.ponds.length) return h + emptyBox('pond', L('এখনো কোনো পুকুর নেই', 'No ponds yet'), L('প্রথম পুকুর যোগ করুন, তারপর অ্যাপ প্রতিদিনের কাজ দেখাবে', 'Add your first pond and the app will show daily tasks'),
-    `<button class="btn primary full" data-act="open" data-view="addPond">${IC.plus}${L('পুকুর যোগ করুন', 'Add a pond')}</button>`);
-  h += `<h2>${L('আজকের কাজ', "Today's work")}</h2>`;
-  S.ponds.forEach(p => {
-    const hl = health(p.id);
-    const ts = tasks(p.id);
-    const ms = mainSpecies(p.id);
-    h += `<div class="card"><button type="button" class="pond-head" data-act="open" data-view="pond" data-id="${p.id}" style="background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%">
-      <span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><span class="grow" style="flex:1;min-width:0"><h3>${esc(p.name)}</h3>
-      <span class="small muted">${ms ? spName(ms) + ' · ' : ''}${n(p.area)} ${L('শতাংশ', 'decimals')} · ${L(`${dig(daysAgo(p.start))} দিন`, `day ${daysAgo(p.start)}`)}</span><br>
-      <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span></span><span style="color:var(--ink-2)">${IC.next}</span></button>
-      <div class="stack">${ts.map(t => `<button type="button" class="task ${t.state}" data-act="task" data-kind="${t.kind}" data-id="${p.id}">
-        <span class="ic">${t.state === 'done' ? IC.check : IC[t.kind === 'feed' ? 'feed' : t.kind === 'water' ? 'drop' : 'scale']}</span><span class="grow" style="flex:1;min-width:0"><b>${t.title}</b><span>${t.sub}</span></span></button>`).join('')}</div></div>`;
-  });
-  return h;
-};
-
 VIEWS.ponds = () => {
   let h = `<div class="row"><h2 class="grow">${L('আমার পুকুর', 'My ponds')}</h2><span class="badge">${n(S.ponds.length)} / ${S.plan === 'pro' ? '∞' : n(PLANS[S.plan].ponds)}</span></div>`;
   if (!S.ponds.length) return h + emptyBox('pond', L('এখনো কোনো পুকুর নেই', 'No ponds yet'), L('নিচের বোতাম চেপে পুকুর যোগ করুন', 'Tap the button below to add a pond'),
@@ -848,22 +868,151 @@ VIEWS.ponds = () => {
   return h;
 };
 
-VIEWS.pond = ({ id, sub }) => {
-  const p = pondById(id); if (!p) return emptyBox('pond', L('পুকুর পাওয়া যায়নি', 'Pond not found'), '');
-  sub = sub || 'summary';
-  const subs = [['summary', 'pond', L('সারাংশ', 'Summary')], ['feed', 'feed', L('খাবার', 'Feed')], ['water', 'drop', L('পানি', 'Water')], ['growth', 'chart', L('বৃদ্ধি', 'Growth')], ['money', 'money', L('হিসাব', 'Money')], ['fish', 'fish', L('মাছ', 'Fish')]];
-  let h = `<div class="seg" role="tablist">${subs.map(s => `<button type="button" role="tab" class="${s[0] === sub ? 'on' : ''}" data-act="sub" data-sub="${s[0]}">${IC[s[1]]}${s[2]}</button>`).join('')}</div>`;
-  h += (SUBV[sub] || SUBV.summary)(p);
+const SUBV = {};
+VIEWS.today = () => {
+  const d = new Date(), streak = logStreak();
+  let h = `<div class="row"><div class="grow"><h2>${S.profile.name ? L('আসসালামু আলাইকুম, ', 'Hello, ') + esc(S.profile.name.split(' ')[0]) : L('আসসালামু আলাইকুম', 'Hello')}</h2>
+    <p class="muted small">${bnDateStr(today())} · ${(S.lang === 'en' ? DAY_EN : DAY_BN)[d.getDay()]}, ${fmtDate(today(), true)}</p></div>
+    ${streak >= 2 ? `<span class="badge safe" title="${L('প্রতিদিন খাতা লিখছেন', 'Logging every day')}">${IC.check}${L(`টানা ${dig(streak)} দিন`, `${streak} days`)}</span>` : ''}</div>`;
+  h += `<button class="btn danger full" data-act="open" data-view="sos">${IC.alert}${L('মাছ মরছে? এখনই সাহায্য', 'Fish dying? Get help now')}</button>`;
+  h += weatherStrip();
+  const warns = collectWarnings();
+  if (warns.length) {
+    const top = warns.slice(0, UI.allWarn ? 99 : 4);
+    h += `<div class="card" style="gap:4px"><div class="row"><h3 class="grow">${L('সতর্কতা', 'Warnings')}</h3><span class="badge ${warns[0].b}">${n(warns.length)}</span></div>
+      <div class="list">${top.map(w => `<button type="button" class="li warnrow" data-act="open" data-view="${w.view}" ${w.id ? `data-id="${w.id}"` : ''} ${w.sub ? `data-sub="${w.sub}"` : ''}>
+        <span class="ic ${w.b}">${IC[w.icon]}</span><span class="grow"><b>${w.t}</b><span class="small muted" style="display:block">${w.s}</span></span>${IC.next}</button>`).join('')}</div>
+      ${warns.length > 4 ? `<button class="btn ghost sm" data-act="allWarn">${UI.allWarn ? L('কম দেখান', 'Show less') : L(`সব ${dig(warns.length)}টি দেখুন`, `See all ${warns.length}`)}</button>` : ''}</div>`;
+  }
+  if (!S.ponds.length) return h + emptyBox('pond', L('এখনো কোনো পুকুর নেই', 'No ponds yet'), L('প্রথম পুকুর যোগ করুন, তারপর অ্যাপ প্রতিদিনের কাজ দেখাবে', 'Add your first pond and the app will show daily tasks'),
+    `<button class="btn primary full" data-act="open" data-view="addPond">${IC.plus}${L('পুকুর যোগ করুন', 'Add a pond')}</button>`);
+  h += `<h2>${L('আজকের কাজ', "Today's work")}</h2>`;
+  S.ponds.forEach(p => {
+    const hl = health(p.id), ts = tasks(p.id), ms = mainSpecies(p.id);
+    h += `<div class="card"><button type="button" class="pond-head" data-act="open" data-view="pond" data-id="${p.id}" style="background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%;color:inherit;font:inherit">
+      <span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><span class="grow" style="flex:1;min-width:0"><h3>${esc(p.name)}</h3>
+      <span class="small muted">${ms ? spName(ms) + ' · ' : ''}${n(p.area)} ${L('শতাংশ', 'decimals')} · ${L(`${dig(daysAgo(p.start))} দিন`, `day ${daysAgo(p.start)}`)}</span><br>
+      <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span></span><span style="color:var(--ink-2)">${IC.next}</span></button>
+      <div class="stack">${ts.map(t => `<button type="button" class="task ${t.state}" data-act="task" data-kind="${t.kind}" data-id="${p.id}">
+        <span class="ic">${t.state === 'done' ? IC.check : IC[t.kind === 'feed' ? 'feed' : t.kind === 'water' ? 'drop' : 'scale']}</span><span class="grow" style="flex:1;min-width:0"><b>${t.title}</b><span>${t.sub}</span></span></button>`).join('')}</div></div>`;
+  });
+  const m = d.getMonth();
+  h += `<button type="button" class="card" data-act="open" data-view="calendar" style="text-align:left;cursor:pointer;color:inherit;font:inherit">
+    <div class="row"><span class="ic" style="color:var(--pond)">${IC.clock}</span><b class="grow">${L('এই মাসের কাজ', "This month's work")} · ${bmonPair(m)}</b>${IC.next}</div>
+    ${CAL[m].t.slice(0, 2).map(t => `<span class="small" style="display:block">• ${tx(t)}</span>`).join('')}</button>`;
+  const tip = TIPS[(Math.floor(Date.now() / 864e5)) % TIPS.length];
+  h += `<div class="row small muted" style="padding:0 4px"><span style="color:var(--turmeric)">${IC.star}</span><span class="grow">${L('আজকের পরামর্শ: ', 'Tip: ')}${tx(tip)}</span></div>`;
   return h;
 };
-const SUBV = {};
+
+const POND_SECTIONS = [['feed', 'feed', L0('খাবার', 'Feed')], ['water', 'drop', L0('পানি', 'Water')], ['growth', 'scale', L0('ওজন ও বৃদ্ধি', 'Weight')],
+  ['fish', 'fish', L0('মাছ ছাড়া/ধরা', 'Stock & harvest')], ['money', 'money', L0('টাকার হিসাব', 'Money')], ['diary', 'camera', L0('ডায়েরি ও ছবি', 'Diary & photos')]];
+VIEWS.pond = ({ id, sub }) => {
+  const p = pondById(id); if (!p) return emptyBox('pond', L('পুকুর পাওয়া যায়নি', 'Pond not found'), '');
+  if (sub && sub !== 'summary' && SUBV[sub]) { if (sub === 'diary') tick('diary'); return SUBV[sub](p); }
+  return SUBV.summary(p);
+};
+const SYS = [['pond', L0('পুকুর', 'Pond')], ['biofloc', L0('বায়োফ্লক ট্যাংক', 'Biofloc tank')], ['cage', L0('খাঁচা', 'Cage')], ['gher', L0('ঘের (লোনা পানি)', 'Gher (brackish)')]];
+const sysName = s => { const x = SYS.find(z => z[0] === (s || 'pond')); return x ? tx(x[1]) : ''; };
+const isSaline = p => p && (p.system === 'gher' || stockRows(p.id).some(r => SP[r.sp] && SP[r.sp].salt));
+
+/* ---- v2 actions (capture phase: runs before the main handler) ---- */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const a = el.dataset.act, ds = el.dataset;
+  const keepInputs = () => { UI.keep = {}; document.querySelectorAll('#app input:not([type=file]):not([type=checkbox]), #app textarea').forEach(x => { if (x.id && !x.readOnly) UI.keep[x.id] = x.value; }); };
+  const done = () => { e.stopImmediatePropagation(); e.preventDefault(); };
+  if (a === 'pick') {
+    const g = ds.group, v = ds.val;
+    const map = { daKind: () => { UI.da.kind = v; }, dgTag: () => { UI.dg = v; }, fiPond: () => { UI.fiPond = v; }, sosPond: () => { UI.sosPond = v; },
+      cvAu: () => { UI.cv.au = v; }, cvWu: () => { UI.cv.wu = v; }, spDays: () => { UI.spDays = +v; }, sys: () => { UI.draft.system = v; } };
+    if (map[g]) { keepInputs(); if (g === 'cvAu' || g === 'cvWu') { UI.cv.a = readNum('cv_a') ?? UI.cv.a; UI.cv.w = readNum('cv_w') ?? UI.cv.w; delete UI.keep.cv_a; delete UI.keep.cv_w; } map[g](); render(false); done(); }
+    return;
+  }
+  switch (a) {
+    case 'qlApp': UI.ql.app = UI.ql.app === ds.val ? null : ds.val; el.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', x.dataset.val === UI.ql.app)); done(); break;
+    case 'allWarn': UI.allWarn = !UI.allWarn; render(false); done(); break;
+    case 'wxRefresh': fetchWx(true).then(() => render(false)); toast(L('আবহাওয়া খোঁজা হচ্ছে…', 'Checking the weather…')); done(); break;
+    case 'saveFeedIn': {
+      const bags = readNum('fi_bags') || 0, price = readNum('fi_price') || 0, baki = document.getElementById('fi_baki').checked, who = readStr('fi_who');
+      if (bags <= 0) { toast(L('কয় বস্তা লিখুন', 'Enter number of bags')); done(); break; }
+      const pid = UI.fiPond || (S.ponds[0] && S.ponds[0].id), amt = Math.round(bags * price);
+      commit(L(`${n(bags)} বস্তা খাবার গুদামে যোগ হয়েছে`, `${bags} bags added to store`), () => {
+        S.feedIn = S.feedIn || []; S.feedIn.push({ id: uid(), date: today(), kg: bags * BAG_KG, amount: amt, note: who });
+        if (amt && pid) S.ledger.push({ id: uid(), pondId: pid, kind: 'exp', cat: 'feed', amount: amt, date: today(), note: L(`${dig(bags)} বস্তা`, `${bags} bags`) + (who ? ' · ' + who : '') });
+        if (baki && amt) { S.dues = S.dues || []; S.dues.push({ id: uid(), kind: 'payable', who: who || L('খাবারের দোকান', 'Feed shop'), amount: amt, date: today(), due: addDays(today(), 30), paid: [], note: L(`${dig(bags)} বস্তা খাবার`, `${bags} bags feed`) }); }
+      });
+      render(false); done(); break;
+    }
+    case 'delFeedIn': commit(L('মুছে ফেলা হয়েছে', 'Deleted'), () => S.feedIn = S.feedIn.filter(x => x.id !== ds.id)); render(false); done(); break;
+    case 'saveDue': {
+      const who = readStr('da_who'), amt = readNum('da_amt') || 0;
+      if (!who || amt <= 0) { toast(L('নাম ও টাকার পরিমাণ দিন', 'Enter name and amount')); done(); break; }
+      commit(L('বাকি খাতায় লেখা হয়েছে', 'Saved to dues'), () => { S.dues = S.dues || []; S.dues.push({ id: uid(), kind: UI.da.kind, who, amount: Math.round(amt), rate: UI.da.kind === 'loan' ? (readNum('da_rate') || 0) : 0, date: today(), due: readStr('da_due') || null, paid: [], note: readStr('da_note') }); });
+      UI.da = null; back(); done(); break;
+    }
+    case 'payDue': openPay(ds.id); done(); break;
+    case 'savePay': {
+      const amt = readNum('pay_amt') || 0; if (amt <= 0) { done(); break; }
+      commit(L('টাকা লেখা হয়েছে', 'Payment saved'), () => { const d = S.dues.find(x => x.id === UI.payId); d.paid = d.paid || []; d.paid.push({ date: today(), amount: Math.round(amt) }); });
+      UI.sheet = null; render(false); done(); break;
+    }
+    case 'delDue': commit(L('মুছে ফেলা হয়েছে', 'Deleted'), () => S.dues = S.dues.filter(x => x.id !== ds.id)); render(false); done(); break;
+    case 'saveDiary': {
+      const text = readStr('dy_text'), pid = ds.id, f = document.getElementById('dy_photo');
+      if (!text && !(f && f.files && f.files[0])) { toast(L('কিছু লিখুন বা ছবি দিন', 'Write something or add a photo')); done(); break; }
+      readPhoto('dy_photo', photo => { commit(L('ডায়েরিতে লেখা হয়েছে', 'Saved to diary'), () => { S.diary = S.diary || []; S.diary.push({ id: uid(), pondId: pid, date: today(), text, photo, tag: UI.dg || 'other' }); }); render(false); });
+      done(); break;
+    }
+    case 'delDiary': commit(L('মুছে ফেলা হয়েছে', 'Deleted'), () => S.diary = S.diary.filter(x => x.id !== ds.id)); render(false); done(); break;
+    case 'askCloseCycle': {
+      const p = pondById(ds.id), live = totalLive(p.id);
+      confirmSheet(live > 0 ? L(`এখনো প্রায় ${n(live)}টি মাছ আছে। তবুও এই চাষ শেষ করবেন? (আগে "মাছ ধরুন" লিখে নিলে হিসাব ঠিক থাকবে)`, `About ${live} fish are still in the pond. Close the season anyway? (Record the harvest first to keep accounts right)`)
+        : L('এই চাষ শেষ করে হিসাব জমা রাখবেন?', 'Close this season and keep its summary?'), L('হ্যাঁ, শেষ করুন', 'Yes, close it'), () => {
+        commit(L('চাষ শেষ — হিসাব "আগের চাষ"-এ জমা হয়েছে', 'Season closed — summary saved in past seasons'), () => {
+          S.cycles = S.cycles || []; S.cycles.push(cycleSummary(p.id));
+          ['stock', 'logs', 'samples', 'ledger'].forEach(k => S[k] = S[k].filter(x => x.pondId !== p.id));
+          p.start = today();
+        });
+        tick('cycle'); UI.stack = [{ view: 'pond', params: { id: p.id } }, { view: 'cycles', params: { id: p.id } }]; UI.tab = 'ponds'; render(true);
+      });
+      done(); break;
+    }
+    case 'cvCalc': UI.cv.a = readNum('cv_a') ?? UI.cv.a; UI.cv.w = readNum('cv_w') ?? UI.cv.w; document.getElementById('cv_out').innerHTML = cvOut(); done(); break;
+    case 'copyBackup': {
+      const t = document.getElementById('bk_out');
+      const ok = () => toast(L('কপি হয়েছে — নিজেকে পাঠিয়ে রাখুন', 'Copied — send it to yourself'));
+      try { navigator.clipboard.writeText(t.value).then(ok, () => { t.select(); document.execCommand('copy'); ok(); }); } catch (er) { t.select(); try { document.execCommand('copy'); ok(); } catch (e2) {} }
+      done(); break;
+    }
+    case 'restoreBackup': {
+      try { const s = JSON.parse(readStr('bk_in')); if (!s || !Array.isArray(s.ponds)) throw 0;
+        confirmSheet(L('এখনকার সব তথ্য বদলে ব্যাকআপ বসাবেন?', 'Replace all current data with this backup?'), L('হ্যাঁ', 'Yes'), () => { S = migrate(s); save(); UI.stack = []; UI.tab = 'today'; render(true); toast(L('ব্যাকআপ ফেরত এসেছে', 'Backup restored')); });
+      } catch (er) { toast(L('কোডটি ঠিক নেই — পুরো কোড পেস্ট করুন', 'The code is not valid — paste the whole code')); }
+      done(); break;
+    }
+  }
+}, true);
+document.addEventListener('input', e => {
+  if (e.target.id === 'cv_a' || e.target.id === 'cv_w') { UI.cv.a = readNum('cv_a') ?? UI.cv.a; UI.cv.w = readNum('cv_w') ?? UI.cv.w; const o = document.getElementById('cv_out'); if (o) o.innerHTML = cvOut(); }
+});
+function migrate(s) {
+  ['dues', 'feedIn', 'diary', 'cycles', 'stock', 'logs', 'water', 'samples', 'ledger', 'reminders', 'questions', 'orders', 'listings', 'tickets'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
+  s.checklist = s.checklist || {}; s.profile = s.profile || { name: '', district: 'mymensingh' };
+  if (!DISTRICTS.find(d => d.id === s.profile.district)) s.profile.district = 'mymensingh';
+  s.ponds.forEach(p => { p.system = p.system || 'pond'; });
+  s.v = 3; return s;
+}
+
 SUBV.summary = p => {
   const rows = stockRows(p.id), hl = health(p.id), a = analytics(p.id), fp = feedPlan(p.id);
   tick('pondDetail');
   let h = `<div class="card"><div class="pond-head"><span class="ring ${hl.band}">${BAND_ICON(hl.band)}</span><div class="grow" style="flex:1"><h3>${esc(p.name)}</h3>
-    <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span>${hl.dangerParams.length ? `<span class="small"> — ${hl.dangerParams.map(x => tx(PARAMS[x])).join(', ')}</span>` : ''}</div></div>
+    <span class="status-word ${hl.band}-t">${BAND_WORD(hl.band)}</span>${hl.dangerParams.length ? `<span class="small"> — ${hl.dangerParams.map(x => tx(PARAMS[x])).join(', ')}</span>` : ''}<div class="small muted">${sysName(p.system)} · ${n(p.area)} ${L('শতাংশ', 'decimals')}</div></div></div>
     <div class="grid2">${statBox(L('জীবিত মাছ', 'Live fish'), n(totalLive(p.id)))}${statBox(L('মোট ওজন', 'Total weight'), n(a.nowBio, 0) + ` <small>${L('কেজি', 'kg')}</small>`)}
     ${statBox(L('চাষের দিন', 'Days farming'), n(daysAgo(p.start)))}${statBox(L('আজকের খাবার', "Today's feed"), fp.kDO === 0 ? `<span class="danger-t">${L('বন্ধ', 'Stop')}</span>` : n(fp.kg, 1) + ` <small>${L('কেজি', 'kg')}</small>`)}</div></div>`;
+  h += `<div class="tiles t3">${POND_SECTIONS.map(x => `<button type="button" class="tile" data-act="open" data-view="pond" data-id="${p.id}" data-sub="${x[0]}"><span class="ic">${IC[x[1]]}</span>${tx(x[2])}</button>`).join('')}</div>`;
   h += `<div class="card"><h3>${L('পুকুরে কোন মাছ কত', 'Fish in this pond')}</h3><div class="list">${rows.map(r => `<div class="li"><span class="ic">${IC.fish}</span><div class="grow"><b>${spName(r.sp)}</b>
     <div class="small muted">${L('গড় ওজন', 'Avg weight')} ${n(r.avgW)} ${L('গ্রাম', 'g')}${r.measured ? '' : ' · ' + L('মাপা হয়নি', 'not weighed')}</div></div><div class="amt num">${n(r.live)}<span class="small muted"> ${L('টি', 'fish')}</span></div></div>`).join('') || `<p class="muted">${L('এখনো মাছ ছাড়া হয়নি', 'No fish stocked yet')}</p>`}</div>
     <button class="btn ghost" data-act="open" data-view="stockEvent" data-id="${p.id}" data-type="release">${IC.plus}${L('মাছ ছাড়ুন', 'Stock fish')}</button></div>`;
@@ -872,7 +1021,9 @@ SUBV.summary = p => {
       `${spName(a.main.sp)} needs about <b>${a.daysLeft} more days</b> to reach ${SP[a.main.sp].target} g — ${fmtDate(a.harvestDate, true)}`)}</p>
     <p class="small muted">${L(`দৈনিক বৃদ্ধি ${n(a.adg, 1)} গ্রাম ধরে হিসাব`, `Based on ${n(a.adg, 1)} g growth per day`)}</p></div>`;
   h += `<div class="grid2"><button class="btn line" data-act="open" data-view="editPond" data-id="${p.id}">${IC.edit}${L('পুকুর বদলান', 'Edit pond')}</button>
-    <button class="btn line" data-act="open" data-view="report" data-id="${p.id}">${IC.doc}${L('রিপোর্ট', 'Report')}</button></div>`;
+    <button class="btn line" data-act="open" data-view="report" data-id="${p.id}">${IC.doc}${L('রিপোর্ট', 'Report')}</button>
+    <button class="btn line" data-act="open" data-view="cycles" data-id="${p.id}">${IC.chart}${L('আগের চাষ', 'Past seasons')}</button>
+    <button class="btn line" data-act="askCloseCycle" data-id="${p.id}">${IC.check}${L('চাষ শেষ করুন', 'Close season')}</button></div>`;
   return h;
 };
 SUBV.feed = p => {
@@ -885,7 +1036,7 @@ SUBV.feed = p => {
     <div class="grid3">${fp.times.map(t => statBox(fmtTime(t), n(fp.perMeal, 1) + ` <small>${L('কেজি', 'kg')}</small>`)).join('')}</div>
     <details><summary class="small muted" style="cursor:pointer;min-height:40px;display:flex;align-items:center">${L('হিসাব কীভাবে হলো', 'How this was calculated')}</summary>
     <div class="small muted stack" style="margin-top:6px">${fp.parts.map(x => `<div>${spName(x.sp)}: ${L('শরীরের ওজনের', 'body weight')} ${n(x.pct[0])}–${n(x.pct[1])}% → ${n(x.kg, 1)} ${L('কেজি', 'kg')}</div>`).join('')}
-    <div>${L('পানির তাপ', 'Water temp')} ${n(fp.temp)}° → ×${n(fp.kT, 2)}</div><div>${L('সিলভার কার্প প্রাকৃতিক খাবার খায়, তাই বাদ', 'Silver carp eat natural food, so they are excluded')}</div></div></details>`;
+    <div>${L('পানির তাপ', 'Water temp')} ${n(fp.temp)}° → ×${n(fp.kT, 2)}</div>${fp.app ? `<div>${L('গতকাল মাছ যেমন খেয়েছে', 'How fish ate yesterday')} → ×${n(fp.kA, 2)}</div>` : ''}<div>${L('সিলভার কার্প প্রাকৃতিক খাবার খায়, তাই বাদ', 'Silver carp eat natural food, so they are excluded')}</div></div></details>`;
   h += `<button class="btn primary full" data-act="quickLog" data-id="${p.id}">${IC.feed}${L('আজকের খাবার লিখুন', "Log today's feed")}</button></div>`;
   h += `<div class="card"><div class="row"><h3 class="grow">${L('খাবার দেওয়ার সময় মনে করানো', 'Feeding reminders')}</h3><button class="btn sm ghost" data-act="open" data-view="reminders">${L('বদলান', 'Change')}</button></div>
     <div class="choice">${S.reminders.filter(r => r.pondId === p.id).map(r => `<span class="badge ${r.on ? 'safe' : ''}">${IC.bell}${fmtTime(r.time)}${r.on ? '' : ' · ' + L('বন্ধ', 'off')}</span>`).join('') || `<span class="muted">${L('কোনো সময় ঠিক করা নেই', 'No reminders set')}</span>`}</div></div>`;
@@ -899,7 +1050,7 @@ SUBV.water = p => {
   const rs = S.water.filter(w => w.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
   let h = `<button class="btn primary full" data-act="open" data-view="waterTest" data-id="${p.id}">${IC.drop}${L('পানি পরীক্ষা করুন', 'Test the water')}</button>`;
   h += `<div class="card"><h3>${L('পানির সর্বশেষ অবস্থা', 'Latest water condition')}</h3><div class="list">`;
-  Object.keys(PARAMS).forEach(k => {
+  Object.keys(PARAMS).filter(k => k !== 'sal' || isSaline(p)).forEach(k => {
     const o = lw.vals[k];
     const b = o ? band(k, o.v) : null;
     h += `<div class="li"><span class="ic">${IC[PARAMS[k].icon]}</span><div class="grow"><b>${tx(PARAMS[k])}</b><div class="small muted">${o ? ago(o.date) : L('মাপা হয়নি', 'Not tested')}</div></div>
@@ -959,6 +1110,7 @@ SUBV.money = p => {
     ${statBox(m.profit >= 0 ? L('লাভ', 'Profit') : L('এখন পর্যন্ত', 'So far'), `<span class="${m.profit >= 0 ? 'plus' : 'minus'}">${tk(m.profit)}</span>`)}</div>
     <div class="grid2"><button class="btn primary" data-act="open" data-view="ledgerAdd" data-id="${p.id}" data-kind="exp">${IC.minus || IC.money}${L('খরচ লিখুন', 'Add expense')}</button>
     <button class="btn ghost" data-act="open" data-view="ledgerAdd" data-id="${p.id}" data-kind="inc">${IC.plus}${L('আয় লিখুন', 'Add income')}</button></div></div>`;
+  h += `<button class="btn warn full" data-act="open" data-view="sellPlan" data-id="${p.id}">${IC.money}${L('এখন বেচবো, না অপেক্ষা করবো?', 'Sell now or wait?')}</button>`;
   h += `<div class="card ${locked ? 'paywall' : ''}"><div class="row"><h3 class="grow">${L('লাভের হিসাব ও অনুমান', 'Profit insight')}</h3>${locked ? lockBadge('plus') : ''}</div>
     <div class="grid2">${statBox(L('প্রতি কেজি খরচ (এখন পর্যন্ত)', 'Cost per kg (so far)'), a.costPerKg ? tk(a.costPerKg) : '–', locked)}${statBox(L('বিক্রি দর (আপনার জেলা)', 'Sale price (your district)'), a.main ? tk(priceOf(a.main.sp)) : '–')}
     ${statBox(L('বিক্রি পর্যন্ত প্রতি কেজি খরচ', 'Cost per kg at harvest'), a.projCostPerKg ? tk(a.projCostPerKg) : '–', locked)}${statBox(L('আরও খাবারের খরচ লাগবে', 'Feed cost still to come'), tk(a.projFeedCost), locked)}
@@ -1000,7 +1152,10 @@ VIEWS.addPond = ({ step, draft }) => {
   if (step === 2) h += `<div class="card"><h3>${L('ধাপ ২: পানি ও চাষের ধরন', 'Step 2: Water and farming type')}</h3>
     <label class="lbl">${IC.drop}${L('সারা বছর পানি থাকে?', 'Water all year round?')}</label>
     <div class="yn">${pick('allYear', 'yes', d.allYear ? 'yes' : 'no', L('হ্যাঁ, থাকে', 'Yes'), 'check')}${pick('allYear', 'no', d.allYear ? 'yes' : 'no', L('না, শুকিয়ে যায়', 'No, it dries'), 'sun')}</div>
+    <label class="lbl">${IC.pond}${L('কোথায় চাষ?', 'Where will you farm?')}</label>
+    <div class="choice">${SYS.map(x => pick('sys', x[0], d.system || 'pond', tx(x[1]))).join('')}</div>
     <label class="lbl">${IC.fish}${L('কোন মাছ চাষ করবেন?', 'Which fish will you farm?')}</label>
+    <p class="small muted">${L('আপনার জেলায় বেশি চাষ হয়', 'Popular in your district')}: ${((DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0]).sp).map(spName).join(', ')}</p>
     <div class="tiles">${MODELS.map(m => `<button type="button" class="tile ${d.model === m.id ? 'sel' : ''}" data-act="pick" data-group="model" data-val="${m.id}"><span class="ic">${IC.fish}</span>${tx(m)}</button>`).join('')}</div>
     <div class="grid2"><button class="btn line" data-act="pondStep" data-step="1">${IC.back}${L('আগের ধাপ', 'Back')}</button><button class="btn primary" data-act="pondStep" data-step="3">${L('পরের ধাপ', 'Next')}${IC.next}</button></div></div>`;
   if (step === 3) {
@@ -1043,6 +1198,7 @@ VIEWS.waterTest = ({ id }) => {
   <div class="card"><label class="lbl">${IC.temp}${L('পানির তাপমাত্রা', 'Water temperature')}</label>${stepper('w_temp', UI.wt.temp ?? '', 1, '°C', 0)}</div>
   <div class="card"><label class="lbl">${IC.leaf}${L('পানির স্বচ্ছতা (সেকি ডিস্ক)', 'Water clearness (Secchi disk)')}</label>
     <div class="secchi">${secchiPic()}<p class="small">${L('সাদা-কালো চাকতি ধীরে ধীরে পানিতে নামান। যেখানে আর দেখা যায় না, সেই গভীরতা লিখুন।', 'Lower the black-and-white disk slowly. Write the depth where it disappears.')}</p></div>${stepper('w_secchi', UI.wt.secchi ?? '', 5, L('সেমি', 'cm'), 0)}</div>
+  ${isSaline(p) ? `<div class="card"><label class="lbl">${IC.drop}${L('লবণাক্ততা (রিফ্র্যাক্টোমিটার)', 'Salinity (refractometer)')}</label>${stepper('w_sal', UI.wt.sal ?? '', 1, 'ppt', 0)}<p class="small muted">${L('বাগদার জন্য ১০–২৫ ভালো', '10–25 is good for bagda')}</p></div>` : ''}
   <div class="card"><label class="lbl">${IC.pill}${L('নাইট্রাইট (যদি মাপেন)', 'Nitrite (if measured)')}</label>${sw('no2', NO2_SW)}</div>
   <button class="btn primary full" data-act="saveWater" data-id="${id}">${IC.check}${L('ফলাফল দেখুন ও সংরক্ষণ', 'Save and see result')}</button>`;
 };
@@ -1077,7 +1233,7 @@ VIEWS.stockEvent = ({ id, type }) => {
   h += `<label class="lbl">${IC.fish}${L('কয়টি মাছ', 'How many fish')}</label>${stepper('se_n', type === 'release' ? 100 : 10, type === 'release' ? 50 : 1, L('টি', 'fish'), 1)}`;
   if (type === 'release') h += `<label class="lbl">${IC.scale}${L('একটি পোনার গড় ওজন', 'Average weight of one fry')}</label>${stepper('se_w', 10, 1, L('গ্রাম', 'grams'), 1)}
     <label class="lbl">${IC.money}${L('প্রতিটি পোনার দাম', 'Price per fry')}</label>${stepper('se_p', SP[UI.se.sp].fry, 0.5, L('টাকা (খরচে যোগ হবে)', 'taka (added to expenses)'), 0)}`;
-  if (type === 'harvest') h += `<label class="lbl">${IC.scale}${L('মোট ওজন', 'Total weight')}</label>${stepper('se_kg', 10, 1, L('কেজি', 'kg'), 0)}
+  if (type === 'harvest') h += `<label class="lbl">${IC.scale}${L('মোট ওজন', 'Total weight')}</label>${stepper('se_kg', 10, 1, L('কেজি (৪০ কেজি = ১ মণ)', 'kg (40 kg = 1 maund)'), 0)}
     <label class="lbl">${IC.money}${L('বিক্রি দর (প্রতি কেজি)', 'Sale price per kg')}</label>${stepper('se_p', priceOf(UI.se.sp), 5, L('টাকা (আয়ে যোগ হবে)', 'taka (added to income)'), 0)}`;
   h += `<button class="btn primary full" data-act="saveStock" data-id="${id}" data-type="${type}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
   return h;
@@ -1091,13 +1247,15 @@ VIEWS.ledgerAdd = ({ id, kind }) => {
     <div class="tiles" style="grid-template-columns:repeat(3,1fr)">${cats.map(c => `<button type="button" class="tile ${UI.lg.cat === c[0] ? 'sel' : ''}" data-act="pick" data-group="lgCat" data-val="${c[0]}" style="min-height:96px"><span class="ic">${IC[c[1]]}</span>${tx(c[2])}</button>`).join('')}</div></div>
   <div class="card"><label class="lbl">${IC.money}${L('কত টাকা', 'How much')}</label>${stepper('l_amt', 1000, 100, L('টাকা', 'taka'), 0)}
     <label class="lbl">${IC.pond}${L('কোন পুকুর', 'Which pond')}</label>${pondChips(UI.lg.pond, 'pick').replace(/data-group="pond"/g, 'data-group="lgPond"')}
+    ${kind === 'exp' && UI.lg.cat === 'feed' ? `<label class="lbl">${IC.feed}${L('কয় বস্তা খাবার (গুদামে যোগ হবে)', 'How many bags (added to store)')}</label>${stepper('l_bags', 0, 1, L('বস্তা (২৫ কেজি)', 'bags (25 kg)'), 0)}` : ''}
     <div class="field"><label class="lbl" for="l_note">${IC.edit}${L('নোট (না দিলেও চলবে)', 'Note (optional)')}</label><input id="l_note" class="inp"></div>
     <div class="field"><label class="lbl" for="l_photo">${IC.camera}${L('রসিদের ছবি (না দিলেও চলবে)', 'Receipt photo (optional)')}</label><input id="l_photo" type="file" accept="image/*" class="inp"></div>
     <button class="btn primary full" data-act="saveLedger" data-kind="${kind}">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
 };
 
 /* ---- Help tab ---- */
-VIEWS.help = () => `<h2>${L('কী সাহায্য দরকার?', 'What help do you need?')}</h2>
+VIEWS.help = () => `<button class="btn danger full" data-act="open" data-view="sos">${IC.alert}${L('মাছ মরছে? এখনই সাহায্য', 'Fish dying? Get help now')}</button>
+  <h2>${L('কী সাহায্য দরকার?', 'What help do you need?')}</h2>
   <div class="tiles">
   <button class="tile" data-act="open" data-view="symptom"><span class="ic" style="color:var(--danger);background:var(--danger-bg)">${IC.fish}</span>${L('মাছ অসুস্থ?', 'Fish sick?')}</button>
   <button class="tile" data-act="open" data-view="diseases"><span class="ic">${IC.pill}</span>${L('রোগের তালিকা', 'Disease guide')}</button>
@@ -1107,6 +1265,9 @@ VIEWS.help = () => `<h2>${L('কী সাহায্য দরকার?', 'Wh
   <button class="tile" data-act="open" data-view="articles"><span class="ic">${IC.book}</span>${L('শিখুন', 'Learn')}</button>
   <button class="tile" data-act="open" data-view="qa"><span class="ic">${IC.chat}</span>${L('প্রশ্ন-উত্তর', 'Questions')}</button>
   <button class="tile" data-act="open" data-view="expert">${hasPlan('plus') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.doctor}</span>${L('বিশেষজ্ঞকে জিজ্ঞেস', 'Ask an expert')}</button>
+  <button class="tile" data-act="open" data-view="weather"><span class="ic">${IC.cloud}</span>${L('৭ দিনের আবহাওয়া', '7-day weather')}</button>
+  <button class="tile" data-act="open" data-view="calendar"><span class="ic">${IC.clock}</span>${L('মাসের কাজ (পঞ্জিকা)', 'Monthly calendar')}</button>
+  <button class="tile" data-act="open" data-view="converter"><span class="ic">${IC.scale}</span>${L('মাপ বদল (বিঘা, মণ)', 'Units (bigha, maund)')}</button>
   </div>
   <div class="card"><div class="row"><span class="ic" style="color:var(--pond)">${IC.phone}</span><div class="grow"><b>${L('জরুরি সাহায্য', 'Urgent help')}</b><p class="small muted">${L('উপজেলা মৎস্য অফিস বা কৃষি কল সেন্টার', 'Upazila fisheries office or the agriculture call centre')}</p></div><b class="num" style="font-size:22px">${dig('16123')}</b></div></div>`;
 
@@ -1301,9 +1462,16 @@ VIEWS.me = () => `<div class="card"><div class="row"><span class="ring" style="b
   <div class="card"><div class="row"><h3 class="grow">${L('প্ল্যান (ডেমোতে বদলে দেখুন)', 'Plan (switch to test in demo)')}</h3></div>
     <div class="grid3">${['free', 'plus', 'pro'].map(p => `<button class="chip ${S.plan === p ? 'sel' : ''}" style="justify-content:center;border-radius:14px" data-act="setPlan" data-plan="${p}">${planName(p)}</button>`).join('')}</div>
     <p class="small muted">${L('ফ্রি: ২টি পুকুর ও সব জরুরি সতর্কতা। প্লাস: লাভের হিসাব, বিশেষজ্ঞ, রিপোর্ট। প্রো: মাছ বিক্রি, কর্মী, সেন্সর।', 'Free: 2 ponds and all safety alerts. Plus: profit insight, expert, reports. Pro: selling, workers, sensors.')}</p></div>
+  <h2>${L('আমার খামার', 'My farm')}</h2>
   <div class="tiles">
-    <button class="tile" data-act="open" data-view="reminders"><span class="ic">${IC.bell}</span>${L('খাবারের সময় মনে করানো', 'Feeding reminders')}</button>
     <button class="tile" data-act="open" data-view="money"><span class="ic">${IC.money}</span>${L('সব পুকুরের হিসাব', 'All ponds money')}</button>
+    <button class="tile" data-act="open" data-view="dues"><span class="ic">${IC.doc}</span>${L('বাকি ও ঋণ খাতা', 'Dues & loans')}</button>
+    <button class="tile" data-act="open" data-view="feedStore"><span class="ic">${IC.feed}</span>${L('খাবারের গুদাম', 'Feed store')}</button>
+    <button class="tile" data-act="open" data-view="reminders"><span class="ic">${IC.bell}</span>${L('খাবারের সময় মনে করানো', 'Feeding reminders')}</button>
+    <button class="tile" data-act="open" data-view="cycles"><span class="ic">${IC.chart}</span>${L('আগের চাষের হিসাব', 'Past seasons')}</button>
+    <button class="tile" data-act="open" data-view="backup"><span class="ic">${IC.reset}</span>${L('তথ্য ব্যাকআপ', 'Back up data')}</button></div>
+  <h2>${L('অ্যাপ', 'App')}</h2>
+  <div class="tiles">
     <button class="tile" data-act="open" data-view="team">${hasPlan('pro') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.team}</span>${L('কর্মী যোগ করুন', 'Add workers')}</button>
     <button class="tile" data-act="open" data-view="sensor">${hasPlan('pro') ? '' : `<span class="lockb">${IC.lock}</span>`}<span class="ic">${IC.sensor}</span>${L('অক্সিজেন সেন্সর', 'Oxygen sensor')}</button>
     <button class="tile" data-act="open" data-view="checklist"><span class="ic" style="color:var(--turmeric);background:var(--watch-bg)">${IC.list}</span>${L('সব ফিচার পরীক্ষা', 'Test every feature')}</button>
@@ -1361,6 +1529,10 @@ const CHECKS = [
   ['article', L0('একটি শিক্ষা পড়ুন', 'Read a lesson')], ['question', L0('একটি প্রশ্ন করুন', 'Ask a question')], ['market', L0('বাজার দর দেখুন', 'See market prices')], ['order', L0('একটি পণ্য অর্ডার করুন', 'Order a product')],
   ['plan', L0('প্লাস/প্রো চালু করে লক করা ফিচার দেখুন', 'Turn on Plus/Pro and open locked features')], ['trend', L0('৩০ দিনের দর (প্লাস)', '30-day prices (Plus)')], ['report', L0('পুকুরের রিপোর্ট (প্লাস)', 'Pond report (Plus)')], ['ticket', L0('বিশেষজ্ঞকে ছবি পাঠান (প্লাস)', 'Send photo to expert (Plus)')],
   ['listing', L0('ক্রেতার কাছে মাছ বিক্রি (প্রো)', 'Sell to buyers (Pro)')], ['reminder', L0('পরীক্ষা মনে করানো বার্তা', 'Test reminder message')], ['lang', L0('ভাষা বদলান', 'Switch language')], ['reset', L0('নমুনা তথ্য ফেরত / খালি শুরু', 'Restore sample / start empty')],
+  ['sos', L0('"মাছ মরছে?" বোতাম', '"Fish dying?" button')], ['weather', L0('৭ দিনের আবহাওয়া ও পরামর্শ', '7-day weather and advice')], ['calendar', L0('মাসের কাজের পঞ্জিকা', 'Monthly calendar')],
+  ['appetite', L0('খাতায় "মাছ কেমন খেয়েছে" দিন', 'Log how the fish ate')], ['feedStore', L0('খাবারের গুদাম', 'Feed store')], ['dues', L0('বাকি ও ঋণ খাতা', 'Dues & loans')],
+  ['diary', L0('পুকুরের ডায়েরি ও ছবি', 'Pond diary & photos')], ['sellPlan', L0('এখন বেচবো না অপেক্ষা করবো', 'Sell now or wait')], ['cycles', L0('আগের চাষের হিসাব', 'Past seasons')],
+  ['cycle', L0('একটি চাষ শেষ করুন', 'Close a season')], ['converter', L0('মাপ বদল (বিঘা, মণ)', 'Unit converter')], ['backup', L0('তথ্য ব্যাকআপ', 'Back up data')],
 ];
 VIEWS.checklist = () => {
   const done = CHECKS.filter(c => S.checklist[c[0]]).length;
@@ -1371,7 +1543,339 @@ VIEWS.checklist = () => {
 };
 VIEWS.about = () => `<div class="card"><h2>${L('মাছবন্ধু', 'Machbondhu')}</h2><p>${L('ছোট ও মাঝারি মাছচাষিদের জন্য পুকুর, খাবার, পানি আর টাকার হিসাব — এক জায়গায়।', 'Pond, feed, water and money records for small and medium fish farmers — in one place.')}</p>
   <p class="small muted">${L('এটি একটি ডেমো। সব তথ্য শুধু এই ফোনে থাকে। দর, আবহাওয়া, ক্রেতা ও বিশেষজ্ঞের উত্তর নমুনা। খাবার, চুন ও পানির মান বিশেষজ্ঞ দিয়ে যাচাই করা দরকার।', 'This is a demo. All data stays on this phone. Prices, weather, buyers and expert replies are samples. Feed, lime and water thresholds still need expert review.')}</p>
-  <p class="small muted">${L('সংস্করণ', 'Version')} ${dig('0.1.0')} (${L('ডেমো', 'demo')})</p></div>`;
+  <p class="small muted">${L('সংস্করণ', 'Version')} ${dig('0.2.0')} (${L('ডেমো', 'demo')})</p></div>`;
+
+/* ===================== v2: weather, Bangla calendar, dues, feed store, diary, cycles, SOS, tools ===================== */
+const DAY_SHORT_BN = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র', 'শনি'];
+const DAY_SHORT_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+// monthly normals for Bangladesh (approximate) — used when live forecast is not available
+const WX_NORM = { tmax: [25, 28, 32, 34, 34, 32, 31, 31, 31, 31, 29, 26], tmin: [12, 15, 20, 23, 25, 26, 26, 26, 25, 23, 18, 14],
+  rain: [1, 2, 4, 8, 12, 18, 20, 17, 14, 7, 2, 1], cloud: [25, 30, 35, 45, 60, 80, 85, 85, 75, 55, 35, 30] };
+function sampleWx() {
+  const T = today(), out = [];
+  const pat = [[0, 0, 0, 0], [1, -1, 2, 10], [2, 0, 25, 20], [0, 1, 60, 30], [-1, -2, 5, 5], [2, 1, 0, -10], [3, 0, 0, -15]];
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(T, i), m = new Date(d + 'T12:00:00').getMonth(), p = pat[i], wet = WX_NORM.rain[m] >= 8;
+    out.push({ date: d, tmax: WX_NORM.tmax[m] + p[0], tmin: WX_NORM.tmin[m] + p[1], rain: Math.round(wet ? WX_NORM.rain[m] * (1 + p[2] / 20) : (p[2] > 40 ? 6 : 0)), cloud: Math.min(100, Math.max(5, WX_NORM.cloud[m] + p[3])) });
+  }
+  return out;
+}
+function wxState() { return (S.wx && S.wx.live && S.wx.district === S.profile.district && S.wx.days && S.wx.days.some(d => d.date === today())) ? S.wx : null; }
+function wxDays() { const w = wxState(); if (w) { const i = w.days.findIndex(d => d.date === today()); return w.days.slice(i, i + 7); } return sampleWx(); }
+let wxBusy = false;
+async function fetchWx(force) {
+  const canNet = !!window.Capacitor || (/^https?:$/.test(location.protocol) && !/claude|anthropic/.test(location.hostname));
+  if (!canNet || wxBusy || (navigator.onLine === false)) return;
+  if (!force && wxState() && Date.now() - S.wx.at < 3 * 3600e3) return;
+  const d = DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0];
+  wxBusy = true;
+  try {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${d.lat}&longitude=${d.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,cloud_cover_mean&timezone=Asia%2FDhaka&forecast_days=8`);
+    const j = await r.json(), D = j.daily;
+    S.wx = { live: true, at: Date.now(), district: S.profile.district, days: D.time.map((t, i) => ({ date: t, tmax: Math.round(D.temperature_2m_max[i]), tmin: Math.round(D.temperature_2m_min[i]), rain: Math.round(D.precipitation_sum[i] || 0), cloud: Math.round(((D.cloud_cover_mean || [])[i]) ?? 50) })) };
+    save(); if (!UI.sheet && ['today', 'weather'].includes(cur().view)) render(false);
+  } catch (e) { /* offline or blocked: keep sample */ } finally { wxBusy = false; }
+}
+const wxIcon = d => d.rain >= 10 ? IC.rain : d.cloud >= 70 ? IC.cloud : IC.sun;
+function wxAdvice() {
+  const days = wxDays(), out = [];
+  const lead = i => i === 0 ? L('আজ', 'Today') : i === 1 ? L('কাল', 'Tomorrow') : L(`${dig(i)} দিন পর`, `In ${i} days`);
+  const first = f => days.findIndex(f);
+  let i = first(d => d.tmax >= 35);
+  if (i >= 0) out.push({ k: 'heat', b: days[i].tmax >= 38 ? 'danger' : 'watch', icon: 'sun', when: lead(i), t: L(`তাপপ্রবাহ — ${n(days[i].tmax)}°`, `Heat wave — ${days[i].tmax}°`),
+    acts: [L('এরেটর ও পাম্প প্রস্তুত রাখুন, নতুন পানি দিন', 'Get the aerator and pump ready; add fresh water'), L('দুপুরে খাবার দেবেন না, সকাল-বিকাল কম দিন', 'No feed at midday; feed less morning and evening'), L('এ সময় পোনা ছাড়বেন না', 'Do not stock fry now')] });
+  i = first(d => d.tmin < 18);
+  if (i >= 0) out.push({ k: 'cold', b: days[i].tmin < 14 ? 'danger' : 'watch', icon: 'snow', when: lead(i), t: L(`ঠান্ডা — রাতে ${n(days[i].tmin)}°`, `Cold — ${days[i].tmin}° at night`),
+    acts: [L('খাবার কমান, রোদ উঠলে দুপুরে দিন', 'Feed less, at midday when sunny'), L('পানির গভীরতা বাড়ান', 'Keep the water deeper'), L('লাল দাগ (ক্ষত রোগ) দেখুন', 'Watch for red spots (ulcer disease)')] });
+  i = first(d => d.rain >= 44);
+  if (i >= 0) out.push({ k: 'rain', b: days[i].rain >= 88 ? 'danger' : 'watch', icon: 'rain', when: lead(i), t: L(`ভারী বৃষ্টি — ${n(days[i].rain)} মিমি`, `Heavy rain — ${days[i].rain} mm`),
+    acts: [L('পাড় উঁচু করুন, চারপাশে জাল দিন', 'Raise the banks and put a net around'), L('বৃষ্টির দিন খাবার ও সার বন্ধ রাখুন', 'No feed or fertiliser on the rainy day'), L('বৃষ্টির পর প্রতি শতাংশে ২৫০ গ্রাম চুন দিন', 'After the rain, apply 250 g lime per decimal')] });
+  const m = new Date().getMonth();
+  if ([1, 2, 3, 4, 10].includes(m) && days.slice(0, 5).reduce((a, d) => a + d.rain, 0) < 3 && days[0].tmax >= 32) out.push({ k: 'dry', b: 'watch', icon: 'sun', when: L('এই সপ্তাহ', 'This week'), t: L('শুকনো গরম সপ্তাহ — পানি কমবে', 'Dry, hot week — water will drop'),
+    acts: [L('পাম্প দিয়ে পানি যোগ করুন', 'Pump in water'), L('খাবার কিছুটা কমান', 'Feed a little less'), L('নতুন পোনা ছাড়া পিছিয়ে দিন', 'Delay stocking new fry')] });
+  if (weatherRisk().length) out.push({ k: 'cloudy', b: 'watch', icon: 'cloud', when: L('আজ রাতে', 'Tonight'), t: L('মেঘলা গরম — ভোরে অক্সিজেন কমতে পারে', 'Cloudy and hot — oxygen may drop at dawn'),
+    acts: [L('আজ খাবার একটু কম দিন', 'Feed a little less today'), L('ভোরে মাছ ভাসছে কিনা দেখুন', 'Check at dawn whether fish are gasping')] });
+  return out;
+}
+function weatherStrip() {
+  const days = wxDays(), live = !!wxState();
+  return `<button type="button" class="weather" data-act="open" data-view="weather" style="flex-direction:column;align-items:stretch;cursor:pointer;color:inherit;font:inherit;text-align:left">
+    <div class="row" style="justify-content:space-between"><b>${L('৭ দিনের আবহাওয়া', '7-day weather')} · ${tx(DISTRICTS.find(x => x.id === S.profile.district) || DISTRICTS[0])}</b>${live ? `<span class="badge safe">${L('লাইভ', 'Live')}</span>` : `<span class="demo-tag">${L('নমুনা', 'Sample')}</span>`}</div>
+    <div class="wxstrip">${days.map((d, i) => `<div class="wxd ${i === 0 ? 'on' : ''}"><span>${i === 0 ? L('আজ', 'Today') : (S.lang === 'en' ? DAY_SHORT_EN : DAY_SHORT_BN)[new Date(d.date + 'T12:00:00').getDay()]}</span>${wxIcon(d)}<b class="num">${n(d.tmax)}°</b><span class="num">${n(d.tmin)}°</span>${d.rain ? `<span class="num rainmm">${n(d.rain)}${L('মিমি', 'mm')}</span>` : '<span class="rainmm">&nbsp;</span>'}</div>`).join('')}</div></button>`;
+}
+VIEWS.weather = () => {
+  const days = wxDays(), adv = wxAdvice(), live = !!wxState();
+  tick('weather');
+  return `<div class="card"><div class="row"><h3 class="grow">${L('৭ দিনের আবহাওয়া', '7-day weather')}</h3>${live ? `<span class="badge safe">${L('লাইভ', 'Live')}</span>` : `<span class="demo-tag">${L('নমুনা', 'Sample')}</span>`}</div>
+    <div class="list">${days.map((d, i) => `<div class="li"><span class="ic">${wxIcon(d)}</span><div class="grow"><b>${i === 0 ? L('আজ', 'Today') : (S.lang === 'en' ? DAY_EN : DAY_BN)[new Date(d.date + 'T12:00:00').getDay()]}</b><div class="small muted">${fmtDate(d.date)} · ${L('মেঘ', 'cloud')} ${n(d.cloud)}%${d.rain ? ` · ${L('বৃষ্টি', 'rain')} ${n(d.rain)} ${L('মিমি', 'mm')}` : ''}</div></div>
+      <div class="amt num">${n(d.tmax)}° <span class="small muted">/ ${n(d.tmin)}°</span></div></div>`).join('')}</div>
+    <p class="small muted">${live ? L('তথ্য: Open-Meteo', 'Data: Open-Meteo') : L('ইন্টারনেট থাকলে অ্যান্ড্রয়েড অ্যাপে আসল আবহাওয়া দেখাবে। এখন মাসের গড় দিয়ে নমুনা দেখানো হচ্ছে।', 'With internet, the Android app shows the real forecast. Now showing a sample from monthly averages.')}</p>
+    ${live ? '' : `<button class="btn ghost sm" data-act="wxRefresh">${IC.reset}${L('আবার চেষ্টা করুন', 'Try again')}</button>`}</div>
+    <h2>${L('আবহাওয়া অনুযায়ী কী করবেন', 'What to do for this weather')}</h2>
+    ${adv.length ? adv.map(a => `<div class="alert ${a.b === 'watch' ? 'watch' : ''}"><span class="ic">${IC[a.icon]}</span><span><b>${a.when}: ${a.t}</b>${a.acts.map(t => `<span style="display:block">• ${t}</span>`).join('')}</span></div>`).join('')
+      : `<div class="card"><div class="row"><span class="ring">${IC.check}</span><p class="grow">${L('এই সপ্তাহে আবহাওয়া মাছের জন্য ভালো। স্বাভাবিক কাজ চালিয়ে যান।', 'The weather looks fine for fish this week. Carry on as usual.')}</p></div></div>`}`;
+};
+
+/* ---- Bangla calendar ---- */
+const BMON = ['বৈশাখ', 'জ্যৈষ্ঠ', 'আষাঢ়', 'শ্রাবণ', 'ভাদ্র', 'আশ্বিন', 'কার্তিক', 'অগ্রহায়ণ', 'পৌষ', 'মাঘ', 'ফাল্গুন', 'চৈত্র'];
+const BMON_EN = ['Boishakh', 'Joishtho', 'Asharh', 'Shrabon', 'Bhadro', 'Ashwin', 'Kartik', 'Ogrohayon', 'Poush', 'Magh', 'Falgun', 'Choitro'];
+function banglaDate(iso) {
+  const d = new Date(iso + 'T12:00:00'); let y = d.getFullYear();
+  let start = new Date(y, 3, 14, 12); if (d < start) { y--; start = new Date(y, 3, 14, 12); }
+  let k = Math.round((d - start) / 864e5);
+  const leap = yy => (yy % 4 === 0 && yy % 100 !== 0) || yy % 400 === 0;
+  const len = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, leap(y + 1) ? 30 : 29, 30];
+  let mi = 0; while (mi < 11 && k >= len[mi]) { k -= len[mi]; mi++; }
+  return { day: k + 1, m: mi, year: y - 593 };
+}
+const bnDateStr = iso => { const b = banglaDate(iso); return S.lang === 'en' ? `${b.day} ${BMON_EN[b.m]} ${b.year}` : `${dig(b.day)} ${BMON[b.m]} ${dig(b.year)}`; };
+const CAL = [
+  { risk: L0('শীত, ক্ষত রোগের ঝুঁকি', 'Cold; ulcer disease risk'), t: [L0('খাবার কমিয়ে দুপুরে দিন', 'Feed less, at midday'), L0('প্রতি শতাংশে ২৫০ গ্রাম চুন দিন', 'Apply 250 g lime per decimal'), L0('বড় মাছ ধরে বিক্রি করুন', 'Harvest and sell big fish')] },
+  { risk: L0('শীত শেষ, শুকনো', 'End of winter; dry'), t: [L0('পুকুর শুকিয়ে কাদা তুলুন', 'Dry the pond and remove mud'), L0('পাড় মেরামত করুন', 'Repair the banks'), L0('পোনার জন্য হ্যাচারির সাথে কথা বলুন', 'Talk to a hatchery about fry')] },
+  { risk: L0('গরম শুরু', 'Heat begins'), t: [L0('পুকুর প্রস্তুত: চুন শতাংশে ১ কেজি', 'Prepare pond: lime 1 kg per decimal'), L0('রাক্ষুসে মাছ ও আগাছা সরান', 'Remove predators and weeds'), L0('বাগদা চিংড়ি ছাড়ার সময়', 'Time to stock bagda shrimp')] },
+  { risk: L0('তাপপ্রবাহ (৩৪° এর বেশি)', 'Heat waves (over 34°)'), t: [L0('পানি দিয়ে সার দিন', 'Fill with water and fertilise'), L0('ভালো হ্যাচারি থেকে পোনা কিনুন', 'Buy fry from a good hatchery'), L0('সকাল বা বিকালে পোনা ছাড়ুন', 'Stock fry in the morning or evening')] },
+  { risk: L0('তাপপ্রবাহ, পানি কমে', 'Heat waves; water drops'), t: [L0('রুই-কাতলা ও তেলাপিয়া ছাড়ুন', 'Stock carp and tilapia'), L0('গরমে এরেটর চালান, পানি যোগ করুন', 'Run aerator and add water in heat'), L0('দুপুরে খাবার দেবেন না', 'No feed at midday')] },
+  { risk: L0('বর্ষা শুরু', 'Monsoon begins'), t: [L0('পাড় উঁচু করুন, জাল দিয়ে ঘিরুন', 'Raise banks and fence with net'), L0('নিয়মিত খাবার দিন', 'Feed regularly'), L0('প্রতি ১৫ দিনে ওজন মাপুন', 'Weigh fish every 15 days')] },
+  { risk: L0('ভারী বৃষ্টি', 'Heavy rain'), t: [L0('ভারী বৃষ্টির দিন খাবার বন্ধ', 'No feed on heavy-rain days'), L0('বৃষ্টির পর চুন দিন', 'Apply lime after rain'), L0('গলদা চিংড়ি ছাড়ার সময়', 'Time to stock golda prawn')] },
+  { risk: L0('বন্যা ও শুকনো দিন', 'Floods and dry spells'), t: [L0('বড় মাছ আংশিক ধরে বিক্রি করুন', 'Partly harvest big fish'), L0('শুকনো দিনে পাম্পে পানি দিন', 'Pump water on dry days'), L0('পানি পরীক্ষা প্রতি সপ্তাহে', 'Test water every week')] },
+  { risk: L0('ভারী বৃষ্টি, বন্যা', 'Heavy rain; floods'), t: [L0('বন্যার আগে জাল ও পাড় দেখুন', 'Check nets and banks before floods'), L0('বৃদ্ধি মাপুন, খাবার ঠিক করুন', 'Measure growth and adjust feed'), L0('মেঘলা দিনে খাবার কম', 'Feed less on cloudy days')] },
+  { risk: L0('বৃষ্টি কমে, শীত আসছে', 'Rain eases; winter coming'), t: [L0('শীতের আগে চুন দিন', 'Apply lime before winter'), L0('তেলাপিয়া বিক্রির প্রস্তুতি', 'Prepare to sell tilapia'), L0('রোগের লক্ষণ খেয়াল করুন', 'Watch for disease signs')] },
+  { risk: L0('রাত ঠান্ডা হয়', 'Nights get cold'), t: [L0('তেলাপিয়া, রুই ধরে বিক্রি করুন', 'Harvest and sell tilapia and rohu'), L0('খাবার ধীরে কমান', 'Slowly reduce feed'), L0('পানির গভীরতা বাড়ান', 'Make the water deeper')] },
+  { risk: L0('শীত, ক্ষত রোগ', 'Cold; ulcer disease'), t: [L0('দুপুরে অল্প খাবার দিন', 'Give a little feed at midday'), L0('লাল দাগ দেখলে চুন ও লবণ দিন', 'Lime and salt if red spots appear'), L0('বিক্রি শেষে হিসাব মিলিয়ে নিন', 'After selling, close the season\'s accounts')] },
+];
+function bmonPair(m) { // Bangla months that overlap Gregorian month m
+  const a = banglaDate(`${new Date().getFullYear()}-${pad(m + 1)}-01`).m, b = banglaDate(`${new Date().getFullYear()}-${pad(m + 1)}-28`).m;
+  return S.lang === 'en' ? `${BMON_EN[a]}–${BMON_EN[b]}` : `${BMON[a]}–${BMON[b]}`;
+}
+VIEWS.calendar = () => {
+  const now = new Date().getMonth(); tick('calendar');
+  const order = Array.from({ length: 12 }, (_, i) => (now + i) % 12);
+  return `<p class="muted">${L('প্রতি মাসে পুকুরে কী করবেন। এই মাস সবার উপরে।', 'What to do in the pond each month. This month is on top.')}</p>
+  ${order.map((m, k) => `<div class="card" ${k === 0 ? 'style="border:2px solid var(--pond)"' : ''}><div class="row"><h3 class="grow">${(S.lang === 'en' ? MON_EN : MON_BN)[m]} <span class="small muted">(${bmonPair(m)})</span></h3>${k === 0 ? `<span class="badge">${L('এই মাস', 'This month')}</span>` : ''}</div>
+    <div class="row small"><span class="badge watch">${IC.alert}${tx(CAL[m].risk)}</span></div>${CAL[m].t.map(t => `<div class="row"><span style="color:var(--pond)">${IC.check}</span><span class="grow">${tx(t)}</span></div>`).join('')}</div>`).join('')}`;
+};
+
+/* ---- Feed store (inventory) ---- */
+const BAG_KG = 25;
+function feedStock() {
+  const ins = S.feedIn || [];
+  if (!ins.length) return null;
+  const from = ins.reduce((a, x) => x.date < a ? x.date : a, ins[0].date);
+  const inKg = ins.reduce((a, x) => a + x.kg, 0);
+  const used = S.logs.filter(l => l.date >= from).reduce((a, l) => a + (l.feedKg || 0), 0);
+  const left = Math.max(0, inKg - used);
+  const need = S.ponds.reduce((a, p) => a + feedPlan(p.id).kg, 0);
+  return { inKg, used, left, need, days: need > 0 ? left / need : null };
+}
+VIEWS.feedStore = () => {
+  const fs = feedStock(); tick('feedStore');
+  const band = !fs || fs.days === null ? 'safe' : fs.days < 3 ? 'danger' : fs.days < 7 ? 'watch' : 'safe';
+  let h = `<div class="card center" style="align-items:center"><p class="muted">${L('গুদামে খাবার আছে', 'Feed in store')}</p>
+    <div class="big-num num">${fs ? n(fs.left, 0) : n(0)} <span style="font-size:22px">${L('কেজি', 'kg')}</span></div>
+    <p class="muted">${L('প্রায়', 'About')} ${n((fs ? fs.left : 0) / BAG_KG, 1)} ${L('বস্তা', 'bags')}</p>
+    ${fs && fs.days !== null ? `<span class="badge ${band}" style="font-size:15px">${L(`আর ${dig(Math.floor(fs.days))} দিন চলবে`, `Lasts ${Math.floor(fs.days)} more days`)}</span>
+      <p class="small muted">${L(`সব পুকুরে দিনে প্রায় ${n(fs.need, 1)} কেজি লাগে`, `All ponds use about ${n(fs.need, 1)} kg a day`)}</p>` : ''}</div>`;
+  h += `<div class="card"><h3>${L('খাবার কিনলেন? এখানে লিখুন', 'Bought feed? Add it here')}</h3>
+    <label class="lbl">${IC.feed}${L('কয় বস্তা (২৫ কেজি)', 'How many bags (25 kg)')}</label>${stepper('fi_bags', 10, 1, L('বস্তা', 'bags'), 1)}
+    <label class="lbl">${IC.money}${L('প্রতি বস্তার দাম', 'Price per bag')}</label>${stepper('fi_price', 1450, 50, L('টাকা', 'taka'), 0)}
+    ${S.ponds.length ? `<label class="lbl">${IC.pond}${L('খরচ কোন পুকুরে লিখবো', 'Which pond pays')}</label>${pondChips(UI.fiPond || S.ponds[0].id).replace(/data-group="pond"/g, 'data-group="fiPond"')}` : ''}
+    <label class="row" style="cursor:pointer;min-height:44px"><input type="checkbox" id="fi_baki" style="width:26px;height:26px"><span>${L('বাকিতে কিনেছি (দোকানের বাকি খাতায় যোগ হবে)', 'Bought on credit (adds to dealer dues)')}</span></label>
+    <div class="field"><label class="lbl" for="fi_who">${IC.market}${L('দোকান/ডিলারের নাম (না দিলেও চলবে)', 'Shop or dealer name (optional)')}</label><input id="fi_who" class="inp"></div>
+    <button class="btn primary full" data-act="saveFeedIn">${IC.check}${L('গুদামে যোগ করুন', 'Add to store')}</button></div>`;
+  const ins = (S.feedIn || []).slice().sort((a, b) => a.date < b.date ? 1 : -1);
+  h += `<div class="card"><h3>${L('খাবার কেনার খাতা', 'Feed purchase diary')}</h3><div class="list">${ins.map(x => `<div class="li"><span class="ic">${IC.feed}</span><div class="grow"><b>${n(x.kg / BAG_KG)} ${L('বস্তা', 'bags')} · ${n(x.kg)} ${L('কেজি', 'kg')}</b><div class="small muted">${fmtDate(x.date, true)}${x.note ? ' · ' + esc(x.note) : ''}</div></div>
+    <div class="amt num">${x.amount ? tk(x.amount) : ''}</div><button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delFeedIn" data-id="${x.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>`).join('') || `<p class="muted">${L('এখনো কিছু লেখা হয়নি', 'Nothing yet')}</p>`}</div></div>`;
+  return h;
+};
+
+/* ---- Dues & loans (baki khata) ---- */
+const DUE_KINDS = { payable: [L0('দোকানের বাকি (আমি দেব)', 'Dealer credit (I owe)'), 'market'], loan: [L0('ঋণ (আমি দেব)', 'Loan (I owe)'), 'money'], receivable: [L0('পাওনা (আমি পাব)', 'Owed to me'), 'truck'] };
+function dueCalc(d) {
+  const paid = (d.paid || []).reduce((a, x) => a + x.amount, 0);
+  const months = Math.floor(Math.max(0, daysAgo(d.date)) / 30);
+  const interest = d.kind === 'loan' && d.rate ? Math.round(d.amount * d.rate / 100 * months) : 0;
+  const left = Math.max(0, d.amount + interest - paid);
+  const dd = d.due ? daysBetween(today(), d.due) : null;
+  const state = left <= 0 ? 'done' : dd !== null && dd < 0 ? 'late' : dd !== null && dd <= 3 ? 'soon' : 'ok';
+  return { paid, interest, left, dd, state };
+}
+function dueWhen(c) {
+  if (c.state === 'done') return L('শোধ হয়েছে', 'Settled');
+  if (c.dd === null) return '';
+  if (c.dd < 0) return L(`${dig(-c.dd)} দিন পার হয়ে গেছে`, `${-c.dd} days overdue`);
+  if (c.dd === 0) return L('আজ দিতে হবে', 'Due today');
+  return L(`${dig(c.dd)} দিন বাকি`, `Due in ${c.dd} days`);
+}
+VIEWS.dues = () => {
+  const ds = S.dues || []; tick('dues');
+  const owe = ds.filter(d => d.kind !== 'receivable').reduce((a, d) => a + dueCalc(d).left, 0);
+  const get = ds.filter(d => d.kind === 'receivable').reduce((a, d) => a + dueCalc(d).left, 0);
+  const row = d => { const c = dueCalc(d); const pct = Math.min(100, Math.round(c.paid / Math.max(1, d.amount + c.interest) * 100));
+    return `<div class="card"><div class="row"><span class="ic" style="color:var(--pond)">${IC[DUE_KINDS[d.kind][1]]}</span><div class="grow"><b>${esc(d.who)}</b><div class="small muted">${tx(DUE_KINDS[d.kind][0])}${d.rate ? ' · ' + L(`মাসে ${dig(d.rate)}% সুদ`, `${d.rate}% interest a month`) : ''}</div></div>
+      <div class="center"><div class="amt num ${d.kind === 'receivable' ? 'plus' : 'minus'}">${tk(c.left)}</div><span class="badge ${c.state === 'late' ? 'danger' : c.state === 'soon' ? 'watch' : c.state === 'done' ? 'safe' : ''}">${dueWhen(c)}</span></div></div>
+      <div style="height:10px;border-radius:6px;background:var(--pond-2)"><div style="height:10px;border-radius:6px;background:var(--safe);width:${pct}%"></div></div>
+      <div class="small muted">${L('মোট', 'Total')} ${tk(d.amount)}${c.interest ? ' + ' + L('সুদ', 'interest') + ' ' + tk(c.interest) : ''} · ${d.kind === 'receivable' ? L('পেয়েছি', 'received') : L('দিয়েছি', 'paid')} ${tk(c.paid)}${d.note ? ' · ' + esc(d.note) : ''}</div>
+      <div class="grid2">${c.state !== 'done' ? `<button class="btn primary sm" data-act="payDue" data-id="${d.id}">${IC.check}${d.kind === 'receivable' ? L('টাকা পেলাম', 'Got money') : L('টাকা দিলাম', 'Paid money')}</button>` : '<span></span>'}
+      <button class="btn line sm" data-act="delDue" data-id="${d.id}">${IC.trash}${L('মুছুন', 'Delete')}</button></div></div>`; };
+  return `<div class="grid2">${statBox(L('আমি দেব', 'I owe'), `<span class="minus">${tk(owe)}</span>`)}${statBox(L('আমি পাব', 'Owed to me'), `<span class="plus">${tk(get)}</span>`)}</div>
+    <button class="btn primary full" data-act="open" data-view="dueAdd">${IC.plus}${L('নতুন বাকি বা ঋণ লিখুন', 'Add a due or loan')}</button>
+    ${ds.length ? ds.slice().sort((a, b) => { const o = { late: 0, soon: 1, ok: 2, done: 3 }; return o[dueCalc(a).state] - o[dueCalc(b).state]; }).map(row).join('') :
+      emptyBox('money', L('কোনো বাকি নেই', 'No dues'), L('দোকানে বাকি, এনজিও ঋণ বা কেউ টাকা দেবে — সব এখানে লিখে রাখুন', 'Keep dealer credit, NGO loans and money owed to you here'))}`;
+};
+VIEWS.dueAdd = () => {
+  UI.da = UI.da || { kind: 'payable' };
+  return `<div class="card"><h3>${L('কী ধরনের?', 'What kind?')}</h3><div class="tiles t3">${Object.entries(DUE_KINDS).map(([k, v]) => `<button type="button" class="tile ${UI.da.kind === k ? 'sel' : ''}" data-act="pick" data-group="daKind" data-val="${k}"><span class="ic">${IC[v[1]]}</span>${tx(v[0])}</button>`).join('')}</div></div>
+  <div class="card"><div class="field"><label class="lbl" for="da_who">${IC.me}${UI.da.kind === 'receivable' ? L('কে দেবে', 'Who will pay') : UI.da.kind === 'loan' ? L('কার কাছ থেকে ঋণ', 'Loan from') : L('দোকান/ডিলারের নাম', 'Shop or dealer name')}</label><input id="da_who" class="inp" placeholder="${UI.da.kind === 'loan' ? L('যেমন: এনজিও, ব্যাংক, সমিতি', 'e.g. NGO, bank, society') : ''}"></div>
+    <label class="lbl">${IC.money}${L('কত টাকা', 'How much')}</label>${stepper('da_amt', 5000, 500, L('টাকা', 'taka'), 0)}
+    ${UI.da.kind === 'loan' ? `<label class="lbl">${IC.chart}${L('মাসে কত % সুদ (না থাকলে ০)', 'Interest % per month (0 if none)')}</label>${stepper('da_rate', 2, 0.5, '%', 0)}` : ''}
+    <div class="field"><label class="lbl" for="da_due">${IC.clock}${L('কবে দিতে/পেতে হবে', 'Due date')}</label><input id="da_due" type="date" class="inp" value="${addDays(today(), 30)}"></div>
+    <div class="field"><label class="lbl" for="da_note">${IC.edit}${L('নোট (না দিলেও চলবে)', 'Note (optional)')}</label><input id="da_note" class="inp"></div>
+    <button class="btn primary full" data-act="saveDue">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div>`;
+};
+function openPay(id) {
+  const d = (S.dues || []).find(x => x.id === id); if (!d) return;
+  const c = dueCalc(d);
+  UI.payId = id;
+  UI.sheet = () => `<div class="scrim" data-act="closeSheet"><div class="sheet" role="dialog" aria-modal="true" data-stop="1"><div class="grab"></div>
+    <h2>${esc(d.who)}</h2><p class="muted">${L('বাকি আছে', 'Remaining')} ${tk(c.left)}</p>
+    <label class="lbl">${IC.money}${d.kind === 'receivable' ? L('কত টাকা পেলেন', 'How much received') : L('কত টাকা দিলেন', 'How much paid')}</label>${stepper('pay_amt', c.left, 500, L('টাকা', 'taka'), 0)}
+    <button class="btn primary full" data-act="savePay">${IC.check}${L('সংরক্ষণ', 'Save')}</button></div></div>`;
+  renderLayer();
+}
+
+/* ---- Pond diary ---- */
+const DIARY_TAGS = [['feed', 'feed', L0('খাবার', 'Feed')], ['sick', 'pill', L0('রোগ', 'Disease')], ['water', 'drop', L0('পানি', 'Water')], ['work', 'team', L0('কাজ', 'Work')], ['other', 'edit', L0('অন্যান্য', 'Other')]];
+SUBV.diary = p => {
+  UI.dg = UI.dg || 'other';
+  const es = (S.diary || []).filter(x => x.pondId === p.id).sort((a, b) => a.date < b.date ? 1 : -1);
+  return `<div class="card"><h3>${L('আজ পুকুরে কী দেখলেন?', 'What did you see at the pond today?')}</h3>
+    <div class="choice">${DIARY_TAGS.map(t => pick('dgTag', t[0], UI.dg, tx(t[2]), t[1])).join('')}</div>
+    <div class="field"><textarea id="dy_text" class="inp" placeholder="${L('যেমন: আজ ভোরে কিছু মাছ ভাসছিল', 'e.g. Some fish were floating at dawn')}"></textarea></div>
+    <div class="field"><label class="lbl" for="dy_photo">${IC.camera}${L('ছবি তুলুন (না দিলেও চলবে)', 'Take a photo (optional)')}</label><input id="dy_photo" type="file" accept="image/*" capture="environment" class="inp"></div>
+    <button class="btn primary full" data-act="saveDiary" data-id="${p.id}">${IC.check}${L('ডায়েরিতে লিখুন', 'Save to diary')}</button></div>
+    ${es.map(x => { const t = DIARY_TAGS.find(z => z[0] === x.tag) || DIARY_TAGS[4]; return `<div class="card"><div class="row"><span class="badge">${IC[t[1]]}${tx(t[2])}</span><span class="grow small muted">${fmtDate(x.date, true)}</span>
+      <button class="iconbtn" style="background:var(--pond-2);color:var(--danger);width:42px;height:42px" data-act="delDiary" data-id="${x.id}" aria-label="${L('মুছুন', 'Delete')}">${IC.trash}</button></div>
+      ${x.text ? `<p>${esc(x.text)}</p>` : ''}${x.photo ? `<img src="${x.photo}" alt="" style="border-radius:12px;max-height:260px;object-fit:cover;width:100%">` : ''}</div>`; }).join('') || `<p class="muted center">${L('ডায়েরি খালি', 'The diary is empty')}</p>`}`;
+};
+
+/* ---- Cycles (close season & history) ---- */
+function cycleSummary(pid) {
+  const p = pondById(pid), a = analytics(pid), m = money(pid);
+  return { id: uid(), pondId: pid, pondName: p.name, start: p.start, end: today(), days: daysAgo(p.start), area: p.area,
+    harvKg: Math.round(a.harvKg), feedKg: Math.round(a.feedKg), fcr: a.fcr ? Math.round(a.fcr * 100) / 100 : null, exp: m.exp, inc: m.inc, profit: m.profit,
+    species: stockRows(pid).map(r => r.sp) };
+}
+VIEWS.cycles = ({ id }) => {
+  const cs = (S.cycles || []).filter(c => !id || c.pondId === id).sort((a, b) => a.end < b.end ? 1 : -1);
+  tick('cycles');
+  if (!cs.length) return emptyBox('chart', L('আগের কোনো চাষ নেই', 'No past seasons'), L('পুকুরের "চাষ শেষ করুন" চাপলে হিসাব এখানে জমা থাকবে', 'When you tap "Close this season" on a pond, its summary is kept here'));
+  return cs.map(c => `<div class="card"><div class="row"><h3 class="grow">${esc(c.pondName)}</h3><span class="badge">${fmtDate(c.start)} – ${fmtDate(c.end, true)}</span></div>
+    <p class="small muted">${c.species.map(spName).join(', ')} · ${n(c.days)} ${L('দিন', 'days')} · ${n(c.area)} ${L('শতাংশ', 'decimals')}</p>
+    <div class="grid2">${statBox(L('মোট ধরা', 'Harvested'), n(c.harvKg) + ` <small>${L('কেজি', 'kg')}</small>`)}${statBox(L('এফসিআর', 'FCR'), c.fcr ? n(c.fcr, 2) : '–')}
+    ${statBox(L('খরচ', 'Spent'), `<span class="minus">${tk(c.exp)}</span>`)}${statBox(L('আয়', 'Earned'), `<span class="plus">${tk(c.inc)}</span>`)}</div>
+    <div class="stat"><div class="k">${c.profit >= 0 ? L('লাভ', 'Profit') : L('ক্ষতি', 'Loss')}</div><div class="v num ${c.profit >= 0 ? 'plus' : 'minus'}">${tk(c.profit)}</div>
+    ${c.harvKg ? `<div class="small muted">${L('প্রতি কেজি খরচ', 'Cost per kg')} ${tk(c.exp / c.harvKg)} · ${L('প্রতি শতাংশে লাভ', 'Profit per decimal')} ${tk(c.profit / Math.max(1, c.area))}</div>` : ''}</div></div>`).join('');
+};
+
+/* ---- SOS ---- */
+VIEWS.sos = () => {
+  tick('sos');
+  UI.sosPond = UI.sosPond || (S.ponds[0] && S.ponds[0].id);
+  return `<div class="alert"><span class="ic">${IC.alert}</span><span><b style="font-size:19px">${L('এখনই এই ৩টি কাজ করুন', 'Do these 3 things now')}</b></span></div>
+  <div class="card">${[L('আজ খাবার দেওয়া বন্ধ রাখুন', 'Stop feeding today'), L('এরেটর চালান বা পাম্পে নতুন পানি দিন', 'Run the aerator or pump in fresh water'), L('মরা মাছ তুলে মাটিতে পুঁতে ফেলুন', 'Remove dead fish and bury them')].map((t, i) => `<div class="row" style="font-size:18px"><span class="badge danger" style="font-size:17px;min-width:34px;justify-content:center">${n(i + 1)}</span><b class="grow">${t}</b></div>`).join('')}</div>
+  ${S.ponds.length ? `<div class="card"><h3>${L('কোন পুকুরে?', 'Which pond?')}</h3>${pondChips(UI.sosPond).replace(/data-group="pond"/g, 'data-group="sosPond"')}</div>` : ''}
+  <h2>${L('তারপর কারণ খুঁজুন', 'Then find the cause')}</h2>
+  <div class="tiles">
+    <button class="tile" data-act="open" data-view="symptom"><span class="ic" style="color:var(--danger);background:var(--danger-bg)">${IC.fish}</span>${L('লক্ষণ মিলিয়ে কারণ', 'Match the signs')}</button>
+    ${S.ponds.length ? `<button class="tile" data-act="open" data-view="waterTest" data-id="${UI.sosPond}"><span class="ic">${IC.drop}</span>${L('পানি পরীক্ষা', 'Test the water')}</button>
+    <button class="tile" data-act="open" data-view="stockEvent" data-id="${UI.sosPond}" data-type="death"><span class="ic">${IC.skull}</span>${L('মরা মাছ লিখুন', 'Record dead fish')}</button>` : ''}
+    <button class="tile" data-act="open" data-view="expert"><span class="ic">${IC.doctor}</span>${L('বিশেষজ্ঞকে ছবি পাঠান', 'Photo to an expert')}</button></div>
+  <div class="card"><div class="row"><span style="color:var(--pond)">${IC.phone}</span><div class="grow"><b>${L('কৃষি কল সেন্টার (ফ্রি)', 'Agriculture call centre (free)')}</b><p class="small muted">${L('অথবা উপজেলা মৎস্য অফিস', 'or the upazila fisheries office')}</p></div><b class="num" style="font-size:24px">${dig('16123')}</b></div></div>`;
+};
+
+/* ---- Unit converter ---- */
+const AREA_U = [['dec', L0('শতাংশ', 'Decimal'), 1], ['bigha', L0('বিঘা', 'Bigha'), 33], ['acre', L0('একর', 'Acre'), 100], ['ha', L0('হেক্টর', 'Hectare'), 247.1]];
+const WT_U = [['kg', L0('কেজি', 'kg'), 1], ['mon', L0('মণ', 'Maund (mon)'), 40], ['ton', L0('টন', 'Tonne'), 1000]];
+function cvOut() {
+  const a = UI.cv.a * AREA_U.find(u => u[0] === UI.cv.au)[2], w = UI.cv.w * WT_U.find(u => u[0] === UI.cv.wu)[2];
+  return `<div class="grid2">${AREA_U.map(u => statBox(tx(u[1]), n(a / u[2], u[0] === 'dec' ? 0 : 2))).join('')}</div><hr>
+    <div class="grid3">${WT_U.map(u => statBox(tx(u[1]), n(w / u[2], u[0] === 'kg' ? 0 : 2))).join('')}</div>`;
+}
+VIEWS.converter = () => {
+  UI.cv = UI.cv || { a: 33, au: 'dec', w: 400, wu: 'kg' }; tick('converter');
+  return `<div class="card"><h3>${L('জমির মাপ', 'Land area')}</h3><div class="choice">${AREA_U.map(u => pick('cvAu', u[0], UI.cv.au, tx(u[1]))).join('')}</div>${stepper('cv_a', UI.cv.a, 1, '', 0)}
+    <h3>${L('ওজন', 'Weight')}</h3><div class="choice">${WT_U.map(u => pick('cvWu', u[0], UI.cv.wu, tx(u[1]))).join('')}</div>${stepper('cv_w', UI.cv.w, 10, '', 0)}
+    <button class="btn primary full" data-act="cvCalc">${IC.calc}${L('হিসাব করুন', 'Convert')}</button></div>
+  <div class="card" id="cv_out">${cvOut()}</div><p class="small muted">${L('১ বিঘা = ৩৩ শতাংশ (এলাকাভেদে আলাদা হতে পারে) · ১ মণ = ৪০ কেজি', '1 bigha = 33 decimals (varies by area) · 1 maund = 40 kg')}</p>`;
+};
+
+/* ---- Sell planner ---- */
+VIEWS.sellPlan = ({ id }) => {
+  const p = pondById(id), a = analytics(id), m = money(id), rows = stockRows(id);
+  tick('sellPlan');
+  UI.spDays = UI.spDays || 30;
+  const priceNow = rows.length ? rows.reduce((s, r) => s + r.bio * priceOf(r.sp), 0) / Math.max(0.001, a.nowBio) : 0;
+  const breakEven = a.nowBio > 0 ? Math.max(0, m.exp - m.inc) / a.nowBio : null;
+  const N = UI.spDays, surv = Math.pow(0.98, N / 30), fcr = a.fcr ? Math.min(2.2, Math.max(1.2, a.fcr)) : 1.5;
+  let later = 0, laterKg = 0;
+  rows.forEach(r => { const w = r.avgW + SP[r.sp].adg * N; const kg = r.live * surv * w / 1000; laterKg += kg; later += kg * priceOf(r.sp); });
+  const extraFeed = Math.max(0, laterKg - a.nowBio) * fcr * 58;
+  const nowNet = a.nowBio * priceNow, laterNet = later - extraFeed, gain = laterNet - nowNet;
+  const locked = !hasPlan('plus');
+  return `<div class="card"><h3>${L('এখন বেচলে', 'If you sell now')}</h3>
+    <div class="grid2">${statBox(L('মোট মাছ', 'Total fish'), n(a.nowBio, 0) + ` <small>${L('কেজি', 'kg')} (${n(a.nowBio / 40, 1)} ${L('মণ', 'mon')})</small>`)}${statBox(L('গড় দর', 'Average price'), tk(priceNow) + `<small>/${L('কেজি', 'kg')}</small>`)}
+    ${statBox(L('বিক্রিতে পাবেন', 'You would get'), `<span class="plus">${tk(nowNet)}</span>`)}${statBox(L('খরচ উঠাতে দর লাগবে', 'Price to cover costs'), breakEven !== null ? tk(breakEven) + `<small>/${L('কেজি', 'kg')}</small>` : '–')}</div>
+    ${breakEven !== null ? `<p class="small ${breakEven <= priceNow ? 'safe-t' : 'danger-t'}"><b>${breakEven <= priceNow ? L('আজকের দরে বেচলে খরচ উঠে লাভ হবে।', "At today's price you cover costs and make a profit.") : L('আজকের দরে বেচলে খরচ উঠবে না।', "At today's price you would not cover your costs.")}</b></p>` : ''}</div>
+  <div class="card ${locked ? 'paywall' : ''}"><div class="row"><h3 class="grow">${L('অপেক্ষা করলে কী হবে?', 'What if you wait?')}</h3>${locked ? lockBadge('plus') : ''}</div>
+    <div class="choice">${[15, 30, 45, 60].map(d => pick('spDays', String(d), String(N), L(`${dig(d)} দিন`, `${d} days`))).join('')}</div>
+    <div class="grid2">${statBox(L('তখন মোট মাছ', 'Fish then'), n(laterKg, 0) + ` <small>${L('কেজি', 'kg')}</small>`, locked)}${statBox(L('বাড়তি খাবার খরচ', 'Extra feed cost'), `<span class="minus">${tk(extraFeed)}</span>`, locked)}</div>
+    <div class="stat ${locked ? 'locked' : ''}"><div class="k">${gain >= 0 ? L('অপেক্ষা করলে বেশি পাবেন', 'Waiting earns you more') : L('অপেক্ষা করলে কম পাবেন', 'Waiting earns you less')}</div><div class="v num ${gain >= 0 ? 'plus' : 'minus'}">${gain >= 0 ? '+' : ''}${tk(gain)}</div></div>
+    ${locked ? `<button class="btn warn full" data-act="paywall" data-need="plus" data-why="profit">${IC.lock}${L('প্লাস চালু করে দেখুন', 'Unlock with Plus')}</button>` :
+      `<p class="small muted">${L('আজকের দর একই থাকবে ধরে হিসাব; প্রতি মাসে ২% মাছ মরতে পারে ধরা হয়েছে। দর বাড়লে-কমলে ফল বদলাবে।', "Assumes today's price stays the same and 2% of fish die per month. Price changes will change the result.")}</p>`}</div>`;
+};
+
+/* ---- Backup ---- */
+VIEWS.backup = () => {
+  tick('backup');
+  return `<div class="card"><h3>${L('তথ্য ব্যাকআপ', 'Back up your data')}</h3><p class="small muted">${L('সব তথ্য শুধু এই ফোনে থাকে। ফোন বদলানোর আগে এই কোড কপি করে নিজের কাছে (যেমন হোয়াটসঅ্যাপে নিজেকে) পাঠিয়ে রাখুন।', 'All data lives only on this phone. Before changing phones, copy this code and send it to yourself (for example on WhatsApp).')}</p>
+    <button class="btn primary full" data-act="copyBackup">${IC.doc}${L('ব্যাকআপ কোড কপি করুন', 'Copy backup code')}</button>
+    <textarea id="bk_out" class="inp" readonly style="min-height:80px;font-size:12px">${esc(JSON.stringify(S))}</textarea></div>
+  <div class="card"><h3>${L('ব্যাকআপ থেকে ফেরত আনুন', 'Restore from a backup')}</h3><textarea id="bk_in" class="inp" placeholder="${L('কোড এখানে পেস্ট করুন', 'Paste the code here')}"></textarea>
+    <button class="btn line full" data-act="restoreBackup">${IC.reset}${L('ফেরত আনুন', 'Restore')}</button></div>`;
+};
+
+/* ---- Warnings, streak, tips ---- */
+function lastApp(pid) { const l = S.logs.filter(x => x.pondId === pid && x.app && daysAgo(x.date) <= 1).sort((a, b) => a.date < b.date ? 1 : -1)[0]; return l ? l.app : null; }
+function logStreak() {
+  const ds = new Set(S.logs.map(l => l.date)); let k = 0, d = today();
+  if (!ds.has(d)) d = addDays(d, -1);
+  while (ds.has(d)) { k++; d = addDays(d, -1); }
+  return k;
+}
+function collectWarnings() {
+  const w = [];
+  S.ponds.forEach(p => {
+    const hl = health(p.id);
+    if (hl.dangerParams.length) w.push({ b: 'danger', icon: 'drop', t: `${esc(p.name)}: ${L('পানিতে বিপদ', 'water danger')}`, s: hl.dangerParams.map(x => tx(PARAMS[x])).join(', '), view: 'pond', id: p.id, sub: 'water' });
+    if (lastApp(p.id) === 'none') w.push({ b: 'danger', icon: 'noeat', t: `${esc(p.name)}: ${L('মাছ খাচ্ছে না', 'fish not eating')}`, s: L('পানি পরীক্ষা করুন, খাবার কমান', 'Test water, reduce feed'), view: 'symptom' });
+  });
+  wxAdvice().forEach(a => w.push({ b: a.b, icon: a.icon, t: `${a.when}: ${a.t}`, s: a.acts[0], view: 'weather' }));
+  const fs = feedStock();
+  if (fs && fs.days !== null && fs.days < 5) w.push({ b: fs.days < 2 ? 'danger' : 'watch', icon: 'feed', t: L(`খাবার আর ${dig(Math.max(0, Math.floor(fs.days)))} দিনের আছে`, `Feed left for ${Math.max(0, Math.floor(fs.days))} days`), s: L(`গুদামে ${n(fs.left, 0)} কেজি — এখনই কিনুন`, `${Math.round(fs.left)} kg in store — buy now`), view: 'feedStore' });
+  (S.dues || []).forEach(d => { const c = dueCalc(d); if (c.state === 'late' || c.state === 'soon') w.push({ b: c.state === 'late' ? 'danger' : 'watch', icon: 'money', t: `${esc(d.who)}: ${tk(c.left)}`, s: `${tx(DUE_KINDS[d.kind][0])} · ${dueWhen(c)}`, view: 'dues' }); });
+  const o = { danger: 0, watch: 1, safe: 2 };
+  return w.sort((a, b) => o[a.b] - o[b.b]);
+}
+const TIPS = [
+  L0('খাবার দেওয়ার ১৫ মিনিট পরে দেখুন — খাবার পড়ে থাকলে পরের বার কম দিন।', 'Check 15 minutes after feeding — if feed is left, give less next time.'),
+  L0('ভোরে পুকুরে যান — মাছ ভাসলে অক্সিজেন কম।', 'Visit the pond at dawn — floating fish mean low oxygen.'),
+  L0('প্রতি ১৫ দিনে ১০টি মাছ মেপে খাবারের হিসাব ঠিক রাখুন।', 'Weigh 10 fish every 15 days to keep the feed amount right.'),
+  L0('খরচ লিখে রাখলে জানবেন প্রতি কেজিতে কত লাভ।', 'Write down costs to know your profit per kg.'),
+  L0('বাকিতে খাবার কিনলে দাম বেশি পড়ে — নগদে কিনতে পারলে ভালো।', 'Feed on credit costs more — buy with cash when you can.'),
+  L0('মেঘলা গরম দিনে খাবার কম দিন।', 'Feed less on cloudy, hot days.'),
+  L0('নতুন পোনা লবণ পানিতে ধুয়ে ছাড়ুন।', 'Dip new fry in salt water before stocking.'),
+  L0('বিক্রির আগের দিন খাবার বন্ধ রাখুন — মাছ কম মরে।', 'Stop feeding the day before selling — fewer fish die.'),
+];
 
 /* ===================== Titles ===================== */
 function titleOf(v) {
@@ -1386,7 +1890,11 @@ function titleOf(v) {
     trend: L('৩০ দিনের দর', '30-day prices'), shop: L('কেনাকাটা', 'Shop'), product: L('পণ্য', 'Product'), orders: L('আমার অর্ডার', 'My orders'), sell: L('মাছ বিক্রি', 'Sell fish'),
     profile: L('প্রোফাইল', 'Profile'), reminders: L('মনে করানো', 'Reminders'), money: L('টাকার হিসাব', 'Money'), team: L('কর্মী', 'Workers'), sensor: L('সেন্সর', 'Sensor'),
     report: L('রিপোর্ট', 'Report'), checklist: L('ফিচার পরীক্ষা', 'Feature test'), about: L('অ্যাপ সম্পর্কে', 'About'), paywall: L('আপগ্রেড', 'Upgrade'),
+    weather: L('আবহাওয়া', 'Weather'), calendar: L('মাসের কাজ', 'Monthly calendar'), feedStore: L('খাবারের গুদাম', 'Feed store'), dues: L('বাকি ও ঋণ', 'Dues & loans'),
+    dueAdd: L('নতুন বাকি/ঋণ', 'New due or loan'), cycles: L('আগের চাষ', 'Past seasons'), sos: L('জরুরি সাহায্য', 'Emergency help'), converter: L('মাপ বদল', 'Unit converter'),
+    sellPlan: L('কখন বেচবো', 'When to sell'), backup: L('ব্যাকআপ', 'Backup'),
   };
+  if (v.view === 'pond' && p && v.params.sub && v.params.sub !== 'summary') { const sec = POND_SECTIONS.find(x => x[0] === v.params.sub); return p.name + (sec ? ' · ' + tx(sec[2]) : ''); }
   return T[v.view] || '';
 }
 VIEWS.paywall = ({ need, why }) => paywallCard(need, why);
@@ -1403,6 +1911,7 @@ function render(scrollTop) {
   let html = '';
   try { html = fn ? fn(v.params) : ''; } catch (e) { console.error(e); html = `<div class="alert"><span class="ic">${IC.alert}</span><span>${L('কিছু ভুল হয়েছে। পেছনে যান।', 'Something went wrong. Go back.')}</span></div>`; }
   document.getElementById('app').innerHTML = html;
+  if (UI.keep) { Object.entries(UI.keep).forEach(([k, val]) => { const x = document.getElementById(k); if (x) x.value = val; }); UI.keep = null; }
   const tabs = [['today', 'today', L('আজ', 'Today')], ['ponds', 'pond', L('পুকুর', 'Ponds')], ['help', 'help', L('সাহায্য', 'Help')], ['market', 'market', L('বাজার', 'Market')], ['me', 'me', L('আমি', 'Me')]];
   document.getElementById('tabs').innerHTML = tabs.map(t => `<button class="${UI.tab === t[0] ? 'on' : ''}" data-act="tab" data-tab="${t[0]}" aria-current="${UI.tab === t[0] ? 'page' : 'false'}"><span class="pill">${IC[t[1]]}</span>${t[2]}</button>`).join('');
   if (scrollTop) window.scrollTo(0, 0);
@@ -1420,7 +1929,7 @@ function renderLayer() {
 
 /* ===================== Sheets ===================== */
 function openQuickLog(pid) {
-  UI.ql = { pond: pid || (S.ponds[0] && S.ponds[0].id) };
+  UI.ql = { pond: pid || (S.ponds[0] && S.ponds[0].id) }; { const ex0 = S.logs.find(l => l.pondId === UI.ql.pond && l.date === today()); UI.ql.app = ex0 ? ex0.app || null : null; }
   UI.sheet = () => {
     const fp = feedPlan(UI.ql.pond);
     const ex = S.logs.find(l => l.pondId === UI.ql.pond && l.date === today());
@@ -1428,6 +1937,8 @@ function openQuickLog(pid) {
     <h2>${L('আজকের খাতা', "Today's log")}</h2>${pondChips(UI.ql.pond, 'qlPond')}
     <label class="lbl">${IC.feed}${L('কত কেজি খাবার দিয়েছেন', 'Feed given (kg)')}</label>
     ${stepper('ql_feed', ex ? ex.feedKg : (fp.kDO === 0 ? 0 : fp.kg), 0.5, fp.kDO === 0 ? L('অক্সিজেন কম — আজ খাবার না দেওয়াই ভালো', 'Oxygen low — better not to feed today') : L(`পরামর্শ: ${n(fp.kg, 1)} কেজি`, `Suggested: ${n(fp.kg, 1)} kg`), 0)}
+    <label class="lbl">${IC.fish}${L('মাছ কেমন খেয়েছে?', 'How did the fish eat?')}</label>
+    <div class="grid3" style="grid-template-columns:repeat(3,1fr)">${[['all', 'ok', L('সব খেয়েছে', 'Ate all')], ['some', 'feed', L('কিছু পড়ে ছিল', 'Some left')], ['none', 'noeat', L('খায়নি', 'Did not eat')]].map(o => `<button type="button" class="chip ${UI.ql.app === o[0] ? 'sel' : ''}" style="flex-direction:column;border-radius:14px;min-height:76px;justify-content:center;gap:2px;font-size:15px" data-act="qlApp" data-val="${o[0]}">${IC[o[1]]}${o[2]}</button>`).join('')}</div>
     <label class="lbl">${IC.skull}${L('আজ কয়টি মাছ মরেছে', 'Fish died today')}</label>${stepper('ql_dead', ex ? ex.deaths : 0, 1, L('টি', 'fish'), 0)}
     <div class="field"><label class="lbl" for="ql_note">${IC.edit}${L('নোট (না দিলেও চলবে)', 'Note (optional)')}</label><input id="ql_note" class="inp" value="${esc(ex ? ex.note : '')}"></div>
     <button class="btn primary full" data-act="saveQuickLog">${IC.check}${ex ? L('আজকের খাতা বদলান', 'Update today\'s log') : L('সংরক্ষণ', 'Save')}</button></div></div>`;
@@ -1521,7 +2032,7 @@ document.addEventListener('click', e => {
       const fryW = readNum('f_fryw') || 10;
       const counts = ds.nofish ? [] : Object.keys(m.mix).map(sp => [sp, Math.round(readNum('f_sp_' + sp) || 0)]).filter(x => x[1] > 0);
       commit(L('পুকুর যোগ হয়েছে', 'Pond added'), () => {
-        S.ponds.push({ id: pid, name: d.name, area: d.area, depth: d.depth, allYear: d.allYear, start: today(), model: d.model });
+        S.ponds.push({ id: pid, name: d.name, area: d.area, depth: d.depth, allYear: d.allYear, start: today(), model: d.model, system: d.system || 'pond' });
         let cost = 0;
         counts.forEach(([sp, c]) => { S.stock.push({ id: uid(), pondId: pid, sp, type: 'release', count: c, w: fryW, price: SP[sp].fry, date: today() }); cost += c * SP[sp].fry; });
         if (cost) S.ledger.push({ id: uid(), pondId: pid, kind: 'exp', cat: 'fry', amount: Math.round(cost), date: today(), note: L('পোনা কেনা', 'Fry purchase') });
@@ -1545,9 +2056,9 @@ document.addEventListener('click', e => {
       if (feed === null || feed < 0) { toast(L('খাবারের পরিমাণ দিন', 'Enter feed amount')); return; }
       commit(L('আজকের খাতা সংরক্ষণ হয়েছে', "Today's log saved"), () => {
         const ex = S.logs.find(l => l.pondId === pid && l.date === today());
-        if (ex) Object.assign(ex, { feedKg: feed, deaths: dead, note }); else S.logs.push({ id: uid(), pondId: pid, date: today(), feedKg: feed, deaths: dead, note });
+        if (ex) Object.assign(ex, { feedKg: feed, deaths: dead, note, app: UI.ql.app || null }); else S.logs.push({ id: uid(), pondId: pid, date: today(), feedKg: feed, deaths: dead, note, app: UI.ql.app || null });
       });
-      tick('quickLog'); UI.sheet = null; render(false); break;
+      tick('quickLog'); if (UI.ql.app) tick('appetite'); UI.sheet = null; render(false); break;
     }
     case 'sw': {
       const k = ds.key, val = parseFloat(ds.val);
@@ -1560,7 +2071,7 @@ document.addEventListener('click', e => {
       if (UI.wt.ph !== undefined) r.ph = UI.wt.ph;
       if (UI.wt.nh3 !== undefined) r.nh3 = UI.wt.nh3;
       if (UI.wt.no2 !== undefined) r.no2 = UI.wt.no2;
-      ['do', 'temp', 'secchi'].forEach(k => { const x = readNum('w_' + k); if (x !== null) r[k] = x; });
+      ['do', 'temp', 'secchi', 'sal'].forEach(k => { const x = readNum('w_' + k); if (x !== null) r[k] = x; });
       if (Object.keys(r).length <= 3) { toast(L('অন্তত একটি মাপ দিন', 'Enter at least one reading')); return; }
       commit(L('পানির পরীক্ষা সংরক্ষণ হয়েছে', 'Water test saved'), () => S.water.push(r));
       tick('water'); UI.wt = null;
@@ -1574,7 +2085,7 @@ document.addEventListener('click', e => {
       const c = Math.round(readNum('s_n') || 0), kg = readNum('s_kg') || 0;
       if (c < 1 || kg <= 0) { toast(L('মাছের সংখ্যা ও ওজন দিন', 'Enter number and weight')); return; }
       commit(L(`গড় ওজন ${n(kg * 1000 / c)} গ্রাম — সংরক্ষণ হয়েছে`, `Average ${Math.round(kg * 1000 / c)} g — saved`), () => S.samples.push({ id: uid(), pondId: ds.id, sp: UI.smp.sp, date: today(), n: c, totalG: Math.round(kg * 1000) }));
-      tick('sample'); UI.smp = null; back(); if (cur().view === 'pond') { cur().params.sub = 'growth'; render(false); } break;
+      tick('sample'); UI.smp = null; back(); break;
     }
     case 'saveStock': {
       const type = ds.type, c = Math.round(readNum('se_n') || 0);
@@ -1586,13 +2097,14 @@ document.addEventListener('click', e => {
       if (type === 'release') { ev.w = readNum('se_w') || 10; ev.price = readNum('se_p') || 0; if (ev.price) led = { kind: 'exp', cat: 'fry', amount: Math.round(ev.price * c), note: spName(ev.sp) + ' ' + n(c) }; }
       if (type === 'harvest') { ev.kg = readNum('se_kg') || 0; ev.price = readNum('se_p') || 0; if (ev.price && ev.kg) led = { kind: 'inc', cat: 'sale', amount: Math.round(ev.price * ev.kg), note: spName(ev.sp) + ' ' + n(ev.kg, 1) + ' ' + L('কেজি', 'kg') }; }
       commit(L('মাছের খাতা সংরক্ষণ হয়েছে', 'Fish record saved'), () => { S.stock.push(ev); if (led) S.ledger.push(Object.assign({ id: uid(), pondId: ds.id, date: today() }, led)); });
-      tick('stock'); UI.se = null; back(); if (cur().view === 'pond') { cur().params.sub = 'fish'; render(false); } break;
+      tick('stock'); UI.se = null; back(); break;
     }
     case 'saveLedger': {
       const amt = readNum('l_amt');
       if (!amt || amt <= 0) { toast(L('টাকার পরিমাণ দিন', 'Enter an amount')); return; }
       if (!UI.lg.pond) { toast(L('আগে একটি পুকুর যোগ করুন', 'Add a pond first')); return; }
-      commit(L('হিসাব সংরক্ষণ হয়েছে', 'Entry saved'), () => S.ledger.push({ id: uid(), pondId: UI.lg.pond, kind: ds.kind, cat: UI.lg.cat, amount: Math.round(amt), date: today(), note: readStr('l_note') }));
+      const bags = Math.round(readNum('l_bags') || 0);
+      commit(L('হিসাব সংরক্ষণ হয়েছে', 'Entry saved'), () => { S.ledger.push({ id: uid(), pondId: UI.lg.pond, kind: ds.kind, cat: UI.lg.cat, amount: Math.round(amt), date: today(), note: readStr('l_note') }); if (bags > 0 && UI.lg.cat === 'feed' && ds.kind === 'exp') { S.feedIn = S.feedIn || []; S.feedIn.push({ id: uid(), date: today(), kg: bags * 25, amount: Math.round(amt), note: readStr('l_note') }); } });
       tick('ledger'); UI.lg = null; back(); break;
     }
     case 'delLog': case 'delWater': case 'delSample': case 'delStock': case 'delLedger': {
@@ -1643,6 +2155,7 @@ document.addEventListener('click', e => {
       const pid = UI.oPond || (S.ponds[0] && S.ponds[0].id);
       commit(L('অর্ডার হয়েছে — ডিলার ফোন করবে (ডেমো)', 'Ordered — the dealer will call (demo)'), () => {
         S.orders.push({ id: uid(), pid: p.id, qty: q, date: today(), status: 'placed' });
+        if (p.cat === 'feed') { S.feedIn = S.feedIn || []; S.feedIn.push({ id: uid(), date: today(), kg: 25 * q, amount: addL ? p.price * q : 0, note: L('অর্ডার', 'Order') }); }
         if (addL && pid) S.ledger.push({ id: uid(), pondId: pid, kind: 'exp', cat: p.cat === 'feed' ? 'feed' : p.cat === 'care' ? 'med' : 'other', amount: p.price * q, date: today(), note: tx(p) + ' × ' + n(q) });
       });
       tick('order'); UI.stack = [{ view: 'orders', params: {} }]; render(true); break;
@@ -1704,6 +2217,8 @@ setInterval(() => {
 /* ===================== Boot ===================== */
 S = load();
 render(true);
+fetchWx(false);
+window.addEventListener('online', () => fetchWx(true));
 // Android hardware back button when wrapped as an app (Capacitor)
 try { const App = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
   if (App) App.addListener('backButton', () => { if (!window.mbBack()) App.exitApp(); }); } catch (e) {}
